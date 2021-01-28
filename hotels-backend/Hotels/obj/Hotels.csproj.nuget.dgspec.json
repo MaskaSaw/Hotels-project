@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Hotels Project\\Hotels backend\\Hotels\\Hotels.csproj": {}
+    "D:\\Hotels Project\\hotels-backend\\Hotels\\Hotels.csproj": {}
   },
   "projects": {
-    "D:\\Hotels Project\\Hotels backend\\Hotels\\Hotels.csproj": {
+    "D:\\Hotels Project\\hotels-backend\\Hotels\\Hotels.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Hotels Project\\Hotels backend\\Hotels\\Hotels.csproj",
+        "projectUniqueName": "D:\\Hotels Project\\hotels-backend\\Hotels\\Hotels.csproj",
         "projectName": "Hotels",
-        "projectPath": "D:\\Hotels Project\\Hotels backend\\Hotels\\Hotels.csproj",
+        "projectPath": "D:\\Hotels Project\\hotels-backend\\Hotels\\Hotels.csproj",
         "packagesPath": "C:\\Users\\Uladzislau.Marchyk\\.nuget\\packages\\",
-        "outputPath": "D:\\Hotels Project\\Hotels backend\\Hotels\\obj\\",
+        "outputPath": "D:\\Hotels Project\\hotels-backend\\Hotels\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Uladzislau.Marchyk\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,24 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[5.6.3, )"
