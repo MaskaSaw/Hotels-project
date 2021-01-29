@@ -17,9 +17,8 @@ namespace Hotels.Models
         public bool? Massage { get; set; }
         public bool? ExtraTowels { get; set; }
         public bool? Reserved { get; set; }
-        public string Image { get; set; }
 
-        public virtual Room Room { get; set; }
-        public virtual User User { get; set; }
+       // public virtual Room Room { get; set; }
+      //  public virtual User User { get; set; }
     }
 }

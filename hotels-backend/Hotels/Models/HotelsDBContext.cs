@@ -65,10 +65,6 @@ namespace Hotels.Models
 
                 entity.Property(e => e.EndDate).HasColumnType("date");
 
-                entity.Property(e => e.Image)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.StartDate).HasColumnType("date");
 
                /* entity.HasOne(d => d.Room)

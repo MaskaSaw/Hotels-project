@@ -9,7 +9,7 @@ namespace Hotels.Models
     {
         public Room()
         {
-        //    Reservations = new HashSet<Reservation>();
+            Reservations = new HashSet<Reservation>();
         }
 
         public int Id { get; set; }
@@ -22,6 +22,6 @@ namespace Hotels.Models
         public int HotelId { get; set; }
 
       //  public virtual Hotel Hotel { get; set; }
-      //  public virtual ICollection<Reservation> Reservations { get; set; }
+        public virtual ICollection<Reservation> Reservations { get; set; }
     }
 }

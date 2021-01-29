@@ -40,22 +40,7 @@ namespace Hotels.Controllers
 
             return hotel;
         }
-
-        // GET: api/Hotels/5/rooms
-        [HttpGet("{id}/rooms")]
-        public async Task<ActionResult<IEnumerable<Room>>> GetHotelRooms(int id)
-        {
-            var rooms = await _context.Rooms.ToListAsync();
-
-            if (rooms == null)
-            {
-                return NotFound();
-            }
-
-            var filteredRooms = rooms.Where(x => x.HotelId == id).ToList();
-            return filteredRooms;
-        }
-
+       
         // PUT: api/Hotels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
