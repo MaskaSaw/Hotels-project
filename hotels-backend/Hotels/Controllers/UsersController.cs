@@ -94,6 +94,12 @@ namespace Hotels.Controllers
             }
 
             _context.Users.Remove(user);
+            var reservations = await _context.Reservations.ToListAsync();
+            reservations = reservations.Where(x => x.UserId == id).ToList();
+            foreach (var reservation in reservations)
+            {
+                _context.Reservations.Remove(reservation);
+            }
             await _context.SaveChangesAsync();
 
             return NoContent();

@@ -9,7 +9,7 @@ namespace Hotels.Models
     {
         public User()
         {
-            Reservations = new HashSet<Reservation>();
+            //Reservations = new HashSet<Reservation>();
         }
 
         public int Id { get; set; }

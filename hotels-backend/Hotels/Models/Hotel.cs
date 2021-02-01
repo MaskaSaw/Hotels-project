@@ -22,6 +22,6 @@ namespace Hotels.Models
         public bool? ExtraTowel { get; set; }
         public string Image { get; set; }
 
-        //public virtual ICollection<Room> Rooms { get; set; }
+        public virtual ICollection<Room> Rooms { get; set; }
     }
 }

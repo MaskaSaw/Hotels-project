@@ -9,7 +9,7 @@ using Hotels.Models;
 
 namespace Hotels.Controllers
 {
-    [Route("api/Hotels/{hotelId}/[controller]")]
+    [Route("api/[controller]") ]
     [ApiController]
     public class RoomsController : ControllerBase
     {
@@ -20,14 +20,36 @@ namespace Hotels.Controllers
             _context = context;
         }
 
-        // GET: api/hotels/5/Rooms
+        // GET: api/Rooms
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
         {
-            return await _context.Rooms.ToListAsync();
+            var rooms = await _context.Rooms.ToListAsync();
+            var reservations = await _context.Reservations.ToListAsync();
+
+            foreach (var room in rooms)
+            {
+                room.Reservations = reservations.Where(x => x.RoomId == room.Id).ToList();
+            }
+            return rooms;
         }
 
-        // GET: api/hotels/5/Rooms/5
+        // GET: api/Hotels/5/Rooms
+        [HttpGet("api/Hotels/{hotelId}/[controller]")]
+        public async Task<ActionResult<IEnumerable<Room>>> GetRooms(int hotelId)
+        {
+            var rooms = await _context.Rooms.ToListAsync();
+            var reservations = await _context.Reservations.ToListAsync();
+
+            foreach (var room in rooms)
+            {
+                room.Reservations = reservations.Where(x => x.RoomId == room.Id).ToList();
+            }
+        
+            return rooms.Where(x => x.HotelId == hotelId).ToList();
+        }
+
+        // GET: api/Rooms/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Room>> GetRoom(int id)
         {
@@ -43,7 +65,24 @@ namespace Hotels.Controllers
             return room;
         }
 
-        // PUT: api/hotels/5/Rooms/5
+        // GET: api/Hotels/5/Rooms/5
+        [HttpGet("api/Hotels/{hotelId}/[controller]/{id}")]
+        public async Task<ActionResult<Room>> GetRoom(int id, int hotelId)
+        {
+            var room = await _context.Rooms.FindAsync(id);
+
+            if (room == null || room.HotelId != hotelId)
+            {
+                return NotFound();
+            }
+
+            var reservations = await _context.Reservations.ToListAsync();
+            room.Reservations = reservations.Where(x => x.RoomId == id).ToList();
+            return room;
+        }
+
+
+        // PUT: api/Rooms/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoom(int id, Room room)
@@ -74,7 +113,7 @@ namespace Hotels.Controllers
             return NoContent();
         }
 
-        // POST: api/hotels/5/Rooms
+        // POST: api/Rooms
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Room>> PostRoom(Room room)
@@ -85,7 +124,7 @@ namespace Hotels.Controllers
             return CreatedAtAction("GetRoom", new { id = room.Id }, room);
         }
 
-        // DELETE: api/hotels/5/Rooms/5
+        // DELETE: api/Rooms/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoom(int id)
         {
@@ -96,6 +135,14 @@ namespace Hotels.Controllers
             }
 
             _context.Rooms.Remove(room);
+
+            var reservations = await _context.Reservations.ToListAsync();
+            reservations = reservations.Where(x => x.RoomId == id).ToList();
+
+            foreach (var reservation in reservations)
+            {
+                _context.Reservations.Remove(reservation);
+            }
             await _context.SaveChangesAsync();
 
             return NoContent();

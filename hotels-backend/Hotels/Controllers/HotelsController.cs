@@ -108,6 +108,14 @@ namespace Hotels.Controllers
             }
 
             _context.Hotels.Remove(hotel);
+            var rooms = await _context.Rooms.ToListAsync();
+            rooms = rooms.Where(x => x.HotelId == id).ToList();
+
+            foreach (var room in rooms) 
+            {
+                _context.Rooms.Remove(room);
+            } 
+
             await _context.SaveChangesAsync();
 
             return NoContent();

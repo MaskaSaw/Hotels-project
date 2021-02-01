@@ -90,11 +90,11 @@ namespace Hotels.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-               /* entity.HasOne(d => d.Hotel)
+              /*  entity.HasOne(d => d.Hotel)
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.HotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Room__HotelId__2B3F6F97");*/
+                    .HasConstraintName("FK__Room__HotelId__2B3F6F97"); */
             });
 
             modelBuilder.Entity<User>(entity =>
