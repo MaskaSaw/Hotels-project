@@ -67,7 +67,7 @@ namespace Hotels.Models
 
                 entity.Property(e => e.StartDate).HasColumnType("date");
 
-               /* entity.HasOne(d => d.Room)
+                entity.HasOne(d => d.Room)
                     .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.RoomId)
                     .HasConstraintName("FK__Reservati__RoomI__32E0915F");
@@ -75,7 +75,7 @@ namespace Hotels.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Reservati__UserI__31EC6D26");*/
+                    .HasConstraintName("FK__Reservati__UserI__31EC6D26");
             });
 
             modelBuilder.Entity<Room>(entity =>
@@ -90,11 +90,11 @@ namespace Hotels.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-              /*  entity.HasOne(d => d.Hotel)
+                entity.HasOne(d => d.Hotel)
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.HotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Room__HotelId__2B3F6F97"); */
+                    .HasConstraintName("FK__Room__HotelId__2B3F6F97"); 
             });
 
             modelBuilder.Entity<User>(entity =>
