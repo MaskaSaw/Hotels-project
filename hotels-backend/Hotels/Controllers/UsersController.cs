@@ -42,7 +42,6 @@ namespace Hotels.Controllers
         }
 
         // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
@@ -73,7 +72,6 @@ namespace Hotels.Controllers
         }
 
         // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
@@ -94,8 +92,8 @@ namespace Hotels.Controllers
             }
 
             _context.Users.Remove(user);
-            var reservations = await _context.Reservations.ToListAsync();
-            reservations = reservations.Where(x => x.UserId == id).ToList();
+            var reservations = await _context.Reservations.Where(x => x.UserId == id).ToListAsync();
+
             foreach (var reservation in reservations)
             {
                 _context.Reservations.Remove(reservation);

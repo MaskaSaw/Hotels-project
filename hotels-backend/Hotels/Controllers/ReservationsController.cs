@@ -31,8 +31,7 @@ namespace Hotels.Controllers
         [HttpGet("api/User/{userId}/Reservations")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int userId)
         {
-            var reservations = await _context.Reservations.ToListAsync();
-            return reservations.Where(x => x.UserId == userId).ToList();
+            return await _context.Reservations.Where(x => x.UserId == userId).ToListAsync();
         }
 
         // GET: api/Reservations/5
@@ -50,7 +49,6 @@ namespace Hotels.Controllers
         }
 
         // PUT: api/Reservations/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReservation(int id, Reservation reservation)
         {
@@ -81,7 +79,6 @@ namespace Hotels.Controllers
         }
 
         // POST: api/Reservations
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
         {

@@ -29,7 +29,9 @@ namespace Hotels.Controllers
 
             foreach (var room in rooms)
             {
-                room.Reservations = reservations.Where(x => x.RoomId == room.Id).ToList();
+                room.Reservations = reservations
+                    .Where(x => x.RoomId == room.Id)
+                    .ToList();
             }
             return rooms;
         }
@@ -43,10 +45,14 @@ namespace Hotels.Controllers
 
             foreach (var room in rooms)
             {
-                room.Reservations = reservations.Where(x => x.RoomId == room.Id).ToList();
+                room.Reservations = reservations
+                    .Where(x => x.RoomId == room.Id)
+                    .ToList();
             }
         
-            return rooms.Where(x => x.HotelId == hotelId).ToList();
+            return rooms
+                .Where(x => x.HotelId == hotelId)
+                .ToList();
         }
 
         // GET: api/Rooms/5
@@ -60,8 +66,8 @@ namespace Hotels.Controllers
                 return NotFound();
             }
 
-            var reservations =  await _context.Reservations.ToListAsync();
-            room.Reservations = reservations.Where(x => x.RoomId == id).ToList();
+            room.Reservations =  await _context.Reservations.Where(x => x.RoomId == id).ToListAsync();
+            
             return room;
         }
 
@@ -76,14 +82,13 @@ namespace Hotels.Controllers
                 return NotFound();
             }
 
-            var reservations = await _context.Reservations.ToListAsync();
-            room.Reservations = reservations.Where(x => x.RoomId == id).ToList();
+            room.Reservations = await _context.Reservations.Where(x => x.RoomId == id).ToListAsync();
+
             return room;
         }
 
 
         // PUT: api/Rooms/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoom(int id, Room room)
         {
@@ -114,7 +119,6 @@ namespace Hotels.Controllers
         }
 
         // POST: api/Rooms
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Room>> PostRoom(Room room)
         {
@@ -136,8 +140,7 @@ namespace Hotels.Controllers
 
             _context.Rooms.Remove(room);
 
-            var reservations = await _context.Reservations.ToListAsync();
-            reservations = reservations.Where(x => x.RoomId == id).ToList();
+            var reservations = await _context.Reservations.Where(x => x.RoomId == id).ToListAsync();
 
             foreach (var reservation in reservations)
             {

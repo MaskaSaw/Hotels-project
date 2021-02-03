@@ -38,25 +38,15 @@ namespace Hotels.Models
             {
                 entity.ToTable("Hotel");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Address).HasMaxLength(50);
 
-                entity.Property(e => e.Address)
-                    .HasMaxLength(50)
-                    .IsFixedLength(true);
+                entity.Property(e => e.City).HasMaxLength(20);
 
-                entity.Property(e => e.City)
-                    .HasMaxLength(20)
-                    .IsFixedLength(true);
-
-                entity.Property(e => e.Country)
-                    .HasMaxLength(20)
-                    .IsFixedLength(true);
+                entity.Property(e => e.Country).HasMaxLength(20);
 
                 entity.Property(e => e.Image).HasMaxLength(100);
 
-                entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .IsFixedLength(true);
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Reservation>(entity =>
@@ -82,13 +72,15 @@ namespace Hotels.Models
             {
                 entity.ToTable("Room");
 
+                entity.Property(e => e.RoomNumber).HasMaxLength(20);
+
+                entity.Property(e => e.Image).HasMaxLength(100);
+
                 entity.Property(e => e.Image)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.RoomType)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.RoomType).HasMaxLength(50);
 
                 entity.HasOne(d => d.Hotel)
                     .WithMany(p => p.Rooms)
@@ -101,13 +93,9 @@ namespace Hotels.Models
             {
                 entity.ToTable("User");
 
-                entity.Property(e => e.Login)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.Login).HasMaxLength(50);
 
-                entity.Property(e => e.Password)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.Password).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

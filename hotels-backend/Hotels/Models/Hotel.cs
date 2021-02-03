@@ -17,9 +17,9 @@ namespace Hotels.Models
         public string Country { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
-        public bool? Parking { get; set; }
-        public bool? Massage { get; set; }
-        public bool? ExtraTowel { get; set; }
+        public bool Parking { get; set; }
+        public bool Massage { get; set; }
+        public bool ExtraTowel { get; set; }
         public string Image { get; set; }
 
         public virtual ICollection<Room> Rooms { get; set; }

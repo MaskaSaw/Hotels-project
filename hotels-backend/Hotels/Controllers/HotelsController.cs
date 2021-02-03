@@ -42,7 +42,6 @@ namespace Hotels.Controllers
         }
 
         // PUT: api/Hotels/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel(int id, Hotel hotel)
         {
@@ -73,26 +72,11 @@ namespace Hotels.Controllers
         }
 
         // POST: api/Hotels
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
         {
             _context.Hotels.Add(hotel);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (HotelExists(hotel.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetHotel", new { id = hotel.Id }, hotel);
         }
@@ -108,8 +92,9 @@ namespace Hotels.Controllers
             }
 
             _context.Hotels.Remove(hotel);
-            var rooms = await _context.Rooms.ToListAsync();
-            rooms = rooms.Where(x => x.HotelId == id).ToList();
+            var rooms = await _context.Rooms
+                .Where(x => x.HotelId == id)
+                .ToListAsync();
 
             foreach (var room in rooms) 
             {
