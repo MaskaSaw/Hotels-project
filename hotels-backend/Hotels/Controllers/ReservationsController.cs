@@ -20,13 +20,6 @@ namespace Hotels.Controllers
             _context = context;
         }
 
-        // GET: api/Reservations
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
-        {
-            return await _context.Reservations.ToListAsync();
-        }
-
         // GET: api/User/5/Reservations
         [HttpGet("api/User/{userId}/Reservations")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int userId)

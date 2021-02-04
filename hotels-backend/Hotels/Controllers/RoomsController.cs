@@ -40,7 +40,9 @@ namespace Hotels.Controllers
                 return NotFound();
             }
 
-            room.Reservations =  await _context.Reservations.Where(x => x.RoomId == id).ToListAsync();
+            room.Reservations =  await _context.Reservations
+                .Where(x => x.RoomId == id)
+                .ToListAsync();
             
             return room;
         }
@@ -96,13 +98,6 @@ namespace Hotels.Controllers
             }
 
             _context.Rooms.Remove(room);
-
-            var reservations = await _context.Reservations.Where(x => x.RoomId == id).ToListAsync();
-
-            foreach (var reservation in reservations)
-            {
-                _context.Reservations.Remove(reservation);
-            }
             await _context.SaveChangesAsync();
 
             return NoContent();
