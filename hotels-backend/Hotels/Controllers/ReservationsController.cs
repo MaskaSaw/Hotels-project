@@ -31,7 +31,9 @@ namespace Hotels.Controllers
         [HttpGet("api/User/{userId}/Reservations")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int userId)
         {
-            return await _context.Reservations.Where(x => x.UserId == userId).ToListAsync();
+            return await _context.Reservations
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
         }
 
         // GET: api/Reservations/5
