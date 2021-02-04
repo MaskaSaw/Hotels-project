@@ -16,7 +16,6 @@ namespace Hotels.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityColumns()
-                .HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
 
@@ -39,7 +38,7 @@ namespace Hotels.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<bool>("ExtraTowel")
+                    b.Property<bool>("ExtraTowels")
                         .HasColumnType("bit");
 
                     b.Property<string>("Image")
@@ -111,8 +110,9 @@ namespace Hotels.Migrations
                     b.Property<bool>("Available")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Cost")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Cost")
+                        .HasPrecision(9, 2)
+                        .HasColumnType("decimal(9,2)");
 
                     b.Property<int>("HotelId")
                         .HasColumnType("int");
@@ -168,34 +168,25 @@ namespace Hotels.Migrations
 
             modelBuilder.Entity("Hotels.Models.Reservation", b =>
                 {
-                    b.HasOne("Hotels.Models.Room", "Room")
+                    b.HasOne("Hotels.Models.Room", null)
                         .WithMany("Reservations")
                         .HasForeignKey("RoomId")
-                        .HasConstraintName("FK__Reservati__RoomI__32E0915F")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Hotels.Models.User", "User")
+                    b.HasOne("Hotels.Models.User", null)
                         .WithMany("Reservations")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK__Reservati__UserI__31EC6D26")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Room");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Hotels.Models.Room", b =>
                 {
-                    b.HasOne("Hotels.Models.Hotel", "Hotel")
+                    b.HasOne("Hotels.Models.Hotel", null)
                         .WithMany("Rooms")
                         .HasForeignKey("HotelId")
-                        .HasConstraintName("FK__Room__HotelId__2B3F6F97")
                         .IsRequired();
-
-                    b.Navigation("Hotel");
                 });
 
             modelBuilder.Entity("Hotels.Models.Hotel", b =>

@@ -7,11 +7,6 @@ namespace Hotels.Models
 {
     public partial class Hotel
     {
-        public Hotel()
-        {
-            //Rooms = new HashSet<Room>();
-        }
-
         public int Id { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
@@ -19,7 +14,7 @@ namespace Hotels.Models
         public string Address { get; set; }
         public bool Parking { get; set; }
         public bool Massage { get; set; }
-        public bool ExtraTowel { get; set; }
+        public bool ExtraTowels { get; set; }
         public string Image { get; set; }
 
         public virtual ICollection<Room> Rooms { get; set; }

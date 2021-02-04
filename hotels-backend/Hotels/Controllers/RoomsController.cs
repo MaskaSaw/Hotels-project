@@ -24,35 +24,9 @@ namespace Hotels.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
         {
-            var rooms = await _context.Rooms.ToListAsync();
-            var reservations = await _context.Reservations.ToListAsync();
-
-            foreach (var room in rooms)
-            {
-                room.Reservations = reservations
-                    .Where(x => x.RoomId == room.Id)
-                    .ToList();
-            }
-            return rooms;
-        }
-
-        // GET: api/Hotels/5/Rooms
-        [HttpGet("api/Hotels/{hotelId}/[controller]")]
-        public async Task<ActionResult<IEnumerable<Room>>> GetRooms(int hotelId)
-        {
-            var rooms = await _context.Rooms.ToListAsync();
-            var reservations = await _context.Reservations.ToListAsync();
-
-            foreach (var room in rooms)
-            {
-                room.Reservations = reservations
-                    .Where(x => x.RoomId == room.Id)
-                    .ToList();
-            }
-        
-            return rooms
-                .Where(x => x.HotelId == hotelId)
-                .ToList();
+            return await _context.Rooms
+                .Include(room => room.Reservations)
+                .ToListAsync();
         }
 
         // GET: api/Rooms/5
@@ -70,23 +44,6 @@ namespace Hotels.Controllers
             
             return room;
         }
-
-        // GET: api/Hotels/5/Rooms/5
-        [HttpGet("api/Hotels/{hotelId}/[controller]/{id}")]
-        public async Task<ActionResult<Room>> GetRoom(int id, int hotelId)
-        {
-            var room = await _context.Rooms.FindAsync(id);
-
-            if (room == null || room.HotelId != hotelId)
-            {
-                return NotFound();
-            }
-
-            room.Reservations = await _context.Reservations.Where(x => x.RoomId == id).ToListAsync();
-
-            return room;
-        }
-
 
         // PUT: api/Rooms/5
         [HttpPut("{id}")]

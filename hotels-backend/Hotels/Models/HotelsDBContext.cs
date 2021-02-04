@@ -10,6 +10,7 @@ namespace Hotels.Models
     {
         public HotelsDBContext()
         {
+            Database.EnsureCreated();
         }
 
         public HotelsDBContext(DbContextOptions<HotelsDBContext> options)
@@ -26,14 +27,12 @@ namespace Hotels.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=wsa-033-71;Database=HotelsDB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=HotelsDB;Trusted_Connection=True;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS");
-
             modelBuilder.Entity<Hotel>(entity =>
             {
                 entity.ToTable("Hotel");
@@ -57,15 +56,13 @@ namespace Hotels.Models
 
                 entity.Property(e => e.StartDate).HasColumnType("date");
 
-                entity.HasOne(d => d.Room)
+                entity.HasOne<Room>()
                     .WithMany(p => p.Reservations)
-                    .HasForeignKey(d => d.RoomId)
-                    .HasConstraintName("FK__Reservati__RoomI__32E0915F");
+                    .HasForeignKey(d => d.RoomId);
 
-                entity.HasOne(d => d.User)
+                entity.HasOne<User>()
                     .WithMany(p => p.Reservations)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Reservati__UserI__31EC6D26");
+                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<Room>(entity =>
@@ -73,6 +70,8 @@ namespace Hotels.Models
                 entity.ToTable("Room");
 
                 entity.Property(e => e.RoomNumber).HasMaxLength(20);
+
+                entity.Property(e => e.Cost).HasPrecision(9,2);
 
                 entity.Property(e => e.Image).HasMaxLength(100);
 
@@ -82,11 +81,10 @@ namespace Hotels.Models
 
                 entity.Property(e => e.RoomType).HasMaxLength(50);
 
-                entity.HasOne(d => d.Hotel)
+                entity.HasOne<Hotel>()
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.HotelId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Room__HotelId__2B3F6F97"); 
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<User>(entity =>

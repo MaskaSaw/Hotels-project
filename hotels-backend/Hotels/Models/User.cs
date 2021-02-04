@@ -7,11 +7,6 @@ namespace Hotels.Models
 {
     public partial class User
     {
-        public User()
-        {
-            //Reservations = new HashSet<Reservation>();
-        }
-
         public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }

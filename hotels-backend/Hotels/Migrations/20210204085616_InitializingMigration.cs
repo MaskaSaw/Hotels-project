@@ -19,7 +19,7 @@ namespace Hotels.Migrations
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Parking = table.Column<bool>(type: "bit", nullable: false),
                     Massage = table.Column<bool>(type: "bit", nullable: false),
-                    ExtraTowel = table.Column<bool>(type: "bit", nullable: false),
+                    ExtraTowels = table.Column<bool>(type: "bit", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
@@ -51,7 +51,7 @@ namespace Hotels.Migrations
                     RoomNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     RoomType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     VacantBeds = table.Column<int>(type: "int", nullable: false),
-                    Cost = table.Column<int>(type: "int", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(9,2)", precision: 9, scale: 2, nullable: false),
                     Available = table.Column<bool>(type: "bit", nullable: false),
                     Reserved = table.Column<bool>(type: "bit", nullable: false),
                     Image = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
@@ -61,7 +61,7 @@ namespace Hotels.Migrations
                 {
                     table.PrimaryKey("PK_Room", x => x.Id);
                     table.ForeignKey(
-                        name: "FK__Room__HotelId__2B3F6F97",
+                        name: "FK_Room_Hotel_HotelId",
                         column: x => x.HotelId,
                         principalTable: "Hotel",
                         principalColumn: "Id",
@@ -74,26 +74,26 @@ namespace Hotels.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    RoomId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "date", nullable: false),
                     EndDate = table.Column<DateTime>(type: "date", nullable: false),
                     ArrivalTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     Parking = table.Column<bool>(type: "bit", nullable: false),
                     Massage = table.Column<bool>(type: "bit", nullable: false),
-                    ExtraTowels = table.Column<bool>(type: "bit", nullable: false)
+                    ExtraTowels = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reservation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK__Reservati__RoomI__32E0915F",
+                        name: "FK_Reservation_Room_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Room",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK__Reservati__UserI__31EC6D26",
+                        name: "FK_Reservation_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
