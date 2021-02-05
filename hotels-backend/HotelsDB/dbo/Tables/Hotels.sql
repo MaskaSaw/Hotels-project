@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Hotel] (
+﻿CREATE TABLE [dbo].[Hotels] (
     [Id]           INT            IDENTITY (1, 1) NOT NULL,
     [Name]         NVARCHAR (50)  NOT NULL,
     [Country]      NVARCHAR (50)  NOT NULL,
@@ -10,6 +10,3 @@
     [Image]        NVARCHAR (100) NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
-
-

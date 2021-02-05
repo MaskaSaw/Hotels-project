@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-#nullable disable
 
 namespace Hotels.Models
 {
@@ -23,20 +22,10 @@ namespace Hotels.Models
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=localhost;Database=HotelsDB;Trusted_Connection=True;");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Hotel>(entity =>
             {
-                entity.ToTable("Hotel");
-
                 entity.Property(e => e.Address).HasMaxLength(50);
 
                 entity.Property(e => e.City).HasMaxLength(20);
@@ -50,8 +39,6 @@ namespace Hotels.Models
 
             modelBuilder.Entity<Reservation>(entity =>
             {
-                entity.ToTable("Reservation");
-
                 entity.Property(e => e.EndDate).HasColumnType("date");
 
                 entity.Property(e => e.StartDate).HasColumnType("date");
@@ -67,8 +54,6 @@ namespace Hotels.Models
 
             modelBuilder.Entity<Room>(entity =>
             {
-                entity.ToTable("Room");
-
                 entity.Property(e => e.RoomNumber).HasMaxLength(20);
 
                 entity.Property(e => e.Cost).HasPrecision(9,2);
@@ -89,16 +74,13 @@ namespace Hotels.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("User");
-
                 entity.Property(e => e.Login).HasMaxLength(50);
 
-                entity.Property(e => e.Password).HasMaxLength(50);
+                entity.Property(e => e.PasswordHash).HasMaxLength(100);
+
+                entity.Property(e => e.PasswordSalt).HasMaxLength(100);
             });
-
-            OnModelCreatingPartial(modelBuilder);
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+     
     }
 }

@@ -14,7 +14,7 @@ namespace Hotels.Controllers
     public class UsersController : ControllerBase
     {
         private readonly HotelsDBContext _context;
-        private readonly int _itemsCount = 100;
+        private const int _maxItemsPerPage = 100;
 
         public UsersController(HotelsDBContext context)
         {
@@ -23,11 +23,12 @@ namespace Hotels.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int page)
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int page, int requiredNumberOfItems)
         {
+            int returnedNumberOfItems = (_maxItemsPerPage < requiredNumberOfItems) ? _maxItemsPerPage : requiredNumberOfItems;
             return await _context.Users
-                .Skip((page - 1) * _itemsCount)
-                .Take(_itemsCount)
+                .Skip((page - 1) * returnedNumberOfItems)
+                .Take(returnedNumberOfItems)
                 .ToListAsync();
         }
 
@@ -86,12 +87,22 @@ namespace Hotels.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser(UserDTO userDTO)
         {
+            string passwordHash, passwordSalt;
+            CreatePasswordHash(userDTO.Password, out passwordHash, out passwordSalt);
+            User user = new User
+            {
+                Login = userDTO.Login,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                IsAdmin = userDTO.IsAdmin
+            };
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return CreatedAtAction("GetUser", new { id = user.Id }, userDTO);
         }
 
         // DELETE: api/Users/5
@@ -122,6 +133,15 @@ namespace Hotels.Controllers
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
+        }
+
+        private void CreatePasswordHash(string password, out string passwordHash, out string passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = System.Text.Encoding.Unicode.GetString(hmac.Key);
+                passwordHash = System.Text.Encoding.Unicode.GetString(hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)));
+            }
         }
     }
 }

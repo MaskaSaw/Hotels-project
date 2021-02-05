@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Reservation] (
+﻿CREATE TABLE [dbo].[Reservations] (
     [Id]          INT      IDENTITY (1, 1) NOT NULL,
     [UserId]      INT      NOT NULL,
     [RoomId]      INT      NOT NULL,
@@ -9,7 +9,6 @@
     [Massage]     BIT      NOT NULL,
     [ExtraTowels] BIT      NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
-    FOREIGN KEY ([RoomId]) REFERENCES [dbo].[Room] ([Id]),
-    FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([Id])
+    FOREIGN KEY ([RoomId]) REFERENCES [dbo].[Rooms] ([Id]),
+    FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])
 );
-

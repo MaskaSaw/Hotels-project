@@ -14,7 +14,7 @@ namespace Hotels.Controllers
     public class HotelsController : ControllerBase
     {
         private readonly HotelsDBContext _context;
-        private readonly int _itemsCount = 100;
+        private const int _maxItemsPerPage = 100;
 
         public HotelsController(HotelsDBContext context)
         {
@@ -23,11 +23,12 @@ namespace Hotels.Controllers
 
         // GET: api/Hotels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels([FromQuery] int page)
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels([FromQuery] int page, int requiredNumberOfItems)
         {
+            int returnedNumberOfItems = (_maxItemsPerPage < requiredNumberOfItems) ? _maxItemsPerPage : requiredNumberOfItems;
             return await _context.Hotels
-                .Skip((page - 1) * _itemsCount)
-                .Take(_itemsCount)
+                .Skip((page - 1) * returnedNumberOfItems)
+                .Take(returnedNumberOfItems)
                 .ToListAsync();
         }
 
@@ -69,7 +70,7 @@ namespace Hotels.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch (DbUpdateConcurrencyException)
             {
                 if (!HotelExists(id))
                 {
@@ -77,7 +78,7 @@ namespace Hotels.Controllers
                 }
                 else
                 {
-                    return Conflict(ex);
+                    return Conflict();
                 }
             }
 

@@ -62,7 +62,7 @@ namespace Hotels.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch (DbUpdateConcurrencyException)
             {
                 if (!RoomExists(id))
                 {
@@ -70,7 +70,7 @@ namespace Hotels.Controllers
                 }
                 else
                 {
-                    return Conflict(ex);
+                    return Conflict();
                 }
             }
 

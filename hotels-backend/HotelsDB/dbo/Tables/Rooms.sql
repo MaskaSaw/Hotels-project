@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Room] (
+﻿CREATE TABLE [dbo].[Rooms] (
     [Id]         INT            IDENTITY (1, 1) NOT NULL,
     [RoomType]   NVARCHAR (50)  NOT NULL,
     [VacantBeds] INT            NOT NULL,
@@ -9,6 +9,5 @@
     [RoomNumber] NVARCHAR (20)  NOT NULL,
     [HotelId]    INT            NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
-    FOREIGN KEY ([HotelId]) REFERENCES [dbo].[Hotel] ([Id])
+    FOREIGN KEY ([HotelId]) REFERENCES [dbo].[Hotels] ([Id])
 );
-
