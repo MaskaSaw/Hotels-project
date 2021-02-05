@@ -14,6 +14,7 @@ namespace Hotels.Controllers
     public class HotelsController : ControllerBase
     {
         private readonly HotelsDBContext _context;
+        private readonly int _itemsCount = 100;
 
         public HotelsController(HotelsDBContext context)
         {
@@ -22,9 +23,12 @@ namespace Hotels.Controllers
 
         // GET: api/Hotels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels()
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels([FromQuery] int page)
         {
-            return await _context.Hotels.ToListAsync();
+            return await _context.Hotels
+                .Skip((page - 1) * _itemsCount)
+                .Take(_itemsCount)
+                .ToListAsync();
         }
 
         // GET: api/Hotels/5
@@ -39,6 +43,15 @@ namespace Hotels.Controllers
             }
 
             return hotel;
+        }
+
+        //GET: api/Hotels/5/Rooms
+        [HttpGet("{id}/Rooms")]
+        public async Task<ActionResult<IEnumerable<Room>>> GetRooms(int id)
+        {
+            return await _context.Rooms
+                .Where(room => room.HotelId == id)
+                .ToListAsync();
         }
 
         // PUT: api/Hotels/5
@@ -56,7 +69,7 @@ namespace Hotels.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!HotelExists(id))
                 {
@@ -64,7 +77,7 @@ namespace Hotels.Controllers
                 }
                 else
                 {
-                    throw;
+                    return Conflict(ex);
                 }
             }
 
@@ -100,7 +113,7 @@ namespace Hotels.Controllers
 
         private bool HotelExists(int id)
         {
-            return _context.Hotels.Any(e => e.Id == id);
+            return _context.Hotels.Any(hotel => hotel.Id == id);
         }
     }
 }

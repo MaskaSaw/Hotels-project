@@ -20,15 +20,6 @@ namespace Hotels.Controllers
             _context = context;
         }
 
-        // GET: api/Rooms
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
-        {
-            return await _context.Rooms
-                .Include(room => room.Reservations)
-                .ToListAsync();
-        }
-
         // GET: api/Rooms/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Room>> GetRoom(int id)
@@ -47,6 +38,15 @@ namespace Hotels.Controllers
             return room;
         }
 
+        //GET: api/Rooms/5/Reservations
+        [HttpGet("{id}/Reservations")]
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
+        {
+            return await _context.Reservations
+                .Where(reservation => reservation.RoomId == id)
+                .ToListAsync();
+        }
+
         // PUT: api/Rooms/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoom(int id, Room room)
@@ -62,7 +62,7 @@ namespace Hotels.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!RoomExists(id))
                 {
@@ -70,7 +70,7 @@ namespace Hotels.Controllers
                 }
                 else
                 {
-                    throw;
+                    return Conflict(ex);
                 }
             }
 

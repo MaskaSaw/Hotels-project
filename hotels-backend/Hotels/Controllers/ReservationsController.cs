@@ -14,6 +14,7 @@ namespace Hotels.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly HotelsDBContext _context;
+        private readonly int _itemsCount = 100;
 
         public ReservationsController(HotelsDBContext context)
         {
@@ -21,21 +22,12 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Reservations
-        [HttpGet("{page}-{itemsCount}")]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int page, int itemsCount)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations([FromQuery] int page)
         {
             return await _context.Reservations
-                .Skip((page - 1)* itemsCount)
-                .Take(itemsCount)
-                .ToListAsync();
-        }
-
-        // GET: api/User/5/Reservations
-        [HttpGet("api/User/{userId}/Reservations")]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int userId)
-        {
-            return await _context.Reservations
-                .Where(x => x.UserId == userId)
+                .Skip((page - 1)* _itemsCount)
+                .Take(_itemsCount)
                 .ToListAsync();
         }
 
@@ -68,7 +60,7 @@ namespace Hotels.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!ReservationExists(id))
                 {
@@ -76,7 +68,7 @@ namespace Hotels.Controllers
                 }
                 else
                 {
-                    throw;
+                    return Conflict(ex);
                 }
             }
 

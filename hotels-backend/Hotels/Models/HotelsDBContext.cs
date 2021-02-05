@@ -27,7 +27,7 @@ namespace Hotels.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=HotelsDB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=localhost;Database=HotelsDB;Trusted_Connection=True;");
             }
         }
 

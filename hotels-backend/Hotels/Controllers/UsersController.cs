@@ -14,6 +14,7 @@ namespace Hotels.Controllers
     public class UsersController : ControllerBase
     {
         private readonly HotelsDBContext _context;
+        private readonly int _itemsCount = 100;
 
         public UsersController(HotelsDBContext context)
         {
@@ -22,9 +23,12 @@ namespace Hotels.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int page)
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Skip((page - 1) * _itemsCount)
+                .Take(_itemsCount)
+                .ToListAsync();
         }
 
         // GET: api/Users/5
@@ -39,6 +43,15 @@ namespace Hotels.Controllers
             }
 
             return user;
+        }
+
+        // GET: api/Users/5/Reservations
+        [HttpGet("{Id}/Reservations")]
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int Id)
+        {
+            return await _context.Reservations
+                .Where(reservation => reservation.UserId == Id)
+                .ToListAsync();
         }
 
         // PUT: api/Users/5
@@ -64,7 +77,7 @@ namespace Hotels.Controllers
                 }
                 else
                 {
-                    throw;
+                    return Conflict();
                 }
             }
 
