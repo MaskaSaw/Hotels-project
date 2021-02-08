@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Hotels.Models
+namespace Hotels.DTO
 {
     public partial class UserDTO
     {

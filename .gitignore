@@ -259,3 +259,4 @@ e2e/*.map
 
 #Database files
 *jfm
+*refactorlog

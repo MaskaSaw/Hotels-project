@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Hotels.Models;
+using Hotels.DTO;
 
 namespace Hotels.Controllers
 {
@@ -14,7 +15,7 @@ namespace Hotels.Controllers
     public class UsersController : ControllerBase
     {
         private readonly HotelsDBContext _context;
-        private const int _maxItemsPerPage = 100;
+        private const int MaxItemsPerPage = 100;
 
         public UsersController(HotelsDBContext context)
         {
@@ -23,9 +24,9 @@ namespace Hotels.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int page, int requiredNumberOfItems)
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int page, int itemsPerPage)
         {
-            int returnedNumberOfItems = (_maxItemsPerPage < requiredNumberOfItems) ? _maxItemsPerPage : requiredNumberOfItems;
+            int returnedNumberOfItems = (MaxItemsPerPage < itemsPerPage) ? MaxItemsPerPage : itemsPerPage;
             return await _context.Users
                 .Skip((page - 1) * returnedNumberOfItems)
                 .Take(returnedNumberOfItems)
@@ -89,8 +90,7 @@ namespace Hotels.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(UserDTO userDTO)
         {
-            string passwordHash, passwordSalt;
-            CreatePasswordHash(userDTO.Password, out passwordHash, out passwordSalt);
+            CreatePasswordHash(userDTO.Password, out string passwordHash, out string passwordSalt);
             User user = new User
             {
                 Login = userDTO.Login,

@@ -14,7 +14,7 @@ namespace Hotels.Controllers
     public class HotelsController : ControllerBase
     {
         private readonly HotelsDBContext _context;
-        private const int _maxItemsPerPage = 100;
+        private const int MaxItemsPerPage = 100;
 
         public HotelsController(HotelsDBContext context)
         {
@@ -23,9 +23,9 @@ namespace Hotels.Controllers
 
         // GET: api/Hotels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels([FromQuery] int page, int requiredNumberOfItems)
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels([FromQuery] int page, int itemsPerPage)
         {
-            int returnedNumberOfItems = (_maxItemsPerPage < requiredNumberOfItems) ? _maxItemsPerPage : requiredNumberOfItems;
+            int returnedNumberOfItems = (MaxItemsPerPage < itemsPerPage) ? MaxItemsPerPage : itemsPerPage;
             return await _context.Hotels
                 .Skip((page - 1) * returnedNumberOfItems)
                 .Take(returnedNumberOfItems)
