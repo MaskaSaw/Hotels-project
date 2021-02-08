@@ -76,9 +76,9 @@ namespace Hotels.Models
             {
                 entity.Property(e => e.Login).HasMaxLength(50);
 
-                entity.Property(e => e.PasswordHash).HasMaxLength(100);
+                entity.Property(e => e.PasswordHash).HasMaxLength(200);
 
-                entity.Property(e => e.PasswordSalt).HasMaxLength(100);
+                entity.Property(e => e.PasswordSalt).HasMaxLength(256);
             });
         }
      

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -90,12 +91,13 @@ namespace Hotels.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(UserDTO userDTO)
         {
-            CreatePasswordHash(userDTO.Password, out string passwordHash, out string passwordSalt);
+            var hash = CreatePasswordHash(userDTO.Password);
+
             User user = new User
             {
                 Login = userDTO.Login,
-                PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt,
+                PasswordHash = hash.passwordHash,
+                PasswordSalt = hash.passwordSalt,
                 IsAdmin = userDTO.IsAdmin
             };
 
@@ -135,12 +137,27 @@ namespace Hotels.Controllers
             return _context.Users.Any(e => e.Id == id);
         }
 
-        private void CreatePasswordHash(string password, out string passwordHash, out string passwordSalt)
+        private (string passwordHash, string passwordSalt) CreatePasswordHash(string password)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
-                passwordSalt = System.Text.Encoding.Unicode.GetString(hmac.Key);
-                passwordHash = System.Text.Encoding.Unicode.GetString(hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)));
+                StringBuilder builder = new StringBuilder();
+                byte[] bytePasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+           
+                for (int i = 0; i < bytePasswordHash.Length; i++)
+                {
+                    builder.Append(bytePasswordHash[i].ToString("x2"));
+                }
+                string passwordHash = builder.ToString();
+
+                builder.Clear();
+                for (int i = 0; i < hmac.Key.Length; i++)
+                {
+                    builder.Append(hmac.Key[i].ToString("x2"));
+                }
+                string passwordSalt = builder.ToString();
+
+                return (passwordHash, passwordSalt);
             }
         }
     }
