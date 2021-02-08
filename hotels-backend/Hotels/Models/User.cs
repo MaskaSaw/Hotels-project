@@ -7,8 +7,8 @@ namespace Hotels.Models
     {
         public int Id { get; set; }
         public string Login { get; set; }
-        public string PasswordHash { get; set; }
-        public string PasswordSalt { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
         public bool IsAdmin { get; set; }
 
 

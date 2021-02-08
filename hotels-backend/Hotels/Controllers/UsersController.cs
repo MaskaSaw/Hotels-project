@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Hotels.Models;
 using Hotels.DTO;
+using Hotels.Authentication;
 
 namespace Hotels.Controllers
 {
@@ -91,18 +92,8 @@ namespace Hotels.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(UserDTO userDTO)
         {
-            var hash = CreatePasswordHash(userDTO.Password);
-
-            User user = new User
-            {
-                Login = userDTO.Login,
-                PasswordHash = hash.passwordHash,
-                PasswordSalt = hash.passwordSalt,
-                IsAdmin = userDTO.IsAdmin
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            var auth = new AuthRepository(_context);
+            var user = await auth.Register(userDTO);
 
             return CreatedAtAction("GetUser", new { id = user.Id }, userDTO);
         }
@@ -137,28 +128,6 @@ namespace Hotels.Controllers
             return _context.Users.Any(e => e.Id == id);
         }
 
-        private (string passwordHash, string passwordSalt) CreatePasswordHash(string password)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                StringBuilder builder = new StringBuilder();
-                byte[] bytePasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-           
-                for (int i = 0; i < bytePasswordHash.Length; i++)
-                {
-                    builder.Append(bytePasswordHash[i].ToString("x2"));
-                }
-                string passwordHash = builder.ToString();
-
-                builder.Clear();
-                for (int i = 0; i < hmac.Key.Length; i++)
-                {
-                    builder.Append(hmac.Key[i].ToString("x2"));
-                }
-                string passwordSalt = builder.ToString();
-
-                return (passwordHash, passwordSalt);
-            }
-        }
+        
     }
 }
