@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Hotels.Models;
 using Hotels.DTO;
 using Hotels.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Hotels.Controllers
 {
@@ -25,6 +27,7 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Users
+        [Authorize (Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int page, int itemsPerPage)
         {
@@ -36,6 +39,7 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Users/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -50,15 +54,25 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Users/5/Reservations
-        [HttpGet("{Id}/Reservations")]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int Id)
+        [Authorize]
+        [HttpGet("{id}/Reservations")]
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
         {
-            return await _context.Reservations
-                .Where(reservation => reservation.UserId == Id)
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            int authUserId = GetAuthorizedUserId(identity.Claims);
+            string authUserRole = GetAuthorizedUserRole(identity.Claims);
+            if (authUserId == id || authUserRole == "Admin")
+            {
+                return await _context.Reservations
+                .Where(reservation => reservation.UserId == id)
                 .ToListAsync();
+            }
+
+            return Forbid();         
         }
 
         // PUT: api/Users/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
@@ -67,38 +81,50 @@ namespace Hotels.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            int authUserId = GetAuthorizedUserId(identity.Claims);
+            string authUserRole = GetAuthorizedUserRole(identity.Claims);
+            if (authUserId == id || authUserRole == "Admin")
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
+                _context.Entry(user).State = EntityState.Modified;
+
+                try
                 {
-                    return NotFound();
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    return Conflict();
+                    if (!UserExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        return Conflict();
+                    }
                 }
+
+                return NoContent();
             }
 
-            return NoContent();
+            return Forbid();            
         }
 
         // POST: api/Users
+        [Authorize (Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(UserDTO userDTO)
         {
             var auth = new AuthRepository(_context);
+
+            userDTO.Login = userDTO.Login.ToLower();
             var user = await auth.Register(userDTO);
 
             return CreatedAtAction("GetUser", new { id = user.Id }, userDTO);
         }
 
         // DELETE: api/Users/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -108,26 +134,48 @@ namespace Hotels.Controllers
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-
-            var reservations = await _context.Reservations
-                .Where(x => x.UserId == id)
-                .ToListAsync();
-
-            foreach (var reservation in reservations)
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            int authUserId = GetAuthorizedUserId(identity.Claims);
+            string authUserRole = GetAuthorizedUserRole(identity.Claims);
+            if (authUserId == id || authUserRole == "Admin")
             {
-                _context.Reservations.Remove(reservation);
-            }
-            await _context.SaveChangesAsync();
+                _context.Users.Remove(user);
 
-            return NoContent();
+                var reservations = await _context.Reservations
+                    .Where(x => x.UserId == id)
+                    .ToListAsync();
+
+                foreach (var reservation in reservations)
+                {
+                    _context.Reservations.Remove(reservation);
+                }
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+
+            return Forbid();    
         }
 
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
+        }   
+        
+        private int GetAuthorizedUserId(IEnumerable<Claim> claims)
+        {
+            return Convert.ToInt32(claims
+                .Where(x => x.Type == ClaimTypes.NameIdentifier)
+                .FirstOrDefault()
+                .Value);
         }
 
-        
+        private string GetAuthorizedUserRole(IEnumerable<Claim> claims)
+        {
+            return claims
+                .Where(x => x.Type == ClaimTypes.Role)
+                .FirstOrDefault()
+                .Value;
+        }
     }
 }

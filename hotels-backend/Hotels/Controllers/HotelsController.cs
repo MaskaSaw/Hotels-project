@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Hotels.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class HotelsController : ControllerBase
@@ -58,6 +57,7 @@ namespace Hotels.Controllers
         }
 
         // PUT: api/Hotels/5
+        [Authorize (Roles ="Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel(int id, Hotel hotel)
         {
@@ -88,6 +88,7 @@ namespace Hotels.Controllers
         }
 
         // POST: api/Hotels
+        [Authorize (Roles ="Admin")]
         [HttpPost]
         public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
         {
@@ -98,6 +99,7 @@ namespace Hotels.Controllers
         }
 
         // DELETE: api/Hotels/5
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {

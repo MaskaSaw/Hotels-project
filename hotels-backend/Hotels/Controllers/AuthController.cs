@@ -42,8 +42,9 @@ namespace Hotels.Controllers
             return Created($"api/Users/{createdUser.Id}", createdUser);
         }
 
+        //POST: api/auth/login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserDTO userForLogin)
+        public async Task<IActionResult> Login(UserDTO userForLogin)
         {
             var userFromRepo = await _repo.Login(userForLogin.Login.ToLower(), userForLogin.Password);
             if (userFromRepo == null) //User login failed
@@ -56,7 +57,8 @@ namespace Hotels.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]{
                     new Claim(ClaimTypes.NameIdentifier,userFromRepo.Id.ToString()),
-                    new Claim(ClaimTypes.Name, userFromRepo.Login)
+                    new Claim(ClaimTypes.Name, userFromRepo.Login),
+                    new Claim(ClaimTypes.Role, userFromRepo.Role)
                 }),
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)

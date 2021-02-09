@@ -50,7 +50,7 @@ namespace Hotels.Authentication
                 Login = userDTO.Login,
                 PasswordHash = hash.passwordHash,
                 PasswordSalt = hash.passwordSalt,
-                IsAdmin = userDTO.IsAdmin
+                Role = userDTO.Role
             };
 
             await _context.Users.AddAsync(user);
