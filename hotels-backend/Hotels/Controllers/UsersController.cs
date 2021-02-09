@@ -74,9 +74,9 @@ namespace Hotels.Controllers
         // PUT: api/Users/5
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, UserDTO userDTO)
         {
-            if (id != user.Id)
+            if (id != userDTO.Id)
             {
                 return BadRequest();
             }
@@ -86,6 +86,15 @@ namespace Hotels.Controllers
             string authUserRole = GetAuthorizedUserRole(identity.Claims);
             if (authUserId == id || authUserRole == "Admin")
             {
+                var hash = HashGenerator.CreatePasswordHash(userDTO.Password);
+                User user = new User
+                {
+                    Id = userDTO.Id,
+                    Login = userDTO.Login,
+                    PasswordHash = hash.passwordHash,
+                    PasswordSalt = hash.passwordSalt,
+                    Role = userDTO.Role
+                };
                 _context.Entry(user).State = EntityState.Modified;
 
                 try

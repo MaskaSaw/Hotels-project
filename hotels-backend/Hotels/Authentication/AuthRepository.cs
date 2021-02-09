@@ -43,7 +43,7 @@ namespace Hotels.Authentication
 
         public async Task<User> Register(UserDTO userDTO)
         {
-            var hash = CreatePasswordHash(userDTO.Password);
+            var hash = HashGenerator.CreatePasswordHash(userDTO.Password);
 
             User user = new User
             {
@@ -64,17 +64,6 @@ namespace Hotels.Authentication
             if (await _context.Users.AnyAsync(x => x.Login == login))
                 return true;
             return false;
-        }
-
-        private (byte[] passwordHash, byte[] passwordSalt) CreatePasswordHash(string password)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                byte[] passwordSalt = hmac.Key;
-                byte[] passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-
-                return (passwordHash, passwordSalt);
-            }           
         }
     }
 }

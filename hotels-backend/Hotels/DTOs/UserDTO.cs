@@ -6,7 +6,7 @@ namespace Hotels.DTO
 {
     public partial class UserDTO
     {
-        public int Id { get; set; }
+       // public int Id { get; set; }
 
         [Required]
         public string Login { get; set; }
