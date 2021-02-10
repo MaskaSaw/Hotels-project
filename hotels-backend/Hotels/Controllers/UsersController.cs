@@ -60,6 +60,7 @@ namespace Hotels.Controllers
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
         {
             var userIdentity = this.GetIdentity();
+
             if (userIdentity.authUserId == id || userIdentity.authUserRole == "Admin")
             {
                 return await _context.Reservations
@@ -81,6 +82,7 @@ namespace Hotels.Controllers
             }
 
             var userIdentity = this.GetIdentity();
+
             if (userIdentity.authUserId == id || userIdentity.authUserRole == "Admin")
             {
                 var hash = HashGenerator.CreatePasswordHash(userDTO.Password);
@@ -92,6 +94,7 @@ namespace Hotels.Controllers
                     PasswordSalt = hash.passwordSalt,
                     Role = userDTO.Role
                 };
+
                 _context.Entry(user).State = EntityState.Modified;
 
                 try
@@ -133,12 +136,14 @@ namespace Hotels.Controllers
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
+
             if (user == null)
             {
                 return NotFound();
             }
 
             var userIdentity = this.GetIdentity();
+
             if (userIdentity.authUserId == id || userIdentity.authUserRole == "Admin")
             {
                 _context.Users.Remove(user);

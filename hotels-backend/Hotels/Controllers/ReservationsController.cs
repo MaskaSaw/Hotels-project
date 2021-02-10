@@ -65,9 +65,10 @@ namespace Hotels.Controllers
             {
                 return BadRequest();
             }
-            var reservation = await _context.Reservations.FindAsync(id);
 
+            var reservation = await _context.Reservations.FindAsync(id);
             var userIdentity = this.GetIdentity();
+
             if (userIdentity.authUserId == reservation.UserId || userIdentity.authUserRole == "Admin")
             {
                 _context.Entry(modifiedReservation).State = EntityState.Modified;
@@ -100,6 +101,7 @@ namespace Hotels.Controllers
         public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
         {
             var userIdentity = this.GetIdentity();
+
             if (userIdentity.authUserId == reservation.UserId || userIdentity.authUserRole == "Admin")
             {
                 _context.Reservations.Add(reservation);
@@ -117,12 +119,14 @@ namespace Hotels.Controllers
         public async Task<IActionResult> DeleteReservation(int id)
         {
             var reservation = await _context.Reservations.FindAsync(id);
+
             if (reservation == null)
             {
                 return NotFound();
             }
 
             var userIdentity = this.GetIdentity();
+
             if (userIdentity.authUserId == reservation.UserId || userIdentity.authUserRole == "Admin")
             {
                 _context.Reservations.Remove(reservation);

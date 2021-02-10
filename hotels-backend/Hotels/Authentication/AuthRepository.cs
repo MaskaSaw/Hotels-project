@@ -21,6 +21,7 @@ namespace Hotels.Authentication
         public async Task<User> Login(string login, string password)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Login == login);
+
             if (user == null)
             {
                 return null;

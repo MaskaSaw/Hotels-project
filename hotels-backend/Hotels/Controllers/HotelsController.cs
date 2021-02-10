@@ -104,6 +104,7 @@ namespace Hotels.Controllers
         public async Task<IActionResult> DeleteHotel(int id)
         {
             var hotel = await _context.Hotels.FindAsync(id);
+
             if (hotel == null)
             {
                 return NotFound();

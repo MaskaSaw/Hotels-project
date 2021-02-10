@@ -15,8 +15,10 @@ namespace Hotels.Extensions
             var identity = controller.HttpContext.User.Identity as ClaimsIdentity;
             int authUserId = GetAuthorizedUserId(identity.Claims);
             string authUserRole = GetAuthorizedUserRole(identity.Claims);
+
             return (authUserId, authUserRole);
         }
+
         private static int GetAuthorizedUserId(IEnumerable<Claim> claims)
         {
             return Convert.ToInt32(claims
