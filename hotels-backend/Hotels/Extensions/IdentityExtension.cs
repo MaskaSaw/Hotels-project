@@ -12,10 +12,11 @@ namespace Hotels.Extensions
     {
         public static int GetAuthorizedUserId(this ClaimsIdentity identity)
         {
-            return Convert.ToInt32(identity.Claims
-                .Where(x => x.Type == ClaimTypes.NameIdentifier)
-                .FirstOrDefault()
-                .Value);
+            return Convert.ToInt32(
+                identity.Claims
+                    .Where(x => x.Type == ClaimTypes.NameIdentifier)
+                    .FirstOrDefault()
+                    .Value);
         }
 
         public static string GetAuthorizedUserRole(this ClaimsIdentity identity)

@@ -17,11 +17,11 @@ namespace Hotels.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AuthService _repo;
+        private readonly AuthService __authService;
         private readonly IConfiguration _config;
-        public AuthController(AuthService repo, IConfiguration config)
+        public AuthController(AuthService authService, IConfiguration config)
         {
-            _repo = repo;
+            __authService = authService;
             _config = config;
         }
 
@@ -36,12 +36,12 @@ namespace Hotels.Controllers
 
             userForRegister.Login = userForRegister.Login.ToLower();
 
-            if (await _repo.UserExists(userForRegister.Login))
+            if (await __authService.UserExists(userForRegister.Login))
             {
                 return BadRequest("Username is already taken");
             }
 
-            var createdUser = await _repo.Register(userForRegister);
+            var createdUser = await __authService.Register(userForRegister);
 
             return Created($"api/Users/{createdUser.Id}", createdUser);
         }
@@ -50,7 +50,7 @@ namespace Hotels.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserDTO userForLogin)
         {
-            var userFromRepo = await _repo.Login(userForLogin.Login.ToLower(), userForLogin.Password);
+            var userFromRepo = await __authService.Login(userForLogin.Login.ToLower(), userForLogin.Password);
 
             if (userFromRepo == null) //User login failed
             {
