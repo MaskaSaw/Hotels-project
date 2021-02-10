@@ -39,7 +39,7 @@ namespace Hotels
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotels", Version = "v1" });
             });
-            services.AddScoped<AuthRepository>();
+            services.AddScoped<AuthService>();
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:TokenSecretKey").Value);
             services

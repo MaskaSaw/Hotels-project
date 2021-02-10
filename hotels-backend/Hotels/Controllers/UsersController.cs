@@ -20,11 +20,13 @@ namespace Hotels.Controllers
     public class UsersController : ControllerBase
     {
         private readonly HotelsDBContext _context;
+        private readonly AuthService _authService;
         private const int MaxItemsPerPage = 100;
 
-        public UsersController(HotelsDBContext context)
+        public UsersController(HotelsDBContext context, AuthService authService)
         {
             _context = context;
+            _authService = authService;
         }
 
         // GET: api/Users
@@ -59,13 +61,13 @@ namespace Hotels.Controllers
         [HttpGet("{id}/Reservations")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
         {
-            var userIdentity = this.GetIdentity();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-            if (userIdentity.authUserId == id || userIdentity.authUserRole == "Admin")
+            if (identity.GetAuthorizedUserId() == id || identity.GetAuthorizedUserRole() == "Admin")
             {
                 return await _context.Reservations
-                .Where(reservation => reservation.UserId == id)
-                .ToListAsync();
+                    .Where(reservation => reservation.UserId == id)
+                    .ToListAsync();
             }
 
             return Forbid();         
@@ -81,11 +83,11 @@ namespace Hotels.Controllers
                 return BadRequest();
             }
 
-            var userIdentity = this.GetIdentity();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-            if (userIdentity.authUserId == id || userIdentity.authUserRole == "Admin")
+            if (identity.GetAuthorizedUserId() == id || identity.GetAuthorizedUserRole() == "Admin")
             {
-                var hash = HashGenerator.CreatePasswordHash(userDTO.Password);
+                var hash = _authService.CreatePasswordHash(userDTO.Password);
                 User user = new User
                 {
                     Id = userDTO.Id,
@@ -122,10 +124,10 @@ namespace Hotels.Controllers
         // POST: api/Users
         [Authorize (Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(UserDTO userDTO,[FromServices] AuthRepository auth)
+        public async Task<ActionResult<User>> PostUser(UserDTO userDTO)
         {
             userDTO.Login = userDTO.Login.ToLower();
-            var user = await auth.Register(userDTO);
+            var user = await _authService.Register(userDTO);
 
             return CreatedAtAction("GetUser", new { id = user.Id }, userDTO);
         }
@@ -142,9 +144,9 @@ namespace Hotels.Controllers
                 return NotFound();
             }
 
-            var userIdentity = this.GetIdentity();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-            if (userIdentity.authUserId == id || userIdentity.authUserRole == "Admin")
+            if (identity.GetAuthorizedUserId() == id || identity.GetAuthorizedUserRole() == "Admin")
             {
                 _context.Users.Remove(user);
 

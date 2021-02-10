@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hotels.Authentication
 {
-    public class AuthRepository
+    public class AuthService
     {
         private readonly HotelsDBContext _context;
 
-        public AuthRepository(HotelsDBContext context)
+        public AuthService(HotelsDBContext context)
         {
             _context = context;
         }
@@ -46,7 +46,7 @@ namespace Hotels.Authentication
 
         public async Task<User> Register(UserDTO userDTO)
         {
-            var hash = HashGenerator.CreatePasswordHash(userDTO.Password);
+            var hash = CreatePasswordHash(userDTO.Password);
 
             User user = new User
             {
@@ -60,6 +60,17 @@ namespace Hotels.Authentication
             await _context.SaveChangesAsync();
 
             return user;
+        }
+
+        public (byte[] passwordHash, byte[] passwordSalt) CreatePasswordHash(string password)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                byte[] passwordSalt = hmac.Key;
+                byte[] passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+
+                return (passwordHash, passwordSalt);
+            }
         }
 
         public async Task<bool> UserExists(string login)

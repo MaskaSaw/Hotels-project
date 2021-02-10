@@ -17,9 +17,9 @@ namespace Hotels.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AuthRepository _repo;
+        private readonly AuthService _repo;
         private readonly IConfiguration _config;
-        public AuthController(AuthRepository repo, IConfiguration config)
+        public AuthController(AuthService repo, IConfiguration config)
         {
             _repo = repo;
             _config = config;
@@ -30,12 +30,16 @@ namespace Hotels.Controllers
         public async Task<IActionResult> Register(UserDTO userForRegister)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }    
 
             userForRegister.Login = userForRegister.Login.ToLower();
 
             if (await _repo.UserExists(userForRegister.Login))
+            {
                 return BadRequest("Username is already taken");
+            }
 
             var createdUser = await _repo.Register(userForRegister);
 
@@ -48,7 +52,9 @@ namespace Hotels.Controllers
         {
             var userFromRepo = await _repo.Login(userForLogin.Login.ToLower(), userForLogin.Password);
             if (userFromRepo == null) //User login failed
+            {
                 return Unauthorized();
+            }
 
             //generate token
             var tokenHandler = new JwtSecurityTokenHandler();
