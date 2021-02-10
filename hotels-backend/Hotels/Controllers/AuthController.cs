@@ -51,6 +51,7 @@ namespace Hotels.Controllers
         public async Task<IActionResult> Login(UserDTO userForLogin)
         {
             var userFromRepo = await _repo.Login(userForLogin.Login.ToLower(), userForLogin.Password);
+
             if (userFromRepo == null) //User login failed
             {
                 return Unauthorized();

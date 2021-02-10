@@ -111,7 +111,6 @@ namespace Hotels.Controllers
             }
 
             _context.Hotels.Remove(hotel);
-
             await _context.SaveChangesAsync();
 
             return NoContent();
