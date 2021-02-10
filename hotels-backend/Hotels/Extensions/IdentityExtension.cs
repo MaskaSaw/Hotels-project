@@ -16,7 +16,8 @@ namespace Hotels.Extensions
                 identity.Claims
                     .Where(x => x.Type == ClaimTypes.NameIdentifier)
                     .FirstOrDefault()
-                    .Value);
+                    .Value
+            );
         }
 
         public static string GetAuthorizedUserRole(this ClaimsIdentity identity)
