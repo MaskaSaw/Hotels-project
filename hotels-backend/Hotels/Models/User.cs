@@ -7,10 +7,9 @@ namespace Hotels.Models
     {
         public int Id { get; set; }
         public string Login { get; set; }
-        public string PasswordHash { get; set; }
-        public string PasswordSalt { get; set; }
-        public bool IsAdmin { get; set; }
-
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
+        public string Role { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }
     }

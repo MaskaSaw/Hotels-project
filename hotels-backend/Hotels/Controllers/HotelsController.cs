@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Hotels.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Hotels.Controllers
 {
@@ -56,6 +57,7 @@ namespace Hotels.Controllers
         }
 
         // PUT: api/Hotels/5
+        [Authorize (Roles ="Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel(int id, Hotel hotel)
         {
@@ -86,6 +88,7 @@ namespace Hotels.Controllers
         }
 
         // POST: api/Hotels
+        [Authorize (Roles ="Admin")]
         [HttpPost]
         public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
         {
@@ -96,17 +99,18 @@ namespace Hotels.Controllers
         }
 
         // DELETE: api/Hotels/5
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {
             var hotel = await _context.Hotels.FindAsync(id);
+
             if (hotel == null)
             {
                 return NotFound();
             }
 
             _context.Hotels.Remove(hotel);
-
             await _context.SaveChangesAsync();
 
             return NoContent();

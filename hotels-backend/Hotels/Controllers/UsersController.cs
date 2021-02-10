@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Hotels.Models;
 using Hotels.DTO;
+using Hotels.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Hotels.Extensions;
 
 namespace Hotels.Controllers
 {
@@ -15,14 +20,17 @@ namespace Hotels.Controllers
     public class UsersController : ControllerBase
     {
         private readonly HotelsDBContext _context;
+        private readonly AuthService _authService;
         private const int MaxItemsPerPage = 100;
 
-        public UsersController(HotelsDBContext context)
+        public UsersController(HotelsDBContext context, AuthService authService)
         {
             _context = context;
+            _authService = authService;
         }
 
         // GET: api/Users
+        [Authorize (Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int page, int itemsPerPage)
         {
@@ -34,6 +42,7 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Users/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -48,100 +57,118 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Users/5/Reservations
-        [HttpGet("{Id}/Reservations")]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int Id)
+        [Authorize]
+        [HttpGet("{id}/Reservations")]
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
         {
-            return await _context.Reservations
-                .Where(reservation => reservation.UserId == Id)
-                .ToListAsync();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if (identity.GetAuthorizedUserId() == id || identity.GetAuthorizedUserRole() == "Admin")
+            {
+                return await _context.Reservations
+                    .Where(reservation => reservation.UserId == id)
+                    .ToListAsync();
+            }
+
+            return Forbid();         
         }
 
         // PUT: api/Users/5
+        [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, UserDTO userDTO)
         {
-            if (id != user.Id)
+            if (id != userDTO.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-            try
+            if (identity.GetAuthorizedUserId() == id || identity.GetAuthorizedUserRole() == "Admin")
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
+                var hash = _authService.CreatePasswordHash(userDTO.Password);
+                User user = new User
                 {
-                    return NotFound();
-                }
-                else
+                    Id = userDTO.Id,
+                    Login = userDTO.Login,
+                    PasswordHash = hash.passwordHash,
+                    PasswordSalt = hash.passwordSalt,
+                    Role = userDTO.Role
+                };
+
+                _context.Entry(user).State = EntityState.Modified;
+
+                try
                 {
-                    return Conflict();
+                    await _context.SaveChangesAsync();
                 }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        return Conflict();
+                    }
+                }
+
+                return NoContent();
             }
 
-            return NoContent();
+            return Forbid();            
         }
 
         // POST: api/Users
+        [Authorize (Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(UserDTO userDTO)
         {
-            CreatePasswordHash(userDTO.Password, out string passwordHash, out string passwordSalt);
-            User user = new User
-            {
-                Login = userDTO.Login,
-                PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt,
-                IsAdmin = userDTO.IsAdmin
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            userDTO.Login = userDTO.Login.ToLower();
+            var user = await _authService.Register(userDTO);
 
             return CreatedAtAction("GetUser", new { id = user.Id }, userDTO);
         }
 
         // DELETE: api/Users/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
+
             if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-            var reservations = await _context.Reservations
-                .Where(x => x.UserId == id)
-                .ToListAsync();
-
-            foreach (var reservation in reservations)
+            if (identity.GetAuthorizedUserId() == id || identity.GetAuthorizedUserRole() == "Admin")
             {
-                _context.Reservations.Remove(reservation);
-            }
-            await _context.SaveChangesAsync();
+                _context.Users.Remove(user);
 
-            return NoContent();
+                var reservations = await _context.Reservations
+                    .Where(x => x.UserId == id)
+                    .ToListAsync();
+
+                foreach (var reservation in reservations)
+                {
+                    _context.Reservations.Remove(reservation);
+                }
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+
+            return Forbid();    
         }
 
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
-        }
-
-        private void CreatePasswordHash(string password, out string passwordHash, out string passwordSalt)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = System.Text.Encoding.Unicode.GetString(hmac.Key);
-                passwordHash = System.Text.Encoding.Unicode.GetString(hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)));
-            }
-        }
+        }   
     }
 }
