@@ -11,6 +11,7 @@ using Hotels.DTO;
 using Hotels.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Hotels.Extensions;
 
 namespace Hotels.Controllers
 {
@@ -58,10 +59,8 @@ namespace Hotels.Controllers
         [HttpGet("{id}/Reservations")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            int authUserId = GetAuthorizedUserId(identity.Claims);
-            string authUserRole = GetAuthorizedUserRole(identity.Claims);
-            if (authUserId == id || authUserRole == "Admin")
+            var userIdentity = this.GetIdentity();
+            if (userIdentity.authUserId == id || userIdentity.authUserRole == "Admin")
             {
                 return await _context.Reservations
                 .Where(reservation => reservation.UserId == id)
@@ -81,10 +80,8 @@ namespace Hotels.Controllers
                 return BadRequest();
             }
 
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            int authUserId = GetAuthorizedUserId(identity.Claims);
-            string authUserRole = GetAuthorizedUserRole(identity.Claims);
-            if (authUserId == id || authUserRole == "Admin")
+            var userIdentity = this.GetIdentity();
+            if (userIdentity.authUserId == id || userIdentity.authUserRole == "Admin")
             {
                 var hash = HashGenerator.CreatePasswordHash(userDTO.Password);
                 User user = new User
@@ -122,10 +119,8 @@ namespace Hotels.Controllers
         // POST: api/Users
         [Authorize (Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(UserDTO userDTO)
+        public async Task<ActionResult<User>> PostUser(UserDTO userDTO,[FromServices] AuthRepository auth)
         {
-            var auth = new AuthRepository(_context);
-
             userDTO.Login = userDTO.Login.ToLower();
             var user = await auth.Register(userDTO);
 
@@ -143,10 +138,8 @@ namespace Hotels.Controllers
                 return NotFound();
             }
 
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            int authUserId = GetAuthorizedUserId(identity.Claims);
-            string authUserRole = GetAuthorizedUserRole(identity.Claims);
-            if (authUserId == id || authUserRole == "Admin")
+            var userIdentity = this.GetIdentity();
+            if (userIdentity.authUserId == id || userIdentity.authUserRole == "Admin")
             {
                 _context.Users.Remove(user);
 
@@ -170,21 +163,5 @@ namespace Hotels.Controllers
         {
             return _context.Users.Any(e => e.Id == id);
         }   
-        
-        private int GetAuthorizedUserId(IEnumerable<Claim> claims)
-        {
-            return Convert.ToInt32(claims
-                .Where(x => x.Type == ClaimTypes.NameIdentifier)
-                .FirstOrDefault()
-                .Value);
-        }
-
-        private string GetAuthorizedUserRole(IEnumerable<Claim> claims)
-        {
-            return claims
-                .Where(x => x.Type == ClaimTypes.Role)
-                .FirstOrDefault()
-                .Value;
-        }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Hotels.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Hotels.Extensions;
 
 namespace Hotels.Controllers
 {
@@ -46,11 +47,8 @@ namespace Hotels.Controllers
                 return NotFound();
             }
 
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            int authUserId = GetAuthorizedUserId(identity.Claims);
-            string authUserRole = GetAuthorizedUserRole(identity.Claims);
-
-            if (authUserId == reservation.UserId || authUserRole == "Admin")
+            var userIdentity = this.GetIdentity();
+            if (userIdentity.authUserId == reservation.UserId || userIdentity.authUserRole == "Admin")
             {                
                 return reservation;
             }
@@ -69,10 +67,8 @@ namespace Hotels.Controllers
             }
             var reservation = await _context.Reservations.FindAsync(id);
 
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            int authUserId = GetAuthorizedUserId(identity.Claims);
-            string authUserRole = GetAuthorizedUserRole(identity.Claims);
-            if (authUserId == reservation.UserId || authUserRole == "Admin")
+            var userIdentity = this.GetIdentity();
+            if (userIdentity.authUserId == reservation.UserId || userIdentity.authUserRole == "Admin")
             {
                 _context.Entry(modifiedReservation).State = EntityState.Modified;
 
@@ -103,10 +99,8 @@ namespace Hotels.Controllers
         [HttpPost]
         public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            int authUserId = GetAuthorizedUserId(identity.Claims);
-            string authUserRole = GetAuthorizedUserRole(identity.Claims);
-            if (authUserId == reservation.UserId || authUserRole == "Admin")
+            var userIdentity = this.GetIdentity();
+            if (userIdentity.authUserId == reservation.UserId || userIdentity.authUserRole == "Admin")
             {
                 _context.Reservations.Add(reservation);
                 await _context.SaveChangesAsync();
@@ -128,31 +122,21 @@ namespace Hotels.Controllers
                 return NotFound();
             }
 
-            _context.Reservations.Remove(reservation);
-            await _context.SaveChangesAsync();
+            var userIdentity = this.GetIdentity();
+            if (userIdentity.authUserId == reservation.UserId || userIdentity.authUserRole == "Admin")
+            {
+                _context.Reservations.Remove(reservation);
+                await _context.SaveChangesAsync();
 
-            return NoContent();
+                return NoContent();
+            }
+
+            return Forbid();          
         }
 
         private bool ReservationExists(int id)
         {
             return _context.Reservations.Any(e => e.Id == id);
-        }
-
-        private int GetAuthorizedUserId(IEnumerable<Claim> claims)
-        {
-            return Convert.ToInt32(claims
-                .Where(x => x.Type == ClaimTypes.NameIdentifier)
-                .FirstOrDefault()
-                .Value);
-        }
-
-        private string GetAuthorizedUserRole(IEnumerable<Claim> claims)
-        {
-            return claims
-                .Where(x => x.Type == ClaimTypes.Role)
-                .FirstOrDefault()
-                .Value;
         }
     }
 }

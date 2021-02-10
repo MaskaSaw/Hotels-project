@@ -12,18 +12,24 @@ namespace Hotels.Authentication
     public class AuthRepository
     {
         private readonly HotelsDBContext _context;
+
         public AuthRepository(HotelsDBContext context)
         {
             _context = context;
         }
+
         public async Task<User> Login(string login, string password)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Login == login);
             if (user == null)
+            {
                 return null;
+            }         
 
             if (!VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
+            {
                 return null;
+            }               
 
             return user;
         }
@@ -33,12 +39,8 @@ namespace Hotels.Authentication
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != passwordHash[i]) return false;
-                }
+                return computedHash.SequenceEqual(passwordHash);
             }
-            return true;
         }
 
         public async Task<User> Register(UserDTO userDTO)
@@ -62,7 +64,10 @@ namespace Hotels.Authentication
         public async Task<bool> UserExists(string login)
         {
             if (await _context.Users.AnyAsync(x => x.Login == login))
+            {
                 return true;
+            }
+                
             return false;
         }
     }

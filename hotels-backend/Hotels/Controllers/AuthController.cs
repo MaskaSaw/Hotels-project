@@ -15,7 +15,7 @@ using System.Text;
 namespace Hotels.Controllers
 {
     [Route("api/[controller]")]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
         private readonly AuthRepository _repo;
         private readonly IConfiguration _config;
@@ -52,14 +52,18 @@ namespace Hotels.Controllers
 
             //generate token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:Token").Value);
+            var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:TokenSecretKey").Value);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]{
-                    new Claim(ClaimTypes.NameIdentifier,userFromRepo.Id.ToString()),
-                    new Claim(ClaimTypes.Name, userFromRepo.Login),
-                    new Claim(ClaimTypes.Role, userFromRepo.Role)
-                }),
+                Subject = new ClaimsIdentity(
+                    new Claim[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier,userFromRepo.Id.ToString()),
+                        new Claim(ClaimTypes.Name, userFromRepo.Login),
+                        new Claim(ClaimTypes.Role, userFromRepo.Role)
+                    }
+                ),
+
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
             };
