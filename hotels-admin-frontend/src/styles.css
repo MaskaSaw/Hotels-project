@@ -3,6 +3,6 @@ h1 {
     margin-left: 20px;
 }
 
-td {
-    text-align: left;
+th, td {
+    text-align: center;
 }

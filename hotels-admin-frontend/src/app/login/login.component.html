@@ -1,5 +1,7 @@
 <div *ngIf='authService.logIn'>
-  <h3>Login</h3>
+  <br>
+  <h3>Please, enter your login and password</h3>
+  <br>
   <div>
     <div class='spacer'>
       <label for='Login'>Login</label>
@@ -9,11 +11,10 @@
       <label for='password'>Password</label>
       <input type='password' placeholder='password' [(ngModel)]='password' class='form-control'/>
     </div>
+    <br>
     <div class='spacer'>
       <button  type='submit' (click)='Login()'>Login</button>
     </div>
-    <p>{{login}}</p>
-    <p>{{password}}</p>
   </div>
 </div>
 

@@ -2,4 +2,15 @@ ul.menu li {
     display: inline;
     margin-right: 5px;
     padding: 3px;
+    border: 2px solid rgb(71, 135, 231); 
+    border-radius: 15%;
+}
+
+ul {
+    margin-top: 10px;
+    font-size: 20pt;
+}
+
+a:hover {
+    text-decoration: none;
 }
