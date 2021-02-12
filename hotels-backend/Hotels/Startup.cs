@@ -40,7 +40,7 @@ namespace Hotels
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotels", Version = "v1" });
             });
             services.AddScoped<AuthService>();
-
+            
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:TokenSecretKey").Value);
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -55,6 +55,11 @@ namespace Hotels
                     };
                 }
             );
+
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +75,7 @@ namespace Hotels
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors("AllowOrigin");
             app.UseAuthentication();
             app.UseAuthorization();
 

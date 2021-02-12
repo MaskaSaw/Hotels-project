@@ -1,0 +1,19 @@
+<div *ngIf='authService.logIn'>
+  <h3>Login</h3>
+  <div>
+    <div class='spacer'>
+      <label for='Login'>Login</label>
+      <input type='text' placeholder='login' [(ngModel)]='login' class='form-control'>
+    </div>
+    <div class='spacer'>
+      <label for='password'>Password</label>
+      <input type='password' placeholder='password' [(ngModel)]='password' class='form-control'/>
+    </div>
+    <div class='spacer'>
+      <button  type='submit' (click)='Login()'>Login</button>
+    </div>
+    <p>{{login}}</p>
+    <p>{{password}}</p>
+  </div>
+</div>
+

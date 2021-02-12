@@ -1,0 +1,33 @@
+<div class="page-header">
+    <h1>Reservations list</h1>
+</div>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr> 
+                <th>Id</th>
+                <th>User Id</th>
+                <th>reservation Id</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Arrival time</th>
+                <th>Parking</th>
+                <th>Massage</th>
+                <th>Extra towels</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let reservation of reservations">
+                <td>{{reservation.id}}</td>
+                <td>{{reservation.userId}}</td>
+                <td>{{reservation.roomId}}</td>
+                <td>{{reservation.startDate | date}}</td>
+                <td>{{reservation.endDate | date}}</td>
+                <td>{{reservation.arrivalTime | date:'shortTime'}}</td>
+                <td><input type="checkbox" [(ngModel)]="reservation.parking" disabled /></td>
+                <td><input type="checkbox" [(ngModel)]="reservation.massage" disabled /></td>
+                <td><input type="checkbox" [(ngModel)]="reservation.extraTowels" disabled /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
