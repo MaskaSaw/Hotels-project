@@ -23,7 +23,7 @@ export class RoomsComponent implements OnInit {
   }
 
   openReservations(roomId: number): void {
-    this.reservationsService.reservations = this.rooms.find(room => room.id == roomId)?.reservations as Reservation[];
+    this.reservationsService.saveReservations(this.rooms.find(room => room.id == roomId)?.reservations as Reservation[]);
     this.router.navigate([`/rooms/${roomId}/reservations`]);
   }
 }

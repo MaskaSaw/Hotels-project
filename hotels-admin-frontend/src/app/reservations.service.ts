@@ -9,6 +9,14 @@ export class ReservationsService {
   reservations: Reservation[];
 
   constructor(
-    private router: Router
   ) { }
+
+  saveReservations( reservations: Reservation[]): void {
+    this.reservations = reservations;
+    localStorage.setItem('reservations', JSON.stringify(this.reservations));
+  }
+
+  getReservations(): Reservation[] {
+    return JSON.parse(localStorage.getItem('reservations') as string) as Reservation[];
+  }
 }

@@ -20,7 +20,7 @@ export class ReservationsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.reservations = this.reservationService.reservations
+    this.reservations = this.reservationService.getReservations();
   }
 
 }

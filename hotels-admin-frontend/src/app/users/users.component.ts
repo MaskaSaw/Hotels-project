@@ -22,7 +22,7 @@ export class UsersComponent implements OnInit {
   ) { }
 
   openReservations(userId: number): void {
-    this.reservationsService.reservations = this.users.find(user => user.id == userId)?.reservations as Reservation[];
+    this.reservationsService.saveReservations(this.users.find(user => user.id == userId)?.reservations as Reservation[]);
     this.router.navigate([`/users/${userId}/reservations`]);
   }
 
