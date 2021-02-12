@@ -2,7 +2,7 @@ ul.menu li {
     display: inline;
     margin-right: 5px;
     padding: 3px;
-    border: 2px solid rgb(71, 135, 231); 
+    border: 2px solid rgb(51, 122, 183); 
     border-radius: 15%;
 }
 
@@ -11,6 +11,29 @@ ul {
     font-size: 20pt;
 }
 
-a:hover {
+nav ul.menu li:hover {
+    color: white;
+    background-color: rgb(51, 122, 183);
+}
+
+nav ul.menu li a:hover {
+    color: white;
+    background-color: rgb(51, 122, 183);
+    text-decoration: none;
+}
+
+nav ul.menu li:visited{
+    color: white;
+    background-color: rgb(51, 122, 183);
+}
+
+nav ul.menu li:active {
+    color: white;
+    background-color: rgb(51, 122, 183);
+}
+
+nav ul.menu li a:active {
+    color: white;
+    background-color: rgb(51, 122, 183);
     text-decoration: none;
 }
