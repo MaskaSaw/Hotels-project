@@ -58,7 +58,12 @@ namespace Hotels
 
             services.AddCors(c =>
             {
-                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+                c.AddPolicy("AllowCorsForAngular",
+                    options => options
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                );
             });
         }
 
@@ -75,7 +80,7 @@ namespace Hotels
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseCors("AllowOrigin");
+            app.UseCors("AllowCorsForAngular");
             app.UseAuthentication();
             app.UseAuthorization();
 

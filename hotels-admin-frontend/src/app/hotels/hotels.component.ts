@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Hotel } from '../hotel';
 import { Router } from '@angular/router';
+
+import { Hotel } from '../hotel';
 
 @Component({
   selector: 'app-hotels',

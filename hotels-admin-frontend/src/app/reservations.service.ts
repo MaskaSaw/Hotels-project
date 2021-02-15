@@ -1,22 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Reservation } from './reservation'
+
+import { Reservation } from './reservation';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservationsService {
-  reservations: Reservation[];
+  reservations: Reservation[] = [];
 
   constructor(
   ) { }
 
   saveReservations( reservations: Reservation[]): void {
     this.reservations = reservations;
-    localStorage.setItem('reservations', JSON.stringify(this.reservations));
+    //localStorage.setItem('reservations', JSON.stringify(this.reservations));
   }
 
   getReservations(): Reservation[] {
-    return JSON.parse(localStorage.getItem('reservations') as string) as Reservation[];
+    return this.reservations
   }
 }

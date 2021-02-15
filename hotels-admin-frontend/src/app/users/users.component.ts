@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { User } from '../user';
-import { ReservationsService } from '../reservations.service'
+import { ReservationsService } from '../reservations.service';
 import { Reservation } from '../reservation';
-import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-users',
@@ -11,8 +12,23 @@ import { Router } from '@angular/router'
 })
 export class UsersComponent implements OnInit {
   users: User[] = [
-    {id: 0, login: 'login', password: 'password', role: 'role', reservations: [
-      { id: 0, roomId: 0, userId: 0, startDate: new Date(), endDate: new Date(), arrivalTime: new Date(), parking: true, massage: false, extraTowels: true}
+    {
+      id: 0, 
+      login: 'login', 
+      password: 'password', 
+      role: 'role', 
+      reservations: [
+      { 
+        id: 0, 
+        roomId: 0, 
+        userId: 0, 
+        startDate: new Date(), 
+        endDate: new Date(), 
+        arrivalTime: new Date(), 
+        parking: true, 
+        massage: false, 
+        extraTowels: true
+      }
     ]}
   ];
 
