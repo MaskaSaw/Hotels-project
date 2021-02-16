@@ -1,0 +1,33 @@
+<div class="page-header">
+    <h1>Hotels list</h1>
+</div>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Address</th>
+                <th>Parking</th>
+                <th>Massage</th>
+                <th>ExtraTowels</th>
+                <th>Rooms</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let hotel of hotels" >
+                <td>{{hotel.id}}</td>
+                <td>{{hotel.name}}</td>
+                <td>{{hotel.country}}</td>
+                <td>{{hotel.city}}</td>
+                <td>{{hotel.address}}</td>
+                <td><input type="checkbox" [(ngModel)]="hotel.parking" disabled/></td>
+                <td><input type="checkbox" [(ngModel)]="hotel.massage" disabled/></td>
+                <td><input type="checkbox" [(ngModel)]="hotel.extraTowels" disabled/></td>
+                <td><button (click)="openRooms(hotel.id)">Rooms</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -233,6 +233,7 @@ dist/
 tmp/
 app/**/*.js
 app/**/*.js.map
+src/app/**/*.spec.ts
 
 # dependencies
 node_modules/

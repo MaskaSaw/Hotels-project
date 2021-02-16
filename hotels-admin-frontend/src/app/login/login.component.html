@@ -1,0 +1,20 @@
+<div *ngIf="authService.userLoggedIn">
+  <br>
+  <h3>Please, enter your login and password</h3>
+  <br>
+  <div>
+    <div class="spacer">
+      <label for="Login">Login</label>
+      <input type="text" placeholder="login" [(ngModel)]="login" class="form-control">
+    </div>
+    <div class="spacer">
+      <label for="password">Password</label>
+      <input type="password" placeholder="password" [(ngModel)]="password" class="form-control"/>
+    </div>
+    <br>
+    <div class="spacer">
+      <button type="submit" (click)="Login()">Login</button>
+    </div>
+  </div>
+</div>
+

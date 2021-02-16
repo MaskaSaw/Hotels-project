@@ -6,8 +6,22 @@
     "hotels-admin-frontend": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:application": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "skipTests": true,
           "strict": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
         }
       },
       "root": "",
@@ -124,5 +138,8 @@
       }
     }
   },
-  "defaultProject": "hotels-admin-frontend"
+  "defaultProject": "hotels-admin-frontend",
+  "cli": {
+    "analytics": "2307463a-333a-45a6-9f0a-567d17fdddb9"
+  }
 }

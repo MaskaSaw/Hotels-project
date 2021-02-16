@@ -48,7 +48,7 @@ namespace Hotels.Controllers
 
         //POST: api/auth/login
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserDTO userForLogin)
+        public async Task<IActionResult> Login([FromBody]UserDTO userForLogin)
         {
             var userFromRepo = await _authService.Login(userForLogin.Login.ToLower(), userForLogin.Password);
 
