@@ -7,14 +7,14 @@ import { Reservation } from './reservation';
   providedIn: 'root'
 })
 export class ReservationsService {
-  reservations: Reservation[] = [];
+  
+  reservations: Reservation[];
 
   constructor(
   ) { }
 
   saveReservations( reservations: Reservation[]): void {
     this.reservations = reservations;
-    //localStorage.setItem('reservations', JSON.stringify(this.reservations));
   }
 
   getReservations(): Reservation[] {

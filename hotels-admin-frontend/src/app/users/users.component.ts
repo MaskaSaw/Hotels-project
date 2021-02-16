@@ -11,6 +11,7 @@ import { Reservation } from '../reservation';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
+  //TODO: create users.service and implement methods for receiving and transmitting data to the server
   users: User[] = [
     {
       id: 0, 

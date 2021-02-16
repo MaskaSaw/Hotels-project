@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
-import {Subscription} from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { ReservationsService } from '../reservations.service';
 import { Reservation } from '../reservation';
@@ -22,10 +22,12 @@ export class ReservationsComponent implements OnInit {
     ) { 
       this.routeSubscription = route.params.subscribe(params=>this.id=params['id']);
     }
-
-  ngOnInit(): void {  
-    if (this.reservationService.getReservations().length !== 0) {
-      this.reservations = this.reservationService.getReservations();
+  
+  //TODO: implement methods in reservations.service for receiving and transmitting data to the server
+  ngOnInit(): void { 
+    let reservationsFromService = this.reservationService.getReservations();
+    if (reservationsFromService !== undefined) {
+      this.reservations = reservationsFromService;
     }
     else {
       if (this.route.toString().includes('users')) {

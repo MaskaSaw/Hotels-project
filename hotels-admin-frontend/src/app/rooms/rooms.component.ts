@@ -11,6 +11,7 @@ import { ReservationsService } from '../reservations.service';
   styleUrls: ['./rooms.component.css']
 })
 export class RoomsComponent implements OnInit {
+  //TODO: create rooms.service and implement methods for receiving and transmitting data to the server
   rooms: Room[] = [
     { 
       id: 0, 
