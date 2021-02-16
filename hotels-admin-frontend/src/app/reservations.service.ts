@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Reservation } from './reservation';
 
@@ -7,7 +6,7 @@ import { Reservation } from './reservation';
   providedIn: 'root'
 })
 export class ReservationsService {
-  
+  //TODO: create service methods for receiving and transmitting data to the server
   reservations: Reservation[];
 
   constructor(
