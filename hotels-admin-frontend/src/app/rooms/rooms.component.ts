@@ -9,7 +9,7 @@ import { RoomsService} from './rooms.service';
 @Component({
   selector: 'app-rooms',
   templateUrl: './rooms.component.html',
-  styleUrls: ['./rooms.component.css']
+  styleUrls: ['./rooms.component.less']
 })
 export class RoomsComponent implements OnInit {
 

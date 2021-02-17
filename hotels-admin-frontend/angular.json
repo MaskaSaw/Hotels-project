@@ -42,7 +42,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.less"
             ],
             "scripts": []
           },
@@ -105,7 +105,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.less"
             ],
             "scripts": []
           }
@@ -141,5 +141,10 @@
   "defaultProject": "hotels-admin-frontend",
   "cli": {
     "analytics": "2307463a-333a-45a6-9f0a-567d17fdddb9"
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "less"
+    }
   }
 }
