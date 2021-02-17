@@ -8,7 +8,7 @@ import { Reservation } from '../reservation';
 @Component({
   selector: 'app-reservations',
   templateUrl: './reservations.component.html',
-  styleUrls: ['./reservations.component.css']
+  styleUrls: ['./reservations.component.less']
 })
 export class ReservationsComponent implements OnInit {
 
