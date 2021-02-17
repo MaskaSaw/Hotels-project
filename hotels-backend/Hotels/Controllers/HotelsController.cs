@@ -52,7 +52,8 @@ namespace Hotels.Controllers
         public async Task<ActionResult<IEnumerable<Room>>> GetRooms(int id)
         {
             return await _context.Rooms
-                .Where(room => room.HotelId == id)
+                .Include(room => room.Reservations)
+                .Where(room => room.HotelId == id)      
                 .ToListAsync();
         }
 

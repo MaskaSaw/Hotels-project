@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { User } from './user';
-import { environment } from '../environments/environment';
-import { ApiPaths } from './api-paths';
+import { User } from '../user';
+import { environment } from '../../environments/environment';
+import { ApiPaths } from '../api-paths';
 
 @Injectable({ providedIn: 'root'})
 export class AuthService {
@@ -20,7 +20,7 @@ export class AuthService {
     private router: Router
   ) { }
 
-  login(user: User) {
+  login(user: User): void {
     this.http.post<User>(this.loginUrl, user, this.httpOptions)
      .subscribe((resp: any) => {
        this.router.navigate(['/hotels']);
@@ -28,7 +28,7 @@ export class AuthService {
      });
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('auth_token');
     this.router.navigate(['/login']);
   }

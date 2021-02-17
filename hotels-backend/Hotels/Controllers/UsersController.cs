@@ -38,6 +38,7 @@ namespace Hotels.Controllers
             return await _context.Users
                 .Skip((page - 1) * returnedNumberOfItems)
                 .Take(returnedNumberOfItems)
+                .Include(user => user.Reservations)
                 .ToListAsync();
         }
 

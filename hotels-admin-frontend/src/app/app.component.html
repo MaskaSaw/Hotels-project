@@ -1,17 +1,16 @@
 <div style="text-align:center">
-  <div class="text-center">
-    <h2>
-      Welcome to the Hotel's Admins App!
-    </h2>
-  </div>
-  <nav>
-    <ul class="menu">
-      <li><a class="nav-link" routerLink="/" routerLinkActive="active">Home</a></li>
-      <li><a class="nav-link" routerLink="hotels" >Hotels</a></li>
-      <li><a class="nav-link" routerLink="users" >Users</a></li>
-      <li style="float:right" > <button class ="nav-link" (click)="logout()" *ngIf="!authService.userLoggedIn">Logout</button>  </li>
-    </ul>
-  </nav>   
-  <router-outlet></router-outlet>
+    <div class="text-center">
+        <h2>Welcome to the Hotel's Admins App!</h2>
+    </div>
+    <nav>
+        <ul class="menu">
+            <li><a class="nav-link" routerLink="/" routerLinkActive="active">Home</a></li>
+            <li><a class="nav-link" routerLink="hotels" >Hotels</a></li>
+            <li><a class="nav-link" routerLink="users" >Users</a></li>
+            <li style="float:right" class ="nav-link" (click)="logout()" *ngIf="!authService.userLoggedIn" >Logout</li>
+        </ul>
+    </nav>   
+    <router-outlet></router-outlet>
+    <app-messages></app-messages>
 </div>
 

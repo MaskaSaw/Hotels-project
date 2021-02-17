@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { User } from '../user';
-import { ReservationsService } from '../reservations.service';
+import { ReservationsService } from '../reservations/reservations.service';
+import { UsersService } from './users.service'
 import { Reservation } from '../reservation';
 
 @Component({
@@ -11,39 +12,32 @@ import { Reservation } from '../reservation';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-  //TODO: create users.service and implement methods for receiving and transmitting data to the server
-  users: User[] = [
-    {
-      id: 0, 
-      login: 'login', 
-      password: 'password', 
-      role: 'role', 
-      reservations: [
-      { 
-        id: 0, 
-        roomId: 0, 
-        userId: 0, 
-        startDate: new Date(), 
-        endDate: new Date(), 
-        arrivalTime: new Date(), 
-        parking: true, 
-        massage: false, 
-        extraTowels: true
-      }
-    ]}
-  ];
+
+  users: User[];
 
   constructor(
     private reservationsService: ReservationsService,
-    private router: Router
+    private usersService: UsersService,
+    private router: Router,
   ) { }
 
+  ngOnInit(): void {
+    this.getUsers();
+  }
+
   openReservations(userId: number): void {
-    this.reservationsService.saveReservations(this.users.find(user => user.id == userId)?.reservations as Reservation[]);
+    this.reservationsService.storeUserReservations(this.users.find(user => user.id == userId)?.reservations as Reservation[]);
     this.router.navigate([`/users/${userId}/reservations`]);
   }
 
-  ngOnInit(): void {
+  deleteUser(userId: number): void {
+    this.users = this.users.filter(user => user.id !== userId);
+    this.usersService.deleteUser(userId).subscribe();
+  }
+
+  getUsers(): void {
+    this.usersService.getUsers()
+      .subscribe(users => this.users = users);   
   }
 
 }

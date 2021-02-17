@@ -6,3 +6,29 @@ h1 {
 th, td {
     text-align: center;
 }
+
+.del-button {
+    background-color: white;
+    color: red;
+    border-radius: 15%;
+    border-color: red;
+    font-weight: bold;
+}
+
+.del-button:hover {
+    background-color: red;
+    color: white;
+}
+
+.open-button {
+    background-color: white;
+    color: rgb(51, 122, 183);
+    font-weight: bold;
+    border-color: rgb(51, 122, 183);
+    border-radius: 15%;
+}
+
+.open-button:hover {
+    background-color: rgb(51, 122, 183);
+    color: white;
+}
