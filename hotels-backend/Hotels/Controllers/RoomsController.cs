@@ -39,7 +39,7 @@ namespace Hotels.Controllers
             return room;
         }
 
-        [Authorize (Roles = "Admin")]
+        //[Authorize (Roles = "Admin")]
         //GET: api/Rooms/5/Reservations
         [HttpGet("{id}/Reservations")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
@@ -49,7 +49,7 @@ namespace Hotels.Controllers
                 .ToListAsync();
         }
 
-        [Authorize (Roles = "Admin")]
+        //[Authorize (Roles = "Admin")]
         // PUT: api/Rooms/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoom(int id, Room room)
@@ -80,7 +80,7 @@ namespace Hotels.Controllers
             return NoContent();
         }
 
-        [Authorize (Roles = "Admin")]
+        //[Authorize (Roles = "Admin")]
         // POST: api/Rooms
         [HttpPost]
         public async Task<ActionResult<Room>> PostRoom(Room room)
@@ -91,7 +91,7 @@ namespace Hotels.Controllers
             return CreatedAtAction("GetRoom", new { id = room.Id }, room);
         }
 
-        [Authorize (Roles = "Admin")]
+        //[Authorize (Roles = "Admin")]
         // DELETE: api/Rooms/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoom(int id)

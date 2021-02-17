@@ -52,12 +52,13 @@ namespace Hotels.Controllers
         public async Task<ActionResult<IEnumerable<Room>>> GetRooms(int id)
         {
             return await _context.Rooms
-                .Where(room => room.HotelId == id)
+                .Include(room => room.Reservations)
+                .Where(room => room.HotelId == id)      
                 .ToListAsync();
         }
 
         // PUT: api/Hotels/5
-        [Authorize (Roles ="Admin")]
+      //  [Authorize (Roles ="Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel(int id, Hotel hotel)
         {
@@ -88,7 +89,7 @@ namespace Hotels.Controllers
         }
 
         // POST: api/Hotels
-        [Authorize (Roles ="Admin")]
+      //  [Authorize (Roles ="Admin")]
         [HttpPost]
         public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
         {
@@ -99,7 +100,7 @@ namespace Hotels.Controllers
         }
 
         // DELETE: api/Hotels/5
-        [Authorize(Roles = "Admin")]
+      //  [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {

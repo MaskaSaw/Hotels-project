@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute} from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { ReservationsService } from '../reservations.service';
+import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
 
 @Component({
@@ -17,7 +17,7 @@ export class ReservationsComponent implements OnInit {
 
   private routeSubscription: Subscription;
   constructor(
-      private reservationService: ReservationsService,
+      private reservationsService: ReservationsService,
       private route: ActivatedRoute
     ) { 
       this.routeSubscription = route.params.subscribe(params=>this.id=params['id']);
@@ -25,42 +25,25 @@ export class ReservationsComponent implements OnInit {
   
   //TODO: implement methods in reservations.service for receiving and transmitting data to the server
   ngOnInit(): void { 
-    let reservationsFromService = this.reservationService.getReservations();
+    let reservationsFromService = this.reservationsService.takeReservations();
     if (reservationsFromService !== undefined) {
       this.reservations = reservationsFromService;
     }
     else {
-      if (this.route.toString().includes('users')) {
-        this.reservations = [
-          {
-            id: 0, 
-            roomId: 0, 
-            userId: this.id, 
-            startDate: new Date(), 
-            endDate: new Date(), 
-            arrivalTime: new Date(), 
-            parking: true, 
-            massage: false, 
-            extraTowels: true
-          }
-        ];
-      }
       if (this.route.toString().includes('rooms')) {
-        this.reservations = [
-          {
-            id: 0, 
-            roomId: this.id, 
-            userId: 0, 
-            startDate: new Date(), 
-            endDate: new Date(), 
-            arrivalTime: new Date(), 
-            parking: true, 
-            massage: false, 
-            extraTowels: true
-          }
-        ];
+        this.reservationsService.getReservations(this.id,'room')
+          .subscribe(reservations => this.reservations = reservations);
+      }
+      else if (this.route.toString().includes('users')) {
+        this.reservationsService.getReservations(this.id,'user')
+          .subscribe(reservations => this.reservations = reservations);
       }
     }
+  }
+
+  deleteReservation(reservationId: number): void {
+    this.reservations = this.reservations.filter(reservation => reservation.id !== reservationId);
+    this.reservationsService.deleteReservation(reservationId).subscribe();
   }
 
 }

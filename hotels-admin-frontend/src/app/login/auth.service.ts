@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { User } from './user';
-import { environment } from '../environments/environment';
-import { ApiPaths } from './api-paths';
+import { User } from '../user';
+import { environment } from '../../environments/environment';
+import { ApiPaths } from '../api-paths';
 
 @Injectable({ providedIn: 'root'})
 export class AuthService {

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Room } from '../room';
 import { Reservation } from '../reservation';
-import { ReservationsService } from '../reservations.service';
+import { ReservationsService } from '../reservations/reservations.service';
+import { RoomsService} from './rooms.service';
 
 @Component({
   selector: 'app-rooms',
@@ -12,31 +13,32 @@ import { ReservationsService } from '../reservations.service';
 })
 export class RoomsComponent implements OnInit {
   //TODO: create rooms.service and implement methods for receiving and transmitting data to the server
-  rooms: Room[] = [
-    { 
-      id: 0, 
-      hotelId: 0, 
-      roomNumber: '0A', 
-      roomType: 'Standart', 
-      vacantBeds: 4, 
-      cost: 50.00, 
-      reserved: false, 
-      available: true, 
-      image: '', 
-      reservations: []
-   }
-  ];
+  rooms: Room[];
 
   constructor(
+    private roomsService: RoomsService,
     private reservationsService: ReservationsService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.getRooms();
+  }
+
+  getRooms(): void {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.roomsService.getRooms(id)
+      .subscribe(rooms => this.rooms = rooms);   
+  }
+
+  deleteRoom(roomId: number): void {
+    this.rooms = this.rooms.filter(room => room.id !== roomId);
+    this.roomsService.deleteRoom(roomId).subscribe();
   }
 
   openReservations(roomId: number): void {
-    this.reservationsService.saveReservations(this.rooms.find(room => room.id == roomId)?.reservations as Reservation[]);
+    this.reservationsService.storeRoomReservations(this.rooms.find(room => room.id == roomId)?.reservations as Reservation[]);
     this.router.navigate([`/rooms/${roomId}/reservations`]);
   }
 }

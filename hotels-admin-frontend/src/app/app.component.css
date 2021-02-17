@@ -11,9 +11,20 @@ ul {
     font-size: 20pt;
 }
 
+nav ul.menu li.nav-link {
+    background-color: white;
+    color: rgb(51, 122, 183);
+}
+
 nav ul.menu li:hover {
     color: white;
     background-color: rgb(51, 122, 183);
+}
+
+nav ul.menu li.nav-link:hover {
+    color: white;
+    background-color: rgb(51, 122, 183);
+    cursor: pointer;
 }
 
 nav ul.menu li a:hover {
@@ -37,3 +48,5 @@ nav ul.menu li a:active {
     background-color: rgb(51, 122, 183);
     text-decoration: none;
 }
+
+
