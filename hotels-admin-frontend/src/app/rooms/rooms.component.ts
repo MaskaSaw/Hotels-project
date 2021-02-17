@@ -12,7 +12,7 @@ import { RoomsService} from './rooms.service';
   styleUrls: ['./rooms.component.css']
 })
 export class RoomsComponent implements OnInit {
-  //TODO: create rooms.service and implement methods for receiving and transmitting data to the server
+
   rooms: Room[];
 
   constructor(

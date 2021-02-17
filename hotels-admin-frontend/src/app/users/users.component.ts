@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { User } from '../user';
 import { ReservationsService } from '../reservations/reservations.service';
@@ -12,14 +12,13 @@ import { Reservation } from '../reservation';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-  //TODO: create users.service and implement methods for receiving and transmitting data to the server
+
   users: User[];
 
   constructor(
     private reservationsService: ReservationsService,
     private usersService: UsersService,
     private router: Router,
-    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {

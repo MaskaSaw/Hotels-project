@@ -30,7 +30,7 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Users
-        //[Authorize (Roles = "Admin")]
+        [Authorize (Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int page, int itemsPerPage)
         {
@@ -43,7 +43,7 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Users/5
-       // [Authorize]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -58,7 +58,7 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Users/5/Reservations
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}/Reservations")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
         {
@@ -75,7 +75,7 @@ namespace Hotels.Controllers
         }
 
         // PUT: api/Users/5
-        //[Authorize]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, UserDTO userDTO)
         {
@@ -123,7 +123,7 @@ namespace Hotels.Controllers
         }
 
         // POST: api/Users
-        //[Authorize (Roles = "Admin")]
+        [Authorize (Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(UserDTO userDTO)
         {
@@ -134,7 +134,7 @@ namespace Hotels.Controllers
         }
 
         // DELETE: api/Users/5
-        //[Authorize]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

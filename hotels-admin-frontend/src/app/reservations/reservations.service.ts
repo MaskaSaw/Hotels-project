@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ReservationsService {
-  //TODO: create service methods for receiving and transmitting data to the server
+
   reservations: Reservation[];
 
   private roomsUrl = environment.baseUrl + ApiPaths.Rooms;
@@ -71,14 +71,10 @@ export class ReservationsService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
+      console.error(error);
   
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-  
-      // TODO: better job of transforming error for user consumption
       this.log(`${operation} failed: ${error.message}`);
   
-      // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }

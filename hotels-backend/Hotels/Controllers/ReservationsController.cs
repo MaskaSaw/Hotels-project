@@ -25,7 +25,7 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Reservations
-        //[Authorize (Roles = "Admin")]
+        [Authorize (Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations([FromQuery] int page)
         {
@@ -36,7 +36,7 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Reservations/5
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Reservation>> GetReservation(int id)
         {
@@ -58,7 +58,7 @@ namespace Hotels.Controllers
         }
 
         // PUT: api/Reservations/5
-        //[Authorize]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReservation(int id, Reservation modifiedReservation)
         {
@@ -97,7 +97,7 @@ namespace Hotels.Controllers
         }
 
         // POST: api/Reservations
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
         {
@@ -115,7 +115,7 @@ namespace Hotels.Controllers
         }
 
         // DELETE: api/Reservations/5
-        //[Authorize]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReservation(int id)
         {

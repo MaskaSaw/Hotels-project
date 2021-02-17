@@ -10,7 +10,6 @@ import { HotelsService } from './hotels.service';
   styleUrls: ['./hotels.component.css']
 })
 export class HotelsComponent implements OnInit {
-  //TODO: create hotels.service and implement methods for receiving and transmitting data to the server
   hotels: Hotel[];
 
   constructor(
