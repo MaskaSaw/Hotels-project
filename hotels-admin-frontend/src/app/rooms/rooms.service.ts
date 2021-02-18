@@ -34,6 +34,13 @@ export class RoomsService {
       );
   }
 
+  addRoom(room: Room) {
+    return this.http.post<Room>(this.roomsUrl, room, this.httpOptions)
+    .pipe(
+      catchError(this.handleError<Room>('addRoom'))
+    );
+  }
+
   deleteRoom(id: number): Observable<Room> {
     const url = this.roomsUrl + `/${id}`;
     return this.http.delete<Room>(url, this.httpOptions)

@@ -37,6 +37,13 @@ export class HotelsService {
         catchError(this.handleError<Hotel[]>('getHotels', []))
       );
   }
+
+  addHotel(hotel: Hotel): Observable<Hotel> {
+    return this.http.post<Hotel>(this.hotelsUrl, hotel, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<Hotel>('addHotel'))
+      );
+  }
   
   deleteHotel(id: number): Observable<Hotel> {
     const url = this.hotelsUrl + `/${id}`;

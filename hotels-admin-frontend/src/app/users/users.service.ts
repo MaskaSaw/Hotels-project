@@ -38,6 +38,13 @@ export class UsersService {
       );
   }
 
+  addUser(user: User): Observable<User> {
+    return this.http.post<User>(this.usersUrl, user, this.httpOptions)
+    .pipe(
+      catchError(this.handleError<User>('addUser'))
+    );
+  }
+
   deleteUser(id: number): Observable<User> {
     const url = this.usersUrl + `/${id}`;
     return this.http.delete<User>(url, this.httpOptions)

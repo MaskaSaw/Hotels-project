@@ -37,23 +37,18 @@ export class ReservationsService {
     this.reservations = reservations;
   }
 
-  getReservations(id: number, type: string) {
-    let url: string;
-
-    switch (type) {
-      case 'user': {
-        url = `${this.usersUrl}/${id}/reservations`;
-        break;
-      }
-      case 'room': {
-        url = `${this.roomsUrl}/${id}/reservations`;
-        break;
-      }
-    };
-   
+  getReservations(id: number, type: string) : Observable<Reservation[]>{
+    let url = this.setUrl(id, type);
     return this.http.get<Reservation[]>(url, this.httpOptions)
       .pipe(
         catchError(this.handleError<Reservation[]>('getReservations', []))
+    );
+  }
+
+  addReservation(reservation: Reservation): Observable<Reservation> {
+    return this.http.post<Reservation>(this.reservationUrl, reservation, this.httpOptions)
+    .pipe(
+      catchError(this.handleError<Reservation>('addReservation'))
     );
   }
 
@@ -67,6 +62,22 @@ export class ReservationsService {
 
   takeReservations(): Reservation[] {
     return this.reservations
+  }
+
+  setUrl(id: number, type: string): string {
+    let url = ""
+    switch (type) {
+      case 'user': {
+        url = `${this.usersUrl}/${id}/reservations`;
+        break;
+      }
+      case 'room': {
+        url =  `${this.roomsUrl}/${id}/reservations`;
+        break;
+      }
+    };
+
+    return url;
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

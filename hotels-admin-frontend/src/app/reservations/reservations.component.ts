@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
+import { RESERVATION } from '../mock-objects';
 
 @Component({
   selector: 'app-reservations',
@@ -13,6 +14,8 @@ import { Reservation } from '../reservation';
 export class ReservationsComponent implements OnInit {
 
   reservations: Reservation[];
+  reservation: Reservation;
+  routePart: string;
   id: number;
 
   private routeSubscription: Subscription;
@@ -21,6 +24,7 @@ export class ReservationsComponent implements OnInit {
       private route: ActivatedRoute
     ) { 
       this.routeSubscription = route.params.subscribe(params=>this.id=params['id']);
+      this.reservation = Object.assign({}, RESERVATION);
     }
   
   //TODO: implement methods in reservations.service for receiving and transmitting data to the server
@@ -31,14 +35,25 @@ export class ReservationsComponent implements OnInit {
     }
     else {
       if (this.route.toString().includes('rooms')) {
-        this.reservationsService.getReservations(this.id,'room')
-          .subscribe(reservations => this.reservations = reservations);
+        this.routePart = 'room';
       }
       else if (this.route.toString().includes('users')) {
-        this.reservationsService.getReservations(this.id,'user')
-          .subscribe(reservations => this.reservations = reservations);
+        this.routePart = 'user'
       }
+
+      this.reservationsService.getReservations(this.id, this.routePart)
+        .subscribe(reservations => this.reservations = reservations);
     }
+  }
+
+  addReservation(): void {
+    this.reservationsService.addReservation(this.reservation)
+    .subscribe(reservation => {
+      if (reservation !== undefined) {
+        this.reservations.push(reservation)
+      }
+    });
+    this.reservation = Object.assign({}, RESERVATION); 
   }
 
   deleteReservation(reservationId: number): void {

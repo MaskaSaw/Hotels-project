@@ -1,3 +1,41 @@
+<div class="add-form">
+    <ul>
+        <li>
+            <h2>Add new hotel</h2>
+        </li>
+        <li> 
+            <label>Name:</label> 
+            <input class="add-input" type="text" [(ngModel)]="hotel.name"/>
+        </li>
+        <li> 
+            <label>Country:</label>   
+            <input class="add-input" type="text" [(ngModel)]="hotel.country"/>  
+        </li>
+        <li>
+            <label>City:</label>
+            <input class="add-input" type="text" [(ngModel)]="hotel.city"/>
+        </li>
+        <li> 
+            <label>Address:</label>
+            <input class="add-input" type="text" [(ngModel)]="hotel.address"/>   
+        </li> 
+        <li> 
+            <label>Parking</label>
+            <input type="checkbox" [(ngModel)]="hotel.parking"/>    
+        </li> 
+        <li> 
+            <label>Massage</label>
+            <input type="checkbox" [(ngModel)]="hotel.massage"/>     
+        </li>  
+        <li> 
+            <label>Extra Towels</label>
+            <input type="checkbox" [(ngModel)]="hotel.extraTowels"/>     
+        </li> 
+        <li>
+            <button class="add-button" (click)="addHotel()">Add Hotel</button>
+        </li>
+    </ul>   
+</div>
 <div class="page-header">
     <h1>Hotels list</h1>
 </div>
