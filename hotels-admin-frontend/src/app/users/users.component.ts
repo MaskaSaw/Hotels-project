@@ -5,7 +5,7 @@ import { User } from '../user';
 import { ReservationsService } from '../reservations/reservations.service';
 import { UsersService } from './users.service'
 import { Reservation } from '../reservation';
-import { USER } from '../mock-objects';
+import { USER } from '../initializer';
 
 @Component({
   selector: 'app-users',

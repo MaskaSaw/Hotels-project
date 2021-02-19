@@ -5,7 +5,7 @@ import { Room } from '../room';
 import { Reservation } from '../reservation';
 import { ReservationsService } from '../reservations/reservations.service';
 import { RoomsService} from './rooms.service';
-import { ROOM } from '../mock-objects';
+import { ROOM } from '../initializer';
 
 @Component({
   selector: 'app-rooms',

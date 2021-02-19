@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
-import { RESERVATION } from '../mock-objects';
+import { RESERVATION } from '../initializer';
 
 @Component({
   selector: 'app-reservations',

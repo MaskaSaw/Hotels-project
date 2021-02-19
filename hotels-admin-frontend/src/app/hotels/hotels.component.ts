@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { Hotel } from '../hotel';
 import { HotelsService } from './hotels.service';
-import { HOTEL } from '../mock-objects';
+import { HOTEL } from '../initializer';
 
 @Component({
   selector: 'app-hotels',
