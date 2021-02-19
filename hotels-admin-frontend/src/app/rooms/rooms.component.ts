@@ -41,7 +41,7 @@ export class RoomsComponent implements OnInit {
     this.roomsService.addRoom(this.room)
       .subscribe(room => {
         if (room !== undefined) {
-          this.rooms.push(room)
+          this.rooms.push(room);
         }
       });    
     this.room = Object.assign({}, ROOM)

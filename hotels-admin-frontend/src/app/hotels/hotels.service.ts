@@ -34,23 +34,26 @@ export class HotelsService {
       }
     })
       .pipe(
-        catchError(this.handleError<Hotel[]>('getHotels', []))
-      );
+        catchError(this.handleError<Hotel[]>('getHotels', [])
+      )
+    );
   }
 
   addHotel(hotel: Hotel): Observable<Hotel> {
     return this.http.post<Hotel>(this.hotelsUrl, hotel, this.httpOptions)
       .pipe(
-        catchError(this.handleError<Hotel>('addHotel'))
-      );
+        catchError(this.handleError<Hotel>('addHotel')
+      )
+    );
   }
   
   deleteHotel(id: number): Observable<Hotel> {
     const url = this.hotelsUrl + `/${id}`;
     return this.http.delete<Hotel>(url, this.httpOptions)
       .pipe(
-        catchError(this.handleError<Hotel>('deleteHotel'))
-      );
+        catchError(this.handleError<Hotel>('deleteHotel')
+      )
+    );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

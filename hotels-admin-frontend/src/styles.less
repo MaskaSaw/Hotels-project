@@ -1,3 +1,5 @@
+@customBlue:  rgb(51, 122, 183);
+
 h1 {
     float: left;
     margin-left: 20px;
@@ -9,31 +11,53 @@ th, td {
 
 .add-form {
     text-align: left;
-}
 
-.add-form h2 {
-    margin: 0;
-    display: inline;
-}
+    h2 {
+        margin: 0;
+        display: inline;
+    }
 
-.add-form ul {
-    width:950px;
-    list-style-type:none;
-    list-style-position:outside;
-    margin:0px;
-    padding:0px;
-}
+    ul {
+        width:950px;
+        list-style-type:none;
+        list-style-position:outside;
+        margin:0px;
+        padding:0px;
 
-.add-form li {
-    padding:5px;
-    position:relative;
-}
+        li {
+            padding:5px;
+            position:relative;
+        }
+    }
 
-.add-form label {
-    width:130px;
-    margin-top: 3px;
-    display:inline-block;
-    padding:3px;
+    label {
+        width:130px;
+        margin-top: 3px;
+        display:inline-block;
+        padding:3px;
+    }
+
+    textarea {
+        padding:8px; 
+        width:300px;
+    }
+
+    button {
+        background-color: white;
+        color: @customBlue;
+        font-weight: bold;
+        border-color: @customBlue;
+        border-radius: 15%;
+    }
+
+    button:hover {
+        background-color: @customBlue;
+        color: white;
+    }
+
+    *:focus {
+        outline: none;
+    }
 }
 
 .add-input {
@@ -45,8 +69,6 @@ th, td {
 .add-select {
     width: 100px;
 }
-
-.add-form textarea {padding:8px; width:300px;}
 
 .del-button {
     background-color: white;
@@ -63,28 +85,13 @@ th, td {
 
 .open-button {
     background-color: white;
-    color: rgb(51, 122, 183);
+    color: @customBlue;
     font-weight: bold;
-    border-color: rgb(51, 122, 183);
+    border-color: @customBlue;
     border-radius: 15%;
 }
 
 .open-button:hover {
-    background-color: rgb(51, 122, 183);
+    background-color: @customBlue;
     color: white;
 }
-
-.add-button {
-    background-color: white;
-    color: rgb(51, 122, 183);
-    font-weight: bold;
-    border-color: rgb(51, 122, 183);
-    border-radius: 15%;
-}
-
-.add-button:hover {
-    background-color: rgb(51, 122, 183);
-    color: white;
-}
-
-*:focus {outline: none;}

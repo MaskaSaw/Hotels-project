@@ -19,7 +19,7 @@ export class HotelsComponent implements OnInit {
     private hotelsService: HotelsService,
   ) {
     this.hotel = Object.assign({}, HOTEL)
-   }
+  }
 
   ngOnInit(): void {
     this.getHotels();

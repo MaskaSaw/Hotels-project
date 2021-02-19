@@ -38,17 +38,19 @@ export class ReservationsService {
   }
 
   getReservations(id: number, type: string) : Observable<Reservation[]>{
-    let url = this.setUrl(id, type);
+    const url = this.setUrl(id, type);
     return this.http.get<Reservation[]>(url, this.httpOptions)
       .pipe(
-        catchError(this.handleError<Reservation[]>('getReservations', []))
+        catchError(this.handleError<Reservation[]>('getReservations', [])
+      )
     );
   }
 
   addReservation(reservation: Reservation): Observable<Reservation> {
     return this.http.post<Reservation>(this.reservationUrl, reservation, this.httpOptions)
-    .pipe(
-      catchError(this.handleError<Reservation>('addReservation'))
+      .pipe(
+        catchError(this.handleError<Reservation>('addReservation')
+      )
     );
   }
 
@@ -56,8 +58,9 @@ export class ReservationsService {
     const url = this.reservationUrl + `/${id}`;
     return this.http.delete<Reservation>(url, this.httpOptions)
       .pipe(
-        catchError(this.handleError<Reservation>('deleteRoom'))
-      );
+        catchError(this.handleError<Reservation>('deleteRoom')
+      )
+    );
   }
 
   takeReservations(): Reservation[] {
