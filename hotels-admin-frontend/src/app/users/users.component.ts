@@ -5,6 +5,7 @@ import { User } from '../user';
 import { ReservationsService } from '../reservations/reservations.service';
 import { UsersService } from './users.service'
 import { Reservation } from '../reservation';
+import { USER } from '../initializer';
 
 @Component({
   selector: 'app-users',
@@ -14,12 +15,15 @@ import { Reservation } from '../reservation';
 export class UsersComponent implements OnInit {
 
   users: User[];
+  user: User;
 
   constructor(
     private reservationsService: ReservationsService,
     private usersService: UsersService,
     private router: Router,
-  ) { }
+  ) { 
+    this.user = Object.assign({}, USER);
+  }
 
   ngOnInit(): void {
     this.getUsers();
@@ -28,6 +32,16 @@ export class UsersComponent implements OnInit {
   openReservations(userId: number): void {
     this.reservationsService.storeUserReservations(this.users.find(user => user.id == userId)?.reservations as Reservation[]);
     this.router.navigate([`/users/${userId}/reservations`]);
+  }
+
+  addUser(): void {
+    this.usersService.addUser(this.user)
+      .subscribe(user =>  {
+        if (user !== undefined) {
+          this.users.push(user)
+        }
+      });
+    this.user = Object.assign({}, USER);
   }
 
   deleteUser(userId: number): void {

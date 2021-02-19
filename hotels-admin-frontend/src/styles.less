@@ -1,3 +1,5 @@
+@customBlue:  rgb(51, 122, 183);
+
 h1 {
     float: left;
     margin-left: 20px;
@@ -7,28 +9,89 @@ th, td {
     text-align: center;
 }
 
+.add-form {
+    text-align: left;
+
+    h2 {
+        margin: 0;
+        display: inline;
+    }
+
+    ul {
+        width:950px;
+        list-style-type:none;
+        list-style-position:outside;
+        margin:0px;
+        padding:0px;
+
+        li {
+            padding:5px;
+            position:relative;
+        }
+    }
+
+    label {
+        width:130px;
+        margin-top: 3px;
+        display:inline-block;
+        padding:3px;
+    }
+
+    textarea {
+        padding:8px; 
+        width:300px;
+    }
+
+    button {
+        background-color: white;
+        color: @customBlue;
+        font-weight: bold;
+        border-color: @customBlue;
+        border-radius: 15%;
+
+        &:hover {
+            background-color: @customBlue;
+            color: white;
+        }
+    }
+
+    *:focus {
+        outline: none;
+    }
+}
+
+.add-input {
+    height:20px;
+    width:35%;
+    padding:5px 10px;
+}
+
+.add-select {
+    width: 100px;
+}
+
 .del-button {
     background-color: white;
     color: red;
     border-radius: 15%;
     border-color: red;
     font-weight: bold;
-}
 
-.del-button:hover {
-    background-color: red;
-    color: white;
+    &:hover {
+        background-color: red;
+        color: white;
+    }
 }
 
 .open-button {
     background-color: white;
-    color: rgb(51, 122, 183);
+    color: @customBlue;
     font-weight: bold;
-    border-color: rgb(51, 122, 183);
+    border-color: @customBlue;
     border-radius: 15%;
-}
 
-.open-button:hover {
-    background-color: rgb(51, 122, 183);
-    color: white;
+    &:hover {
+        background-color: @customBlue;
+        color: white;
+    }
 }

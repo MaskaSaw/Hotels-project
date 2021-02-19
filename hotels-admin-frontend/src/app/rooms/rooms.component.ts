@@ -5,6 +5,7 @@ import { Room } from '../room';
 import { Reservation } from '../reservation';
 import { ReservationsService } from '../reservations/reservations.service';
 import { RoomsService} from './rooms.service';
+import { ROOM } from '../initializer';
 
 @Component({
   selector: 'app-rooms',
@@ -14,22 +15,37 @@ import { RoomsService} from './rooms.service';
 export class RoomsComponent implements OnInit {
 
   rooms: Room[];
+  room: Room;
+  id = +this.route.snapshot.paramMap.get('id');
 
   constructor(
     private roomsService: RoomsService,
     private reservationsService: ReservationsService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.room = Object.assign({}, ROOM);
+  }
 
   ngOnInit(): void {
     this.getRooms();
   }
 
   getRooms(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.roomsService.getRooms(id)
+    this.room.hotelId = this.id;
+    this.roomsService.getRooms(this.id)
       .subscribe(rooms => this.rooms = rooms);   
+  }
+
+  addRoom(): void {
+    this.roomsService.addRoom(this.room)
+      .subscribe(room => {
+        if (room !== undefined) {
+          this.rooms.push(room);
+        }
+      });    
+    this.room = Object.assign({}, ROOM)
+    this.room.hotelId = this.id
   }
 
   deleteRoom(roomId: number): void {

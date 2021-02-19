@@ -34,16 +34,26 @@ export class UsersService {
       }
     })
       .pipe(
-        catchError(this.handleError<User[]>('getUsers', []))
-      );
+        catchError(this.handleError<User[]>('getUsers', [])
+      )
+    );
+  }
+
+  addUser(user: User): Observable<User> {
+    return this.http.post<User>(this.usersUrl, user, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<User>('addUser')
+      )
+    );
   }
 
   deleteUser(id: number): Observable<User> {
     const url = this.usersUrl + `/${id}`;
     return this.http.delete<User>(url, this.httpOptions)
       .pipe(
-        catchError(this.handleError<User>('deleteUser'))
-      );
+        catchError(this.handleError<User>('deleteUser')
+      )
+    );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

@@ -1,3 +1,37 @@
+<div class="add-form">
+    <ul>
+        <li>
+            <h2>Add new room</h2>
+        </li>
+        <li> 
+            <label>Room number:</label>   
+            <input class="add-input" type="text" [(ngModel)]="room.number"/>  
+        </li>
+        <li> 
+            <label>Room type</label> 
+            <input class="add-input" type="text" [(ngModel)]="room.type"/>
+        </li>
+        <li> 
+            <label>Vacant beds:</label>   
+            <input class="add-input" type="text" [(ngModel)]="room.vacantBeds"/>  
+        </li>
+        <li>
+            <label>Cost:</label>
+            <input class="add-input" type="text" [(ngModel)]="room.cost"/>
+        </li>
+        <li> 
+            <label>Reserved</label>
+            <input type="checkbox" [(ngModel)]="room.reserved"/>    
+        </li> 
+        <li> 
+            <label>Available</label>
+            <input type="checkbox" [(ngModel)]="room.available"/>    
+        </li> 
+        <li>
+            <button class="add-button" (click)="addRoom()">Add Room</button>
+        </li>
+    </ul>   
+</div>
 <div class="page-header">
     <h1>Rooms list</h1>
 </div>
@@ -6,7 +40,6 @@
         <thead>
             <tr> 
                 <th>Id</th>
-                <th>Hotel Id</th>
                 <th>Number</th>
                 <th>Room Type</th>
                 <th>Vacant Beds</th>
@@ -20,7 +53,6 @@
         <tbody>
             <tr *ngFor="let room of rooms">
                 <td>{{room.id}}</td>
-                <td>{{room.hotelId}}</td>
                 <td>{{room.roomNumber}}</td>
                 <td>{{room.roomType}}</td>
                 <td>{{room.vacantBeds}}</td>

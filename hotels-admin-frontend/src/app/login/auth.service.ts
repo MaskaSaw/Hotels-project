@@ -25,7 +25,8 @@ export class AuthService {
      .subscribe((resp: any) => {
        this.router.navigate(['/hotels']);
        localStorage.setItem('auth_token', resp.tokenString);
-     });
+     }
+    );
   }
 
   logout(): void {

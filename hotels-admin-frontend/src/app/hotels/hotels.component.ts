@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { Hotel } from '../hotel';
 import { HotelsService } from './hotels.service';
+import { HOTEL } from '../initializer';
 
 @Component({
   selector: 'app-hotels',
@@ -11,11 +12,14 @@ import { HotelsService } from './hotels.service';
 })
 export class HotelsComponent implements OnInit {
   hotels: Hotel[];
+  hotel: Hotel;
 
   constructor(
     private router: Router,
-    private hotelsService: HotelsService
-  ) { }
+    private hotelsService: HotelsService,
+  ) {
+    this.hotel = Object.assign({}, HOTEL)
+  }
 
   ngOnInit(): void {
     this.getHotels();
@@ -24,6 +28,16 @@ export class HotelsComponent implements OnInit {
   getHotels(): void {
     this.hotelsService.getHotels()
       .subscribe(hotels => this.hotels = hotels);
+  }
+
+  addHotel(): void {
+    this.hotelsService.addHotel(this.hotel)
+      .subscribe(hotel => {
+        if (hotel !== undefined) {
+          this.hotels.push(hotel)
+        }
+      });    
+    this.hotel = Object.assign({}, HOTEL)
   }
 
   deleteHotel(hotelId: number): void {

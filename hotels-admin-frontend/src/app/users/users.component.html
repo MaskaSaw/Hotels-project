@@ -1,3 +1,28 @@
+<div class="add-form">
+    <ul>
+        <li>
+            <h2>Add new User</h2>
+        </li>
+        <li> 
+            <label>Login:</label>   
+            <input class="add-input" type="text" [(ngModel)]="user.login"/>  
+        </li>
+        <li> 
+            <label>Password</label> 
+            <input class="add-input" type="text" [(ngModel)]="user.password"/>
+        </li>
+        <li> 
+            <label>Role:</label>   
+            <select class="add-select" [(ngModel)]="user.role">
+                <option value="Admin">Admin</option>
+                <option value="User">User</option>
+            </select> 
+        </li>
+        <li>
+            <button class="add-button" (click)="addUser()">Add user</button>
+        </li>
+    </ul>   
+</div>
 <div class="page-header">
     <h1>Users list</h1>
 </div>

@@ -30,16 +30,26 @@ export class RoomsService {
     const url = `${this.hotelsUrl}/${id}/rooms`;
     return this.http.get<Room[]>(url)
       .pipe(
-        catchError(this.handleError<Room[]>('getRooms', []))
-      );
+        catchError(this.handleError<Room[]>('getRooms', [])
+      )
+    );
+  }
+
+  addRoom(room: Room) {
+    return this.http.post<Room>(this.roomsUrl, room, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<Room>('addRoom')
+      )
+    );
   }
 
   deleteRoom(id: number): Observable<Room> {
     const url = this.roomsUrl + `/${id}`;
     return this.http.delete<Room>(url, this.httpOptions)
       .pipe(
-        catchError(this.handleError<Room>('deleteRoom'))
-      );
+        catchError(this.handleError<Room>('deleteRoom')
+      )
+    );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
