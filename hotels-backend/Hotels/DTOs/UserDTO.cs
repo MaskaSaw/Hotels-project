@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Hotels.DTO
+namespace Hotels.DTOs
 {
     public partial class UserDTO
     {

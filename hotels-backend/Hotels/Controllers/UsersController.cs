@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Hotels.Models;
-using Hotels.DTO;
+using Hotels.DTOs;
 using Hotels.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;

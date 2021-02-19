@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
+import * as moment from 'moment/moment';
 
 import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
 import { RESERVATION } from '../initializer';
+import { TimeSpan } from '../users/timespan';
 
 @Component({
   selector: 'app-reservations',
@@ -15,8 +17,9 @@ import { RESERVATION } from '../initializer';
 export class ReservationsComponent implements OnInit {
 
   reservations: Reservation[];
+  formattedTime: string;
   reservation: Reservation;
-  routePart: string;
+  routePart: string = '13:00';
   id: number;
 
   private routeSubscription: Subscription;
@@ -43,11 +46,13 @@ export class ReservationsComponent implements OnInit {
       }
 
       this.reservationsService.getReservations(this.id, this.routePart)
-        .subscribe(reservations => this.reservations = reservations);
+        .subscribe(reservations => this.reservations = reservations
+      );
     }
   }
 
   addReservation(): void {
+    this.reservation.arrivalTime = this.timeReverseFormatting(this.formattedTime);
     this.reservationsService.addReservation(this.reservation)
     .subscribe(reservation => {
       if (reservation !== undefined) {
@@ -60,6 +65,28 @@ export class ReservationsComponent implements OnInit {
   deleteReservation(reservationId: number): void {
     this.reservations = this.reservations.filter(reservation => reservation.id !== reservationId);
     this.reservationsService.deleteReservation(reservationId).subscribe();
+  }
+
+  timeFormatting(rawTime: TimeSpan) : string {
+    let formattedTime = rawTime.hours + ':' + rawTime.minutes;
+    return moment(formattedTime, 'hh:mm').format('LT');
+  }
+
+  timeReverseFormatting(formattedTime: string): TimeSpan {
+    let splitTime = formattedTime.split(':');
+    return {
+      ticks: 0,
+      days: 0,
+      hours: +splitTime[0],
+      milliseconds: 0,
+      minutes: +splitTime[1],
+      seconds: 0,
+      totalDays: 0,
+      totalHours: 0,
+      totalMilliseconds: 0,
+      totalMinutes: 0,
+      totalSeconds: 0
+    }
   }
 
 }

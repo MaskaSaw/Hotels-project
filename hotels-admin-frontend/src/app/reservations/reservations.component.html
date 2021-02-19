@@ -20,7 +20,7 @@
         </li>
         <li>
             <label>Arrival time:</label>
-            <input type="time" [(ngModel)]="reservation.arrivalTime" value="12:00 PM"/>
+            <input type="time" [(ngModel)]="formattedTime"/>
         </li> 
         <li> 
             <label>Parking</label>
@@ -65,7 +65,7 @@
                 <td>{{reservation.roomId}}</td>
                 <td>{{reservation.startDate | date}}</td>
                 <td>{{reservation.endDate | date}}</td>
-                <td>{{reservation.arrivalTime | date:'shortTime'}}</td>
+                <td>{{timeFormatting(reservation.arrivalTime)}}</td>
                 <td><input type="checkbox" [(ngModel)]="reservation.parking" disabled /></td>
                 <td><input type="checkbox" [(ngModel)]="reservation.massage" disabled /></td>
                 <td><input type="checkbox" [(ngModel)]="reservation.extraTowels" disabled /></td>
