@@ -2,7 +2,6 @@ import { Hotel } from './hotel';
 import { Room } from './room';
 import { Reservation } from './reservation';
 import { User } from './user';
-import { DatePipe, Time } from '@angular/common';
 
 export const HOTEL: Hotel = {
     id: 0, 
