@@ -7,7 +7,6 @@ import * as moment from 'moment/moment';
 import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
 import { RESERVATION } from '../initializer';
-import { TimeSpan } from '../users/timespan';
 
 @Component({
   selector: 'app-reservations',
@@ -17,7 +16,6 @@ import { TimeSpan } from '../users/timespan';
 export class ReservationsComponent implements OnInit {
 
   reservations: Reservation[];
-  formattedTime: string;
   reservation: Reservation;
   routePart: string;
   id: number;
@@ -50,8 +48,7 @@ export class ReservationsComponent implements OnInit {
     }
   }
 
-  addReservation(): void {
-    this.reservation.arrivalTime = this.timeReverseFormatting(this.formattedTime);
+  addReservation(): void {;
     this.reservationsService.addReservation(this.reservation)
       .subscribe(reservation => {
         if (reservation !== undefined) {
@@ -65,27 +62,4 @@ export class ReservationsComponent implements OnInit {
     this.reservations = this.reservations.filter(reservation => reservation.id !== reservationId);
     this.reservationsService.deleteReservation(reservationId).subscribe();
   }
-
-  timeFormatting(rawTime: TimeSpan) : string {
-    let formattedTime = rawTime.hours + ':' + rawTime.minutes;
-    return moment(formattedTime, 'hh:mm').format('LT');
-  }
-
-  timeReverseFormatting(formattedTime: string): TimeSpan {
-    let splitTime = formattedTime.split(':');
-    return {
-      ticks: 0,
-      days: 0,
-      hours: +splitTime[0],
-      milliseconds: 0,
-      minutes: +splitTime[1],
-      seconds: 0,
-      totalDays: 0,
-      totalHours: 0,
-      totalMilliseconds: 0,
-      totalMinutes: 0,
-      totalSeconds: 0
-    }
-  }
-
 }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Hotels.Json_Converters;
+using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Hotels.Models
 {
@@ -8,6 +10,8 @@ namespace Hotels.Models
         public int Id { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan ArrivalTime { get; set; }
         public bool Parking { get; set; }
         public bool Massage { get; set; }
