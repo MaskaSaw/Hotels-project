@@ -48,7 +48,7 @@ export class ReservationsComponent implements OnInit {
     }
   }
 
-  addReservation(): void {;
+  addReservation(): void {
     this.reservationsService.addReservation(this.reservation)
       .subscribe(reservation => {
         if (reservation !== undefined) {

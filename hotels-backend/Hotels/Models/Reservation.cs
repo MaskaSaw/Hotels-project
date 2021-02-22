@@ -1,4 +1,4 @@
-﻿using Hotels.Json_Converters;
+﻿using Hotels.JsonConverters;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
