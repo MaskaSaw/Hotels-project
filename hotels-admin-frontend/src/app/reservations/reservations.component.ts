@@ -19,7 +19,7 @@ export class ReservationsComponent implements OnInit {
   reservations: Reservation[];
   formattedTime: string;
   reservation: Reservation;
-  routePart: string = '13:00';
+  routePart: string;
   id: number;
 
   private routeSubscription: Subscription;
@@ -53,11 +53,11 @@ export class ReservationsComponent implements OnInit {
   addReservation(): void {
     this.reservation.arrivalTime = this.timeReverseFormatting(this.formattedTime);
     this.reservationsService.addReservation(this.reservation)
-    .subscribe(reservation => {
-      if (reservation !== undefined) {
-        this.reservations.push(reservation)
-      }
-    });
+      .subscribe(reservation => {
+        if (reservation !== undefined) {
+          this.reservations.push(reservation)
+        }
+      });
     this.reservation = Object.assign({}, RESERVATION); 
   }
 
