@@ -17,13 +17,14 @@ namespace Hotels.JsonConverters
         )
         {
             string value = reader.GetString();
-            try
+            TimeSpan interval;
+            if(TimeSpan.TryParseExact(value, "h\\:mm",CultureInfo.InvariantCulture, TimeSpanStyles.AssumeNegative, out interval))
             {
-                return TimeSpan.ParseExact(value, "h\\:mm", CultureInfo.InvariantCulture);
+                return interval;
             }
-            catch(Exception e)
+            else
             {
-                throw new JsonException($"Cannot convert object {e} of given signature");
+                throw new JsonException();
             }
         }
 
