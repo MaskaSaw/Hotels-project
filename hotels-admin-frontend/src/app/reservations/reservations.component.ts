@@ -31,7 +31,6 @@ export class ReservationsComponent implements OnInit {
       this.reservation = Object.assign({}, RESERVATION);
     }
   
-  //TODO: implement methods in reservations.service for receiving and transmitting data to the server
   ngOnInit(): void { 
     let reservationsFromService = this.reservationsService.takeReservations();
     if (reservationsFromService !== undefined) {
