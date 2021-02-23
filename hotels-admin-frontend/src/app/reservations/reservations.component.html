@@ -5,7 +5,7 @@
         </li>
         <li> 
             <label>User id:</label>   
-            <input class="add-input" type="text" [(ngModel)]="reservation.userId"/>  
+            <input class="add-input" type="text" [(ngModel)]="reservation.userId" />  
         </li>
         <li> 
             <label>Room id</label> 
@@ -21,7 +21,11 @@
         <li>
             <label>Arrival time:</label>
             <input type="time" [(ngModel)]="reservation.arrivalTime"/>
-        </li> 
+        </li>
+        <li>
+            <label>Departure time:</label>
+            <input type="time" [(ngModel)]="reservation.departureTime"/>
+        </li>  
         <li> 
             <label>Parking</label>
             <input class="date-pick" type="checkbox" [(ngModel)]="reservation.parking"/>    
@@ -52,6 +56,7 @@
                 <th>Start date</th>
                 <th>End date</th>
                 <th>Arrival time</th>
+                <th>Departure time</th>
                 <th>Parking</th>
                 <th>Massage</th>
                 <th>Extra towels</th>
@@ -66,6 +71,7 @@
                 <td>{{reservation.startDate | date}}</td>
                 <td>{{reservation.endDate | date}}</td>
                 <td>{{reservation.arrivalTime | timeFormatPipe}}</td>
+                <td>{{reservation.departureTime | timeFormatPipe}}</td>
                 <td><input type="checkbox" [(ngModel)]="reservation.parking" disabled /></td>
                 <td><input type="checkbox" [(ngModel)]="reservation.massage" disabled /></td>
                 <td><input type="checkbox" [(ngModel)]="reservation.extraTowels" disabled /></td>

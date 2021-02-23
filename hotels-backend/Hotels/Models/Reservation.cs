@@ -13,6 +13,9 @@ namespace Hotels.Models
 
         [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan ArrivalTime { get; set; }
+
+        [JsonConverter(typeof(TimeSpanConverter))]
+        public TimeSpan DepartureTime { get; set; }
         public bool Parking { get; set; }
         public bool Massage { get; set; }
         public bool ExtraTowels { get; set; }

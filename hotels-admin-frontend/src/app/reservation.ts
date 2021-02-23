@@ -6,6 +6,7 @@ export interface Reservation {
     startDate: Date;
     endDate: Date;
     arrivalTime: string;
+    departureTime: string;
     parking: boolean;
     massage: boolean;
     extraTowels: boolean;

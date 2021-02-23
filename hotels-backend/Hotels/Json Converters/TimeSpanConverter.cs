@@ -18,13 +18,14 @@ namespace Hotels.JsonConverters
         {
             string value = reader.GetString();
             TimeSpan interval;
-            if(TimeSpan.TryParseExact(value, "h\\:mm",CultureInfo.InvariantCulture, TimeSpanStyles.AssumeNegative, out interval))
+
+            if (TimeSpan.TryParseExact(value, "h\\:mm",CultureInfo.InvariantCulture, TimeSpanStyles.AssumeNegative, out interval))
             {
                 return interval;
             }
             else
             {
-                throw new JsonException();
+                throw new JsonException("Cannot convert given data to TimeSpan");
             }
         }
 
