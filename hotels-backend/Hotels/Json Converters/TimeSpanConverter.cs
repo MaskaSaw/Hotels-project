@@ -16,16 +16,19 @@ namespace Hotels.JsonConverters
             JsonSerializerOptions options
         )
         {
-            string value = reader.GetString();
-            TimeSpan interval;
-            if(TimeSpan.TryParseExact(value, "h\\:mm",CultureInfo.InvariantCulture, TimeSpanStyles.AssumeNegative, out interval))
+            var value = reader.GetString();
+
+            if (TimeSpan.TryParseExact(
+                value,
+                "h\\:mm",CultureInfo.InvariantCulture,
+                TimeSpanStyles.AssumeNegative,
+                out var interval)
+            )
             {
                 return interval;
             }
-            else
-            {
-                throw new JsonException();
-            }
+
+            throw new JsonException($"Failed to convert object {value} to TimeSpan");
         }
 
         public override void Write(
