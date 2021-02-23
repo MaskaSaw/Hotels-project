@@ -11,6 +11,7 @@ import { RoomsComponent } from './rooms/rooms.component';
 import { ReservationsComponent } from './reservations/reservations.component';
 import { UsersComponent } from './users/users.component';
 import { MessagesComponent } from './messages/messages.component';
+import { TimeFormatPipe } from './pipes';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { MessagesComponent } from './messages/messages.component';
     RoomsComponent,
     ReservationsComponent,
     UsersComponent,
-    MessagesComponent
+    MessagesComponent,
+    TimeFormatPipe
   ],
   imports: [
     BrowserModule,

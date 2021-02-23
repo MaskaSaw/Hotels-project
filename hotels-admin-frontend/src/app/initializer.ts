@@ -34,7 +34,7 @@ export const RESERVATION: Reservation = {
     roomId: 0,
     startDate: new Date(),
     endDate: new Date(),
-    arrivalTime: { hours: 12, minutes: 0 },
+    arrivalTime: "00:00",
     parking: false,
     massage: false,
     extraTowels: false,

@@ -1,4 +1,3 @@
-import { DatePipe, Time } from "@angular/common";
 
 export interface Reservation {
     id: number;
@@ -6,7 +5,7 @@ export interface Reservation {
     roomId: number;
     startDate: Date;
     endDate: Date;
-    arrivalTime: Time;
+    arrivalTime: string;
     parking: boolean;
     massage: boolean;
     extraTowels: boolean;

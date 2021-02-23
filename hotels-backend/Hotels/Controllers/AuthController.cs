@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Hotels.Authentication;
-using Hotels.DTO;
+using Hotels.DTOs;
 using Hotels.Models;
 using System.Text;
 
