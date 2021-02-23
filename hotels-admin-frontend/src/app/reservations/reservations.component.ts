@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
-import * as moment from 'moment/moment';
 
 import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
@@ -31,17 +30,16 @@ export class ReservationsComponent implements OnInit {
   
   ngOnInit(): void { 
     let reservationsFromService = this.reservationsService.takeReservations();
+    if (this.isRoom()) {
+      this.routePart = 'room';
+    }
+    else if (this.isUser()) {
+      this.routePart = 'user';
+    }
     if (reservationsFromService !== undefined) {
       this.reservations = reservationsFromService;
     }
     else {
-      if (this.route.toString().includes('rooms')) {
-        this.routePart = 'room';
-      }
-      else if (this.route.toString().includes('users')) {
-        this.routePart = 'user'
-      }
-
       this.reservationsService.getReservations(this.id, this.routePart)
         .subscribe(reservations => this.reservations = reservations
       );
@@ -52,7 +50,7 @@ export class ReservationsComponent implements OnInit {
     this.reservationsService.addReservation(this.reservation)
       .subscribe(reservation => {
         if (reservation !== undefined) {
-          this.reservations.push(reservation)
+          this.reservations.push(reservation);
         }
       });
     this.reservation = Object.assign({}, RESERVATION); 
@@ -62,4 +60,22 @@ export class ReservationsComponent implements OnInit {
     this.reservations = this.reservations.filter(reservation => reservation.id !== reservationId);
     this.reservationsService.deleteReservation(reservationId).subscribe();
   }
+
+  isRoom(): boolean {
+    if (this.route.toString().includes('rooms')) {
+      this.reservation.roomId = this.id;
+      return true;
+    }
+
+    return false;
+  }
+
+  isUser(): boolean {
+    if (this.route.toString().includes('users')) {
+      this.reservation.userId = this.id;
+      return true;
+    }
+
+    return false;
+  } 
 }
