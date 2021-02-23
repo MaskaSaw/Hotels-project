@@ -20,7 +20,8 @@ namespace Hotels.JsonConverters
 
             if (TimeSpan.TryParseExact(
                 value,
-                "h\\:mm", CultureInfo.InvariantCulture,
+                "h\\:mm",
+                CultureInfo.InvariantCulture,
                 TimeSpanStyles.AssumeNegative,
                 out var interval)
             )
