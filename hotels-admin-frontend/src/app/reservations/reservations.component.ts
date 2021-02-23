@@ -34,7 +34,7 @@ export class ReservationsComponent implements OnInit {
       this.routePart = 'room';
     }
     else if (this.isUser()) {
-      this.routePart = 'user'
+      this.routePart = 'user';
     }
     if (reservationsFromService !== undefined) {
       this.reservations = reservationsFromService;
@@ -50,7 +50,7 @@ export class ReservationsComponent implements OnInit {
     this.reservationsService.addReservation(this.reservation)
       .subscribe(reservation => {
         if (reservation !== undefined) {
-          this.reservations.push(reservation)
+          this.reservations.push(reservation);
         }
       });
     this.reservation = Object.assign({}, RESERVATION); 
@@ -64,18 +64,18 @@ export class ReservationsComponent implements OnInit {
   isRoom(): boolean {
     if (this.route.toString().includes('rooms')) {
       this.reservation.roomId = this.id;
-      return true
+      return true;
     }
 
-    return false
+    return false;
   }
 
   isUser(): boolean {
     if (this.route.toString().includes('users')) {
       this.reservation.userId = this.id;
-      return true
+      return true;
     }
 
-    return false
+    return false;
   } 
 }
