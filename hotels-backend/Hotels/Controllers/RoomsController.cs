@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Hotels.Models;
 using Microsoft.AspNetCore.Authorization;
+using Hotels.Models;
+using Hotels.ImageProcessing;
 
 namespace Hotels.Controllers
 {
@@ -35,6 +36,7 @@ namespace Hotels.Controllers
             room.Reservations =  await _context.Reservations
                 .Where(x => x.RoomId == id)
                 .ToListAsync();
+            room.Image = ImageProcessor.GetImage(room.Image);
             
             return room;
         }
@@ -59,6 +61,7 @@ namespace Hotels.Controllers
                 return BadRequest();
             }
 
+            room.Image = ImageProcessor.SaveImage(room.Image);
             _context.Entry(room).State = EntityState.Modified;
 
             try
@@ -85,6 +88,7 @@ namespace Hotels.Controllers
         [HttpPost]
         public async Task<ActionResult<Room>> PostRoom(Room room)
         {
+            room.Image = ImageProcessor.SaveImage(room.Image);
             _context.Rooms.Add(room);
             await _context.SaveChangesAsync();
 
@@ -104,6 +108,7 @@ namespace Hotels.Controllers
             }
 
             _context.Rooms.Remove(room);
+            ImageProcessor.DeleteImage(room.Image);
             await _context.SaveChangesAsync();
 
             return NoContent();

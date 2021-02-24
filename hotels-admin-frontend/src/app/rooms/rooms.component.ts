@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Room } from '../room';
@@ -17,6 +17,8 @@ export class RoomsComponent implements OnInit {
   rooms: Room[];
   room: Room;
   id = +this.route.snapshot.paramMap.get('id');
+
+  @ViewChild('imageUploader') imageUploader:ElementRef;
 
   constructor(
     private roomsService: RoomsService,
@@ -46,6 +48,7 @@ export class RoomsComponent implements OnInit {
       });    
     this.room = Object.assign({}, ROOM)
     this.room.hotelId = this.id
+    this.imageUploader.nativeElement.value = null;
   }
 
   deleteRoom(roomId: number): void {
@@ -56,5 +59,18 @@ export class RoomsComponent implements OnInit {
   openReservations(roomId: number): void {
     this.reservationsService.storeRoomReservations(this.rooms.find(room => room.id == roomId)?.reservations as Reservation[]);
     this.router.navigate([`/rooms/${roomId}/reservations`]);
+  }
+
+  onSelectFile(event: any) { // called each time file input changes
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+
+      reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+      reader.onload = (event) => { // called once readAsDataURL is completed
+        this.room.image = event.target.result;
+        console.log(this.url);
+      }  
+    }   
   }
 }
