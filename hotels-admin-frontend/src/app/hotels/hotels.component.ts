@@ -37,7 +37,7 @@ export class HotelsComponent implements OnInit {
     this.hotelsService.addHotel(this.hotel)
       .subscribe(hotel => {
         if (hotel !== undefined) {
-          this.hotels.push(hotel)
+          this.hotels.push(hotel);
         }
       });    
 

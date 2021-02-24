@@ -46,8 +46,8 @@ export class RoomsComponent implements OnInit {
           this.rooms.push(room);
         }
       });    
-    this.room = Object.assign({}, ROOM)
-    this.room.hotelId = this.id
+    this.room = Object.assign({}, ROOM);
+    this.room.hotelId = this.id;
     this.imageUploader.nativeElement.value = null;
   }
 
