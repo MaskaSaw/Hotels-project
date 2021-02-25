@@ -81,7 +81,7 @@ namespace Hotels.Controllers
         }
 
         // POST: api/Rooms
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Room>> PostRoom(IFormFile image, [FromForm] string roomString)
         {
