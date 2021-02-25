@@ -64,7 +64,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let hotel of hotels" >
-                <td><img [src]="hotel.image" height="100"></td>
+                <td><img [src]="imagesUrl + hotel.image" height="100"></td>
                 <td>{{hotel.id}}</td>
                 <td>{{hotel.name}}</td>
                 <td>{{hotel.country}}</td>

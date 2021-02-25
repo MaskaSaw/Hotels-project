@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Hotels.Models;
 using Hotels.ImageProcessing;
+using Newtonsoft.Json;
 
 namespace Hotels.Controllers
 {
@@ -16,10 +17,12 @@ namespace Hotels.Controllers
     public class RoomsController : ControllerBase
     {
         private readonly HotelsDBContext _context;
+        private readonly ImageService _imageService;
 
-        public RoomsController(HotelsDBContext context)
+        public RoomsController(HotelsDBContext context, ImageService imageService)
         {
             _context = context;
+            _imageService = imageService;
         }
 
         // GET: api/Rooms/5
@@ -32,11 +35,6 @@ namespace Hotels.Controllers
             {
                 return NotFound();
             }
-
-            room.Reservations =  await _context.Reservations
-                .Where(x => x.RoomId == id)
-                .ToListAsync();
-            room.Image = ImageProcessor.GetImage(room.Image);
             
             return room;
         }
@@ -61,7 +59,6 @@ namespace Hotels.Controllers
                 return BadRequest();
             }
 
-            room.Image = ImageProcessor.SaveImage(room.Image);
             _context.Entry(room).State = EntityState.Modified;
 
             try
@@ -86,9 +83,13 @@ namespace Hotels.Controllers
         // POST: api/Rooms
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Room>> PostRoom(Room room)
+        public async Task<ActionResult<Room>> PostRoom(IFormFile image, [FromForm] string roomString)
         {
-            room.Image = ImageProcessor.SaveImage(room.Image);
+            var imageName = await _imageService.SaveImageAsync(image);
+
+            Room room = JsonConvert.DeserializeObject<Room>(roomString);
+            room.Image = imageName;
+
             _context.Rooms.Add(room);
             await _context.SaveChangesAsync();
 
@@ -108,7 +109,6 @@ namespace Hotels.Controllers
             }
 
             _context.Rooms.Remove(room);
-            ImageProcessor.DeleteImage(room.Image);
             await _context.SaveChangesAsync();
 
             return NoContent();

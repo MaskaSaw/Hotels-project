@@ -6,6 +6,7 @@ import { Reservation } from '../reservation';
 import { ReservationsService } from '../reservations/reservations.service';
 import { RoomsService} from './rooms.service';
 import { ROOM } from '../initializer';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-rooms',
@@ -17,6 +18,8 @@ export class RoomsComponent implements OnInit {
   rooms: Room[];
   room: Room;
   id = +this.route.snapshot.paramMap.get('id');
+  roomFormData: FormData;
+  imagesUrl = environment.resourceUrl;
 
   @ViewChild('imageUploader') imageUploader:ElementRef;
 
@@ -27,6 +30,7 @@ export class RoomsComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.room = Object.assign({}, ROOM);
+    this.roomFormData = new FormData();
   }
 
   ngOnInit(): void {
@@ -40,7 +44,8 @@ export class RoomsComponent implements OnInit {
   }
 
   addRoom(): void {
-    this.roomsService.addRoom(this.room)
+    this.roomFormData.append('roomString', JSON.stringify(this.room));
+    this.roomsService.addRoom(this.roomFormData)
       .subscribe(room => {
         if (room !== undefined) {
           this.rooms.push(room);
@@ -61,16 +66,9 @@ export class RoomsComponent implements OnInit {
     this.router.navigate([`/rooms/${roomId}/reservations`]);
   }
 
-  onSelectFile(event: any) { // called each time file input changes
+  onSelectFile(event: any) {
     if (event.target.files && event.target.files[0]) {
-      var reader = new FileReader();
-
-      reader.readAsDataURL(event.target.files[0]); // read file as data url
-
-      reader.onload = (event) => { // called once readAsDataURL is completed
-        this.room.image = event.target.result;
-        console.log(this.url);
-      }  
+      this.roomFormData.append('image', event.target.files[0]);
     }   
   }
 }

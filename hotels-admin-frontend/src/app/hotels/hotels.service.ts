@@ -18,7 +18,7 @@ export class HotelsService {
   private itemsPerPage = 100;
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
   };
 
   constructor(
@@ -39,8 +39,8 @@ export class HotelsService {
     );
   }
 
-  addHotel(hotel: Hotel): Observable<Hotel> {
-    return this.http.post<Hotel>(this.hotelsUrl, hotel, this.httpOptions)
+  addHotel(hotelFormData: FormData): Observable<Hotel> {
+    return this.http.post<Hotel>(this.hotelsUrl, hotelFormData)
       .pipe(
         catchError(this.handleError<Hotel>('addHotel')
       )

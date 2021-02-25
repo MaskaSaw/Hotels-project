@@ -35,8 +35,8 @@ export class RoomsService {
     );
   }
 
-  addRoom(room: Room) {
-    return this.http.post<Room>(this.roomsUrl, room, this.httpOptions)
+  addRoom(roomFormData: FormData) {
+    return this.http.post<Room>(this.roomsUrl, roomFormData)
       .pipe(
         catchError(this.handleError<Room>('addRoom')
       )
