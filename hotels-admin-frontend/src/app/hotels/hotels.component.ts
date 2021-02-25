@@ -54,15 +54,14 @@ export class HotelsComponent implements OnInit {
     this.router.navigate([`hotels/${hotelId}/rooms`]);
   }
 
-  onSelectFile(event: any) { // called each time file input changes
+  onSelectFile(event: any) { 
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
 
-      reader.readAsDataURL(event.target.files[0]); // read file as data url
+      reader.readAsDataURL(event.target.files[0]); 
 
-      reader.onload = (event) => { // called once readAsDataURL is completed
+      reader.onload = (event) => { 
         this.hotel.image = event.target.result;
-        console.log(this.url);
       }  
     }   
   }

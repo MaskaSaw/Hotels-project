@@ -1,23 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Hotels.ImageProcessing
 {
-    public class ImageProcessor
+    public static class ImageProcessor
     {
-        private static int length = 20;
+        private static int imageNameLength = 20;
         private static string folderPath = Path.GetFullPath(@"..\") + "Images";
         public static string SaveImage(string base64string)
         {
             try
             {
-                string fileName = GetName();
-                string fileExtension = GetExtension(base64string.Substring(0, base64string.IndexOf(",")));
-                var bytes = Convert.FromBase64String(base64string.Substring(base64string.IndexOf(",")+1));
-                string filePath = $@"{folderPath}\{fileName}.{fileExtension}";
+                var fileName = GetName();
+                var fileExtension = GetExtension(base64string.Substring(0, base64string.IndexOf(",")));
+                var bytes = Convert.FromBase64String(base64string.Substring(base64string.IndexOf(",") + 1));
+                var filePath = $@"{folderPath}\{fileName}.{fileExtension}";
 
                 using (FileStream fstream = new FileStream(filePath, FileMode.OpenOrCreate))
                 {
@@ -37,22 +35,24 @@ namespace Hotels.ImageProcessing
         {
             try
             {
-                string filePath = $@"{folderPath}\{fileName}";
-                string imageString = "";
+                var filePath = $@"{folderPath}\{fileName}";
+                var imageString = string.Empty;
                 using (FileStream fstream = new FileStream(filePath, FileMode.OpenOrCreate))
                 {
                     byte[] imageBytes = new byte[fstream.Length];
                     fstream.Read(imageBytes, 0, imageBytes.Length);
                     imageString = @"data:image/" + GetExtension(
-                        fileName.Substring(fileName.IndexOf("."), fileName.Length - fileName.IndexOf("."))) +
-                        ";base64," + Convert.ToBase64String(imageBytes);
+                        fileName.Substring(
+                            fileName.IndexOf("."), fileName.Length - fileName.IndexOf(".")
+                        )
+                    ) + ";base64," + Convert.ToBase64String(imageBytes);
+
                 }
 
                 return imageString;
             }
-            catch (Exception e)
+            catch 
             {
-                Console.WriteLine(e.Message);
                 throw;
             }
         }
@@ -68,16 +68,17 @@ namespace Hotels.ImageProcessing
 
             Random random = new Random();
 
-            return new string(Enumerable.Repeat(chars, length)
-            .Select(s => s[random.Next(s.Length)]).ToArray());
-
+            return new string(Enumerable.Repeat(chars, imageNameLength)
+                .Select(s => s[random.Next(s.Length)])
+                .ToArray()
+            );
         }
 
-        private static string GetExtension(string fileName)
+        private static string GetExtension(string fileExtensionPart)
         {
-            string extension = "";
+            var extension = string.Empty;
 
-            switch (fileName)
+            switch (fileExtensionPart)
             {
                 case string s when s.Contains("jpeg"):
                     extension = "jpg";
