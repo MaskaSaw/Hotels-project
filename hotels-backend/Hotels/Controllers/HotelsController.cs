@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Hotels.Models;
 using Microsoft.AspNetCore.Authorization;
+using Hotels.ImageProcessing;
+using Hotels.Models;
+using Newtonsoft.Json;
 
 namespace Hotels.Controllers
 {
@@ -14,12 +16,14 @@ namespace Hotels.Controllers
     [ApiController]
     public class HotelsController : ControllerBase
     {
+        private readonly ImageService _imageService;
         private readonly HotelsDBContext _context;
         private const int MaxItemsPerPage = 100;
 
-        public HotelsController(HotelsDBContext context)
+        public HotelsController(HotelsDBContext context, ImageService imageService)
         {
             _context = context;
+            _imageService = imageService;
         }
 
         // GET: api/Hotels
@@ -30,7 +34,7 @@ namespace Hotels.Controllers
             return await _context.Hotels
                 .Skip((page - 1) * returnedNumberOfItems)
                 .Take(returnedNumberOfItems)
-                .ToListAsync();
+                .ToListAsync();        
         }
 
         // GET: api/Hotels/5
@@ -112,6 +116,7 @@ namespace Hotels.Controllers
             }
 
             _context.Hotels.Remove(hotel);
+            _imageService.DeleteImage(hotel.Image);
             await _context.SaveChangesAsync();
 
             return NoContent();

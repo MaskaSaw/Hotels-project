@@ -21,6 +21,7 @@ namespace Hotels
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseWebRoot("Images");
                 });
     }
 }

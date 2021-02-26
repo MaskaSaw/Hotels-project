@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Hotels.Models;
 using Microsoft.AspNetCore.Authorization;
+using Hotels.Models;
+using Hotels.ImageProcessing;
+using Newtonsoft.Json;
 
 namespace Hotels.Controllers
 {
@@ -15,10 +17,12 @@ namespace Hotels.Controllers
     public class RoomsController : ControllerBase
     {
         private readonly HotelsDBContext _context;
+        private readonly ImageService _imageService;
 
-        public RoomsController(HotelsDBContext context)
+        public RoomsController(HotelsDBContext context, ImageService imageService)
         {
             _context = context;
+            _imageService = imageService;
         }
 
         // GET: api/Rooms/5
@@ -31,10 +35,6 @@ namespace Hotels.Controllers
             {
                 return NotFound();
             }
-
-            room.Reservations =  await _context.Reservations
-                .Where(x => x.RoomId == id)
-                .ToListAsync();
             
             return room;
         }
@@ -104,6 +104,7 @@ namespace Hotels.Controllers
             }
 
             _context.Rooms.Remove(room);
+            _imageService.DeleteImage(room.Image);
             await _context.SaveChangesAsync();
 
             return NoContent();

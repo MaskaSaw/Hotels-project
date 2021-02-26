@@ -30,7 +30,13 @@
         <li> 
             <label>Extra Towels</label>
             <input type="checkbox" [(ngModel)]="hotel.extraTowels"/>     
-        </li> 
+        </li>
+        <li> 
+            <label>Image</label>
+            <input type="file" accept="image/x-png,image/jpeg" (change)="onSelectFile($event)" #imageUploader/>
+            <img [src]="hotel.image" height="200">      
+        </li>
+         
         <li>
             <button class="add-button" (click)="addHotel()">Add Hotel</button>
         </li>
@@ -43,6 +49,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>Image</th>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Country</th>
@@ -57,6 +64,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let hotel of hotels" >
+                <td><img [src]="hotel.image" height="100"></td>
                 <td>{{hotel.id}}</td>
                 <td>{{hotel.name}}</td>
                 <td>{{hotel.country}}</td>

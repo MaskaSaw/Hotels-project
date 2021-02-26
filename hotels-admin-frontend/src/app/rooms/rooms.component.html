@@ -26,6 +26,11 @@
         <li> 
             <label>Available</label>
             <input type="checkbox" [(ngModel)]="room.available"/>    
+        </li>
+        <li> 
+            <label>Image</label>
+            <input type="file" accept="image/x-png,image/jpeg" (change)="onSelectFile($event)" #imageUploader/>
+            <img [src]="room.image" height="200">      
         </li> 
         <li>
             <button class="add-button" (click)="addRoom()">Add Room</button>
@@ -39,6 +44,7 @@
     <table class="table table-striped">
         <thead>
             <tr> 
+                <th>Image</th>
                 <th>Id</th>
                 <th>Number</th>
                 <th>Room Type</th>
@@ -52,6 +58,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let room of rooms">
+                <td><img [src]="room.image" height="100"></td>
                 <td>{{room.id}}</td>
                 <td>{{room.roomNumber}}</td>
                 <td>{{room.roomType}}</td>

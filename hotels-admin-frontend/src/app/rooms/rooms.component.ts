@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Room } from '../room';
@@ -17,6 +17,9 @@ export class RoomsComponent implements OnInit {
   rooms: Room[];
   room: Room;
   id = +this.route.snapshot.paramMap.get('id');
+  roomFormData: FormData;
+
+  @ViewChild('imageUploader') imageUploader:ElementRef;
 
   constructor(
     private roomsService: RoomsService,
@@ -25,6 +28,7 @@ export class RoomsComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.room = Object.assign({}, ROOM);
+    this.roomFormData = new FormData();
   }
 
   ngOnInit(): void {
@@ -38,14 +42,21 @@ export class RoomsComponent implements OnInit {
   }
 
   addRoom(): void {
-    this.roomsService.addRoom(this.room)
-      .subscribe(room => {
-        if (room !== undefined) {
-          this.rooms.push(room);
-        }
-      });    
-    this.room = Object.assign({}, ROOM)
-    this.room.hotelId = this.id
+    this.roomsService.addImage(this.roomFormData)
+      .subscribe(imageUrl => {
+        this.room.image = imageUrl;
+        this.roomsService.addRoom(this.room)
+          .subscribe(room => {
+            if (room !== undefined) {
+              this.rooms.push(room);
+            }
+          }
+        )      
+      }
+    );    
+    this.room = Object.assign({}, ROOM);
+    this.room.hotelId = this.id;
+    this.imageUploader.nativeElement.value = null;
   }
 
   deleteRoom(roomId: number): void {
@@ -54,7 +65,15 @@ export class RoomsComponent implements OnInit {
   }
 
   openReservations(roomId: number): void {
-    this.reservationsService.storeRoomReservations(this.rooms.find(room => room.id == roomId)?.reservations as Reservation[]);
+    this.reservationsService.storeRoomReservations(
+      this.rooms.find(room => room.id == roomId)?.reservations as Reservation[]
+    );
     this.router.navigate([`/rooms/${roomId}/reservations`]);
+  }
+
+  onSelectFile(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      this.roomFormData.append('image', event.target.files[0]);
+    }   
   }
 }

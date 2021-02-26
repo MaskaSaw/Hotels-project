@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Hotel } from '../hotel';
@@ -13,12 +13,16 @@ import { HOTEL } from '../initializer';
 export class HotelsComponent implements OnInit {
   hotels: Hotel[];
   hotel: Hotel;
+  imageFormData: FormData;
+
+  @ViewChild('imageUploader') imageUploader:ElementRef;
 
   constructor(
     private router: Router,
     private hotelsService: HotelsService,
   ) {
     this.hotel = Object.assign({}, HOTEL)
+    this.imageFormData = new FormData();
   }
 
   ngOnInit(): void {
@@ -31,13 +35,21 @@ export class HotelsComponent implements OnInit {
   }
 
   addHotel(): void {
-    this.hotelsService.addHotel(this.hotel)
-      .subscribe(hotel => {
-        if (hotel !== undefined) {
-          this.hotels.push(hotel)
-        }
-      });    
-    this.hotel = Object.assign({}, HOTEL)
+    this.hotelsService.addImage(this.imageFormData)
+      .subscribe(imageUrl => {
+        this.hotel.image = imageUrl;
+        this.hotelsService.addHotel(this.hotel)
+          .subscribe(hotel => {
+            if (hotel !== undefined) {
+              this.hotels.push(hotel);
+            }
+          }
+        );
+      }
+    )
+        
+    this.hotel = Object.assign({}, HOTEL);
+    this.imageUploader.nativeElement.value = null;
   }
 
   deleteHotel(hotelId: number): void {
@@ -47,6 +59,12 @@ export class HotelsComponent implements OnInit {
 
   openRooms(hotelId: number): void {
     this.router.navigate([`hotels/${hotelId}/rooms`]);
+  }
+
+  onSelectFile(event: any) { 
+    if (event.target.files && event.target.files[0]) {
+      this.imageFormData.append('image', event.target.files[0]);
+    }   
   }
 
 }
