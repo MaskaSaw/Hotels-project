@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Hotels.ImageProcessing
 {
@@ -16,10 +17,16 @@ namespace Hotels.ImageProcessing
             _hostEnvironment = webHostEnvironment;
         }
 
-        public async System.Threading.Tasks.Task<string> SaveImageAsync(IFormFile image)
+        public async Task<string> SaveImageAsync(IFormFile image)
         {
-            var imageName = CreateUniqueName(Path.GetExtension(image.FileName));
-            var imagePath = Path.Combine(_hostEnvironment.WebRootPath, imageName);
+            string imageName, imagePath;
+
+            do
+            {
+                imageName = CreateUniqueName(Path.GetExtension(image.FileName));
+                imagePath = Path.Combine(_hostEnvironment.WebRootPath, imageName);
+            }
+            while (File.Exists(imagePath));
 
             using (var fileStream = new FileStream(imagePath, FileMode.Create))
             {

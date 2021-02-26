@@ -95,11 +95,9 @@ namespace Hotels.Controllers
         // POST: api/Hotels
         [Authorize (Roles ="Admin")]
         [HttpPost]
-        public async Task<ActionResult<Hotel>> PostHotel(IFormFile image, [FromForm] string hotelString)
+        public async Task<ActionResult<Hotel>> PostHotel(IFormFile image, [FromForm] Hotel hotel)
         {
             var imageName = await _imageService.SaveImageAsync(image);
-
-            Hotel hotel = JsonConvert.DeserializeObject<Hotel>(hotelString);
             hotel.Image = imageName;
 
             _context.Hotels.Add(hotel);

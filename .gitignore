@@ -263,6 +263,4 @@ e2e/*.map
 *refactorlog
 
 #Images
-*jpg
-*png
-*jpeg
+Images/

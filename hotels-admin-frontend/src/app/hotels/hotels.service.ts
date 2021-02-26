@@ -18,7 +18,7 @@ export class HotelsService {
   private itemsPerPage = 100;
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(

@@ -41,7 +41,7 @@ namespace Hotels
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotels", Version = "v1" });
             });
             services.AddScoped<AuthService>();
-            services.AddScoped<ImageService>();
+            services.AddSingleton<ImageService>();
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:TokenSecretKey").Value);
             services
@@ -85,7 +85,7 @@ namespace Hotels
             app.UseRouting();
             app.UseCors("AllowCorsForAngular");
             app.UseAuthentication();
-            app.UseAuthorization();          
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
