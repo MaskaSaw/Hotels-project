@@ -9,7 +9,6 @@ namespace Hotels.ImageProcessing
 {
     public class ImageService
     {
-        private readonly int imageNameLength = 20;
         private readonly IWebHostEnvironment _hostEnvironment;
 
         public ImageService(IWebHostEnvironment webHostEnvironment)
@@ -36,17 +35,18 @@ namespace Hotels.ImageProcessing
             return imageName;
         }
 
+        public void DeleteImage(string imageUrl)
+        {
+            Uri uri = new Uri(imageUrl);
+            var imageName = Path.GetFileName(uri.LocalPath);
+            var imagePath = Path.Combine(_hostEnvironment.WebRootPath, imageName);
+
+            File.Delete(imagePath);
+        }
+
         private string CreateUniqueName(string extension)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-            Random random = new Random();
-
-            var imageName = new string(Enumerable.Repeat(chars, imageNameLength)
-                .Select(s => s[random.Next(s.Length)])
-                .ToArray()
-            );
-
+            var imageName = Guid.NewGuid();
             return imageName + extension;
         }
     }

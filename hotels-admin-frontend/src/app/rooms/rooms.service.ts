@@ -16,6 +16,7 @@ export class RoomsService {
 
   private hotelsUrl = environment.baseUrl + ApiPaths.Hotels;
   private roomsUrl = environment.baseUrl + ApiPaths.Rooms;
+  private imagesUrl = environment.baseUrl + ApiPaths.Images;
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -35,10 +36,18 @@ export class RoomsService {
     );
   }
 
-  addRoom(roomFormData: FormData) {
-    return this.http.post<Room>(this.roomsUrl, roomFormData)
+  addRoom(room: Room): Observable<Room> {
+    return this.http.post<Room>(this.roomsUrl, room, this.httpOptions)
       .pipe(
         catchError(this.handleError<Room>('addRoom')
+      )
+    );
+  }
+
+  addImage(imageFormData: FormData): Observable<string> {
+    return this.http.post<string>(this.imagesUrl, imageFormData)
+      .pipe(
+        catchError(this.handleError<string>('addImage')
       )
     );
   }

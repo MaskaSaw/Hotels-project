@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Hotel } from '../hotel';
 import { HotelsService } from './hotels.service';
 import { HOTEL } from '../initializer';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-hotels',
@@ -14,8 +13,7 @@ import { environment } from 'src/environments/environment';
 export class HotelsComponent implements OnInit {
   hotels: Hotel[];
   hotel: Hotel;
-  hotelFormData: FormData;
-  imagesUrl = environment.resourceUrl;
+  imageFormData: FormData;
 
   @ViewChild('imageUploader') imageUploader:ElementRef;
 
@@ -24,7 +22,7 @@ export class HotelsComponent implements OnInit {
     private hotelsService: HotelsService,
   ) {
     this.hotel = Object.assign({}, HOTEL)
-    this.hotelFormData = new FormData();
+    this.imageFormData = new FormData();
   }
 
   ngOnInit(): void {
@@ -37,14 +35,19 @@ export class HotelsComponent implements OnInit {
   }
 
   addHotel(): void {
-    this.hotelFormData.append('hotelString', JSON.stringify(this.hotel));
-    this.hotelsService.addHotel(this.hotelFormData)
-      .subscribe(hotel => {
-        if (hotel !== undefined) {
-          this.hotels.push(hotel);
-        }
-      });    
-
+    this.hotelsService.addImage(this.imageFormData)
+      .subscribe(imageUrl => {
+        this.hotel.image = imageUrl;
+        this.hotelsService.addHotel(this.hotel)
+          .subscribe(hotel => {
+            if (hotel !== undefined) {
+              this.hotels.push(hotel);
+            }
+          }
+        );
+      }
+    )
+        
     this.hotel = Object.assign({}, HOTEL);
     this.imageUploader.nativeElement.value = null;
   }
@@ -60,7 +63,7 @@ export class HotelsComponent implements OnInit {
 
   onSelectFile(event: any) { 
     if (event.target.files && event.target.files[0]) {
-      this.hotelFormData.append('image', event.target.files[0]);
+      this.imageFormData.append('image', event.target.files[0]);
     }   
   }
 

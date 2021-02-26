@@ -6,7 +6,6 @@ import { Reservation } from '../reservation';
 import { ReservationsService } from '../reservations/reservations.service';
 import { RoomsService} from './rooms.service';
 import { ROOM } from '../initializer';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-rooms',
@@ -19,7 +18,6 @@ export class RoomsComponent implements OnInit {
   room: Room;
   id = +this.route.snapshot.paramMap.get('id');
   roomFormData: FormData;
-  imagesUrl = environment.resourceUrl;
 
   @ViewChild('imageUploader') imageUploader:ElementRef;
 
@@ -44,13 +42,18 @@ export class RoomsComponent implements OnInit {
   }
 
   addRoom(): void {
-    this.roomFormData.append('roomString', JSON.stringify(this.room));
-    this.roomsService.addRoom(this.roomFormData)
-      .subscribe(room => {
-        if (room !== undefined) {
-          this.rooms.push(room);
-        }
-      });    
+    this.roomsService.addImage(this.roomFormData)
+      .subscribe(imageUrl => {
+        this.room.image = imageUrl;
+        this.roomsService.addRoom(this.room)
+          .subscribe(room => {
+            if (room !== undefined) {
+              this.rooms.push(room);
+            }
+          }
+        )      
+      }
+    );    
     this.room = Object.assign({}, ROOM);
     this.room.hotelId = this.id;
     this.imageUploader.nativeElement.value = null;
@@ -62,7 +65,9 @@ export class RoomsComponent implements OnInit {
   }
 
   openReservations(roomId: number): void {
-    this.reservationsService.storeRoomReservations(this.rooms.find(room => room.id == roomId)?.reservations as Reservation[]);
+    this.reservationsService.storeRoomReservations(
+      this.rooms.find(room => room.id == roomId)?.reservations as Reservation[]
+    );
     this.router.navigate([`/rooms/${roomId}/reservations`]);
   }
 

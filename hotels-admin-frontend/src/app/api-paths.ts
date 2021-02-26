@@ -3,5 +3,6 @@ export enum ApiPaths {
     Hotels = '/hotels',
     Rooms = '/rooms',
     Users = '/users',
-    Reservations = '/reservations'
+    Reservations = '/reservations',
+    Images = '/images'
  }

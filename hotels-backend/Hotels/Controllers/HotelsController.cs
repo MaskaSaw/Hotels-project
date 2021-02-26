@@ -95,11 +95,8 @@ namespace Hotels.Controllers
         // POST: api/Hotels
         [Authorize (Roles ="Admin")]
         [HttpPost]
-        public async Task<ActionResult<Hotel>> PostHotel(IFormFile image, [FromForm] Hotel hotel)
+        public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
         {
-            var imageName = await _imageService.SaveImageAsync(image);
-            hotel.Image = imageName;
-
             _context.Hotels.Add(hotel);
             await _context.SaveChangesAsync();
 
@@ -119,6 +116,7 @@ namespace Hotels.Controllers
             }
 
             _context.Hotels.Remove(hotel);
+            _imageService.DeleteImage(hotel.Image);
             await _context.SaveChangesAsync();
 
             return NoContent();

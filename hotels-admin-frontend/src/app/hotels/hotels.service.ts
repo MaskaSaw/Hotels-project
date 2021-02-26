@@ -15,6 +15,7 @@ import { MessageService } from '../messages/message.service';
 export class HotelsService {
 
   private hotelsUrl = environment.baseUrl + ApiPaths.Hotels;
+  private imagesUrl = environment.baseUrl + ApiPaths.Images;
   private itemsPerPage = 100;
 
   httpOptions = {
@@ -39,10 +40,18 @@ export class HotelsService {
     );
   }
 
-  addHotel(hotelFormData: FormData): Observable<Hotel> {
-    return this.http.post<Hotel>(this.hotelsUrl, hotelFormData)
+  addHotel(hotel: Hotel): Observable<Hotel> {
+    return this.http.post<Hotel>(this.hotelsUrl, hotel, this.httpOptions)
       .pipe(
         catchError(this.handleError<Hotel>('addHotel')
+      )
+    );  
+  }
+
+  addImage(imageFormData: FormData): Observable<string> {
+    return this.http.post<string>(this.imagesUrl, imageFormData)
+      .pipe(
+        catchError(this.handleError<string>('addImage')
       )
     );
   }
