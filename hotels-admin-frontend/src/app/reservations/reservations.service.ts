@@ -18,7 +18,7 @@ export class ReservationsService {
 
   private roomsUrl = environment.baseUrl + ApiPaths.Rooms;
   private usersUrl = environment.baseUrl + ApiPaths.Users;
-  private reservationUrl = environment.baseUrl + ApiPaths.Reservations;
+  private reservationsUrl = environment.baseUrl + ApiPaths.Reservations;
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -47,15 +47,24 @@ export class ReservationsService {
   }
 
   addReservation(reservation: Reservation): Observable<Reservation> {
-    return this.http.post<Reservation>(this.reservationUrl, reservation, this.httpOptions)
+    return this.http.post<Reservation>(this.reservationsUrl, reservation, this.httpOptions)
       .pipe(
         catchError(this.handleError<Reservation>('addReservation')
       )
     );
   }
 
+  updateReservation(reservation: Reservation): Observable<Reservation> {
+    const url = this.reservationsUrl + `/${reservation.id}`;
+    return this.http.put<Reservation>(url, reservation, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<any>('updateReservation')
+      )
+    );
+  }
+
   deleteReservation(id: number): Observable<Reservation> {
-    const url = this.reservationUrl + `/${id}`;
+    const url = this.reservationsUrl + `/${id}`;
     return this.http.delete<Reservation>(url, this.httpOptions)
       .pipe(
         catchError(this.handleError<Reservation>('deleteRoom')

@@ -13,10 +13,10 @@
         </li>
         <li> 
             <label>Start date:</label>   
-            <input type="date" [(ngModel)]="reservation.startDate"/>
+            <input type="date" [ngModel]="reservation.startDate | date:'yyyy-MM-dd'" (ngModelChange)="reservation.startDate = parseDate($event.target.value)"/>
         <li>
             <label>End date:</label>
-            <input type="date" [(ngModel)]="reservation.endDate"/>
+            <input type="date" [ngModel]="reservation.endDate | date:'yyyy-MM-dd'" (ngModelChange)="reservation.endDate = parseDate($event.target.value)"/>
         </li>
         <li>
             <label>Arrival time:</label>
@@ -38,8 +38,12 @@
             <label>Extra Towels</label>
             <input type="checkbox" [(ngModel)]="reservation.extraTowels"/>     
         </li> 
-        <li>
+        <li *ngIf="!edit">
             <button class="add-button" (click)="addReservation()">Add reservation</button>
+        </li>
+        <li *ngIf="edit">
+            <button (click)="updateReservation()">Save Reservation {{reservation.id}}</button>
+            <button (click)="cancelEdit()">Cancel</button>
         </li>
     </ul>   
 </div>
@@ -61,6 +65,7 @@
                 <th>Massage</th>
                 <th>Extra towels</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -75,6 +80,7 @@
                 <td><input type="checkbox" [(ngModel)]="reservation.parking" disabled /></td>
                 <td><input type="checkbox" [(ngModel)]="reservation.massage" disabled /></td>
                 <td><input type="checkbox" [(ngModel)]="reservation.extraTowels" disabled /></td>
+                <td><button class="open-button" (click)="editMode(reservation.id)">Edit</button></td>
                 <td><button class="del-button" (click)="deleteReservation(reservation.id)">Delete</button></td>
             </tr>
         </tbody>

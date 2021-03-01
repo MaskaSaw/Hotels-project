@@ -34,12 +34,15 @@
         <li> 
             <label>Image</label>
             <input type="file" accept="image/x-png,image/jpeg" (change)="onSelectFile($event)" #imageUploader/>
-            <img [src]="hotel.image" height="200">      
+            <img [src]="imageToShow" height="150">      
+        </li>        
+        <li *ngIf="!edit">
+            <button (click)="addHotel()">Add Hotel</button>
         </li>
-         
-        <li>
-            <button class="add-button" (click)="addHotel()">Add Hotel</button>
-        </li>
+        <li *ngIf="edit">
+            <button (click)="updateHotel()">Save Hotel {{hotel.id}}</button>
+            <button (click)="cancelEdit()">Cancel</button>
+        </li>      
     </ul>   
 </div>
 <div class="page-header">
@@ -60,6 +63,7 @@
                 <th>ExtraTowels</th>
                 <th>Rooms</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -72,8 +76,9 @@
                 <td>{{hotel.address}}</td>
                 <td><input type="checkbox" [(ngModel)]="hotel.parking" disabled/></td>
                 <td><input type="checkbox" [(ngModel)]="hotel.massage" disabled/></td>
-                <td><input type="checkbox" [(ngModel)]="hotel.extraTowels" disabled/></td>
+                <td><input type="checkbox" [(ngModel)]="hotel.extraTowels" disabled/></td>                
                 <td><button class="open-button" (click)="openRooms(hotel.id)">Rooms</button></td>
+                <td><button class="open-button" (click)="editMode(hotel.id)">Edit</button></td>
                 <td><button class="del-button" (click)="deleteHotel(hotel.id)">Delete</button></td>
             </tr>
         </tbody>

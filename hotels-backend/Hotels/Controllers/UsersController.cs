@@ -30,16 +30,26 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Users
-        [Authorize (Roles = "Admin")]
+        //[Authorize (Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int page, int itemsPerPage)
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers([FromQuery] int page, int itemsPerPage)
         {
             int returnedNumberOfItems = (MaxItemsPerPage < itemsPerPage) ? MaxItemsPerPage : itemsPerPage;
-            return await _context.Users
+            var users = await _context.Users
                 .Skip((page - 1) * returnedNumberOfItems)
                 .Take(returnedNumberOfItems)
                 .Include(user => user.Reservations)
                 .ToListAsync();
+
+            return users
+                .Select(user => new UserDTO
+                {
+                    Id = user.Id,
+                    Login = user.Login,
+                    Password = "",
+                    Role = user.Role
+                })
+                .ToList();
         }
 
         // GET: api/Users/5

@@ -62,9 +62,9 @@ namespace Hotels.Controllers
         }
 
         // PUT: api/Hotels/5
-        [Authorize (Roles ="Admin")]
+        //[Authorize (Roles ="Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutHotel(int id, Hotel hotel)
+        public async Task<IActionResult> PutHotel([FromRoute]int id, Hotel hotel)
         {
             if (id != hotel.Id)
             {

@@ -18,6 +18,7 @@ export class ReservationsComponent implements OnInit {
   reservation: Reservation;
   routePart: string;
   id: number;
+  edit: boolean;
 
   private routeSubscription: Subscription;
   constructor(
@@ -44,6 +45,8 @@ export class ReservationsComponent implements OnInit {
         .subscribe(reservations => this.reservations = reservations
       );
     }
+
+    this.edit = false;
   }
 
   addReservation(): void {
@@ -56,9 +59,33 @@ export class ReservationsComponent implements OnInit {
     this.reservation = Object.assign({}, RESERVATION); 
   }
 
+  editMode(reservationId: number): void {
+    this.reservation = Object.assign({}, this.reservations.find(reservation => reservation.id === reservationId));
+    this.edit = true;
+  }
+
+  updateReservation(): void {
+    this.reservationsService.updateReservation(this.reservation)
+      .subscribe();
+    this.cancelEdit(); 
+  }
+
   deleteReservation(reservationId: number): void {
     this.reservations = this.reservations.filter(reservation => reservation.id !== reservationId);
     this.reservationsService.deleteReservation(reservationId).subscribe();
+  }
+
+  cancelEdit(): void {
+    this.reservation = Object.assign({}, RESERVATION);
+    this.edit = false;
+  }
+
+  parseDate(dateString: string): Date{
+    if (dateString) {
+      return new Date(dateString);
+    }
+    
+    return null;
   }
 
   isRoom(): boolean {
