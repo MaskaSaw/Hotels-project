@@ -30,7 +30,7 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Users
-        //[Authorize (Roles = "Admin")]
+        [Authorize (Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers([FromQuery] int page, int itemsPerPage)
         {
@@ -81,7 +81,7 @@ namespace Hotels.Controllers
                     .ToListAsync();
             }
 
-            return Forbid();         
+            return Forbid();
         }
 
         // PUT: api/Users/5
@@ -129,7 +129,7 @@ namespace Hotels.Controllers
                 return NoContent();
             }
 
-            return Forbid();            
+            return Forbid();
         }
 
         // POST: api/Users
@@ -174,12 +174,12 @@ namespace Hotels.Controllers
                 return NoContent();
             }
 
-            return Forbid();    
+            return Forbid();
         }
 
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
-        }   
+        }
     }
 }

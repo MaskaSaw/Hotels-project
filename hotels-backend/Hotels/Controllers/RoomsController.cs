@@ -35,7 +35,7 @@ namespace Hotels.Controllers
             {
                 return NotFound();
             }
-            
+
             return room;
         }
 

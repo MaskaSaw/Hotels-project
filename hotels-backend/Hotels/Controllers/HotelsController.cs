@@ -34,7 +34,7 @@ namespace Hotels.Controllers
             return await _context.Hotels
                 .Skip((page - 1) * returnedNumberOfItems)
                 .Take(returnedNumberOfItems)
-                .ToListAsync();        
+                .ToListAsync();
         }
 
         // GET: api/Hotels/5
@@ -57,12 +57,12 @@ namespace Hotels.Controllers
         {
             return await _context.Rooms
                 .Include(room => room.Reservations)
-                .Where(room => room.HotelId == id)      
+                .Where(room => room.HotelId == id)
                 .ToListAsync();
         }
 
         // PUT: api/Hotels/5
-        //[Authorize (Roles ="Admin")]
+        [Authorize (Roles ="Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel([FromRoute]int id, Hotel hotel)
         {

@@ -50,7 +50,7 @@ namespace Hotels.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
 
             if (identity.GetAuthorizedUserId() == reservation.UserId || identity.GetAuthorizedUserRole() == "Admin")
-            {                
+            {
                 return reservation;
             }
 
@@ -136,7 +136,7 @@ namespace Hotels.Controllers
                 return NoContent();
             }
 
-            return Forbid();          
+            return Forbid();
         }
 
         private bool ReservationExists(int id)

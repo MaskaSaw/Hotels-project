@@ -79,6 +79,5 @@ namespace Hotels.Models
                 entity.Property(e => e.Role).HasMaxLength(50);
             });
         }
-     
     }
 }
