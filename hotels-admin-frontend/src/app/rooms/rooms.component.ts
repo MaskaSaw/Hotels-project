@@ -5,6 +5,7 @@ import { Room } from '../room';
 import { Reservation } from '../reservation';
 import { ReservationsService } from '../reservations/reservations.service';
 import { RoomsService} from './rooms.service';
+import { AuthService } from '../login/auth.service';
 
 @Component({
   selector: 'app-rooms',
@@ -25,11 +26,18 @@ export class RoomsComponent implements OnInit {
   constructor(
     private roomsService: RoomsService,
     private reservationsService: ReservationsService,
+    private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
+     
   ) {
-    this.room = new Room();
-    this.imageFormData = new FormData();
+    if (this.authService.userLoggedIn) {
+      this.room = new Room();
+      this.imageFormData = new FormData();
+    }
+    else {
+      this.authService.logout();
+    } 
   }
 
   ngOnInit(): void {
@@ -45,31 +53,36 @@ export class RoomsComponent implements OnInit {
   }
 
   addRoom(): void {
-    if (this.imageUploader.nativeElement.value) {
-      this.roomsService.addImage(this.imageFormData)
-        .subscribe(imageUrl => {
-          this.room.image = imageUrl;
-          this.roomsService.addRoom(this.room)
-            .subscribe(room => {
-              if (room !== undefined) {
-                this.rooms.push(room);
+    if (this.authService.userLoggedIn) {
+      if (this.imageUploader.nativeElement.value) {
+        this.roomsService.addImage(this.imageFormData)
+          .subscribe(imageUrl => {
+            this.room.image = imageUrl;
+            this.roomsService.addRoom(this.room)
+              .subscribe(room => {
+                if (room !== undefined) {
+                  this.rooms.push(room);
+                }
               }
-            }
-          );      
-        }
-      );    
-    }
-    this.roomsService.addRoom(this.room)
-      .subscribe(room => {
-        if (room !== undefined) {
-          this.rooms.push(room);
-        }
+            );      
+          }
+        );    
       }
-    ); 
-
-    this.room = new Room();
-    this.room.hotelId = this.id;
-    this.imageUploader.nativeElement.value = null;
+      this.roomsService.addRoom(this.room)
+        .subscribe(room => {
+          if (room !== undefined) {
+            this.rooms.push(room);
+          }
+        }
+      ); 
+  
+      this.room = new Room();
+      this.room.hotelId = this.id;
+      this.imageUploader.nativeElement.value = null;
+    }
+    else {
+      this.authService.logout();
+    }
   }
 
   editMode(roomId: number): void {
@@ -79,24 +92,34 @@ export class RoomsComponent implements OnInit {
   }
 
   updateRoom(): void {
-    if (this.imageUploader.nativeElement.value) {
-      this.roomsService.addImage(this.imageFormData)
-        .subscribe(imageUrl => {
-          this.room.image = imageUrl;
-          this.roomsService.updateRoom(this.room)
-            .subscribe();      
-        }
-      ); 
+    if (this.authService.userLoggedIn) {
+      if (this.imageUploader.nativeElement.value) {
+        this.roomsService.addImage(this.imageFormData)
+          .subscribe(imageUrl => {
+            this.room.image = imageUrl;
+            this.roomsService.updateRoom(this.room)
+              .subscribe();      
+          }
+        ); 
+      }
+      this.roomsService.updateRoom(this.room)
+        .subscribe(); 
+  
+      this.cancelEdit();
     }
-    this.roomsService.updateRoom(this.room)
-      .subscribe(); 
-
-    this.cancelEdit();
+    else {
+      this.authService.logout();
+    }
   }
 
   deleteRoom(roomId: number): void {
-    this.rooms = this.rooms.filter(room => room.id !== roomId);
-    this.roomsService.deleteRoom(roomId).subscribe();
+    if (this.authService.userLoggedIn) {
+      this.rooms = this.rooms.filter(room => room.id !== roomId);
+      this.roomsService.deleteRoom(roomId).subscribe();
+    }
+    else {
+      this.authService.logout();
+    }  
   }
 
   cancelEdit(): void {
@@ -107,10 +130,15 @@ export class RoomsComponent implements OnInit {
   }
 
   openReservations(roomId: number): void {
-    this.reservationsService.storeRoomReservations(
-      this.rooms.find(room => room.id == roomId)?.reservations as Reservation[]
-    );
-    this.router.navigate([`/rooms/${roomId}/reservations`]);
+    if (this.authService.userLoggedIn) {
+      this.reservationsService.storeRoomReservations(
+        this.rooms.find(room => room.id == roomId)?.reservations as Reservation[]
+      );
+      this.router.navigate([`/rooms/${roomId}/reservations`]);
+    }
+    else {
+      this.authService.logout();
+    }  
   }
 
   onSelectFile(event: any) {

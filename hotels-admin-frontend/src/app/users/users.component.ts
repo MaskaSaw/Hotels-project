@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { User } from '../user';
-import { UsersService } from './users.service'
+import { UsersService } from './users.service';
+import { AuthService } from '../login/auth.service';
 
 @Component({
   selector: 'app-users',
@@ -17,9 +18,15 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private usersService: UsersService,
+    private authService: AuthService,
     private router: Router,
   ) { 
-    this.user = new User();
+    if (this.authService.userLoggedIn) {
+      this.user = new User();
+    }
+    else {
+      this.authService.logout();
+    }  
   }
 
   ngOnInit(): void {
@@ -28,17 +35,28 @@ export class UsersComponent implements OnInit {
   }
 
   openReservations(userId: number): void {
-    this.router.navigate([`/users/${userId}/reservations`]);
+    if (this.authService.userLoggedIn) {
+      this.router.navigate([`/users/${userId}/reservations`]);
+    }
+    else {
+      this.authService.logout();
+    }
   }
 
   addUser(): void {
-    this.usersService.addUser(this.user)
-      .subscribe(user =>  {
-        if (user !== undefined) {
-          this.users.push(user)
-        }
-      });
-    this.user = new User();
+    if (this.authService.userLoggedIn) {
+      this.usersService.addUser(this.user)
+        .subscribe(user =>  {
+          if (user !== undefined) {
+            this.users.push(user)
+          }
+        });
+
+      this.user = new User();
+    }
+    else {
+      this.authService.logout();
+    } 
   }
 
   editMode(userId: number): void {
@@ -48,14 +66,24 @@ export class UsersComponent implements OnInit {
   }
 
   updateUser(): void {
-    this.usersService.updateUser(this.user)
-      .subscribe();
-    this.cancelEdit();
+    if (this.authService.userLoggedIn) {
+      this.usersService.updateUser(this.user)
+        .subscribe();
+      this.cancelEdit();
+    }
+    else {
+      this.authService.logout();
+    }  
   }
 
   deleteUser(userId: number): void {
-    this.users = this.users.filter(user => user.id !== userId);
-    this.usersService.deleteUser(userId).subscribe();
+    if (this.authService.userLoggedIn) {
+      this.users = this.users.filter(user => user.id !== userId);
+      this.usersService.deleteUser(userId).subscribe();
+    }
+    else {
+      this.authService.logout();
+    }   
   }
 
   cancelEdit(): void {

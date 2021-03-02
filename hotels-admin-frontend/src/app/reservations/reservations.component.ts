@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
+import { AuthService } from '../login/auth.service';
 
 @Component({
   selector: 'app-reservations',
@@ -22,10 +23,16 @@ export class ReservationsComponent implements OnInit {
   private routeSubscription: Subscription;
   constructor(
       private reservationsService: ReservationsService,
-      private route: ActivatedRoute
+      private route: ActivatedRoute,
+      private authService: AuthService
     ) { 
-      this.routeSubscription = route.params.subscribe(params=>this.id=params['id']);
-      this.reservation = new Reservation();
+      if (this.authService.userLoggedIn) { 
+        this.routeSubscription = route.params.subscribe(params=>this.id=params['id']);
+        this.reservation = new Reservation();
+      }
+      else {
+        this.authService.logout();
+      }     
     }
   
   ngOnInit(): void { 
@@ -49,13 +56,18 @@ export class ReservationsComponent implements OnInit {
   }
 
   addReservation(): void {
-    this.reservationsService.addReservation(this.reservation)
-      .subscribe(reservation => {
-        if (reservation !== undefined) {
-          this.reservations.push(reservation);
-        }
-      });
-    this.reservation = new Reservation(); 
+    if (this.authService.userLoggedIn) { 
+      this.reservationsService.addReservation(this.reservation)
+        .subscribe(reservation => {
+          if (reservation !== undefined) {
+            this.reservations.push(reservation);
+          }
+        });
+    this.reservation = new Reservation();
+    }
+    else {
+      this.authService.logout();
+    }  
   }
 
   editMode(reservationId: number): void {
@@ -64,14 +76,25 @@ export class ReservationsComponent implements OnInit {
   }
 
   updateReservation(): void {
-    this.reservationsService.updateReservation(this.reservation)
-      .subscribe();
-    this.cancelEdit(); 
+    if (this.authService.userLoggedIn) { 
+      this.reservationsService.updateReservation(this.reservation)
+        .subscribe();
+      this.cancelEdit(); 
+    }
+    else {
+      this.authService.logout();
+    }
+    
   }
 
   deleteReservation(reservationId: number): void {
-    this.reservations = this.reservations.filter(reservation => reservation.id !== reservationId);
-    this.reservationsService.deleteReservation(reservationId).subscribe();
+    if (this.authService.userLoggedIn) { 
+      this.reservations = this.reservations.filter(reservation => reservation.id !== reservationId);
+      this.reservationsService.deleteReservation(reservationId).subscribe();
+    }
+    else {
+      this.authService.logout();
+    }   
   }
 
   cancelEdit(): void {

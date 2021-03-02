@@ -7,7 +7,7 @@
             <li><a class="nav-link" routerLink="/" routerLinkActive="active">Home</a></li>
             <li><a class="nav-link" routerLink="hotels" >Hotels</a></li>
             <li><a class="nav-link" routerLink="users" >Users</a></li>
-            <li style="float:right" class ="nav-link" (click)="logout()" *ngIf="!authService.userLoggedIn" >Logout</li>
+            <li style="float:right" class ="nav-link" (click)="logout()" *ngIf="authService.userLoggedIn" >Logout</li>
         </ul>
     </nav>   
     <router-outlet></router-outlet>
