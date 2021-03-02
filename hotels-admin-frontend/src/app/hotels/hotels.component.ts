@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 
 import { Hotel } from '../hotel';
 import { HotelsService } from './hotels.service';
-import { HOTEL } from '../initializer';
-import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-hotels',
@@ -24,7 +22,7 @@ export class HotelsComponent implements OnInit {
     private router: Router,
     private hotelsService: HotelsService,
   ) {
-    this.hotel = Object.assign({}, HOTEL)
+    this.hotel = new Hotel();
     this.imageFormData = new FormData();
   }
 
@@ -51,14 +49,14 @@ export class HotelsComponent implements OnInit {
           }
         );
 
-        this.hotel = Object.assign({}, HOTEL);
+        this.hotel = new Hotel();
         this.imageUploader.nativeElement.value = null;
       }
     )
   }
 
   editMode(hotelId: number): void {
-    this.hotel = Object.assign({}, this.hotels.find(hotel => hotel.id === hotelId));
+    this.hotel = this.hotels.find(hotel => hotel.id === hotelId);
     this.imageToShow = this.hotel.image;
     this.edit = true;
     this.imageUploader.nativeElement.value = null;
@@ -85,7 +83,7 @@ export class HotelsComponent implements OnInit {
   }
 
   cancelEdit(): void {
-    this.hotel = Object.assign({}, HOTEL);
+    this.hotel = new Hotel();
     this.imageToShow = "";
     this.edit = false;
     this.imageUploader.nativeElement.value = null;

@@ -1,9 +1,18 @@
+import { runInThisContext } from "vm";
 import { Reservation } from "./reservation";
 
-export interface User {
+export class User {
     id: number;
     login: string;
     password: string;
     role: string;
     reservations: Reservation[];
+
+    constructor() {
+        this.id = 0;
+        this.login = '';
+        this.password = '';
+        this.role = 'User';
+        this.reservations = [];
+    }
 }

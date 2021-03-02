@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 
 import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
-import { RESERVATION } from '../initializer';
 
 @Component({
   selector: 'app-reservations',
@@ -26,7 +25,7 @@ export class ReservationsComponent implements OnInit {
       private route: ActivatedRoute
     ) { 
       this.routeSubscription = route.params.subscribe(params=>this.id=params['id']);
-      this.reservation = Object.assign({}, RESERVATION);
+      this.reservation = new Reservation();
     }
   
   ngOnInit(): void { 
@@ -56,11 +55,11 @@ export class ReservationsComponent implements OnInit {
           this.reservations.push(reservation);
         }
       });
-    this.reservation = Object.assign({}, RESERVATION); 
+    this.reservation = new Reservation(); 
   }
 
   editMode(reservationId: number): void {
-    this.reservation = Object.assign({}, this.reservations.find(reservation => reservation.id === reservationId));
+    this.reservation = this.reservations.find(reservation => reservation.id === reservationId);
     this.edit = true;
   }
 
@@ -76,7 +75,7 @@ export class ReservationsComponent implements OnInit {
   }
 
   cancelEdit(): void {
-    this.reservation = Object.assign({}, RESERVATION);
+    this.reservation = new Reservation();
     this.edit = false;
   }
 

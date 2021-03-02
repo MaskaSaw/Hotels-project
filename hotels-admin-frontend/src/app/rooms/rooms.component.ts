@@ -5,7 +5,6 @@ import { Room } from '../room';
 import { Reservation } from '../reservation';
 import { ReservationsService } from '../reservations/reservations.service';
 import { RoomsService} from './rooms.service';
-import { ROOM } from '../initializer';
 
 @Component({
   selector: 'app-rooms',
@@ -29,7 +28,7 @@ export class RoomsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.room = Object.assign({}, ROOM);
+    this.room = new Room();
     this.imageFormData = new FormData();
   }
 
@@ -58,13 +57,13 @@ export class RoomsComponent implements OnInit {
         )      
       }
     );    
-    this.room = Object.assign({}, ROOM);
+    this.room = new Room();
     this.room.hotelId = this.id;
     this.imageUploader.nativeElement.value = null;
   }
 
   editMode(roomId: number): void {
-    this.room = Object.assign({}, this.rooms.find(room => room.id === roomId));
+    this.room = this.rooms.find(room => room.id === roomId);
     this.imageToShow = this.room.image;
     this.edit = true;
   }
@@ -86,7 +85,7 @@ export class RoomsComponent implements OnInit {
   }
 
   cancelEdit(): void {
-    this.room = Object.assign({}, ROOM);
+    this.room = new Room();
     this.imageToShow = "";
     this.edit = false;
     this.imageUploader.nativeElement.value = null;

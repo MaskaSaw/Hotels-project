@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 
 import { User } from '../user';
 import { UsersService } from './users.service'
-import { USER } from '../initializer';
 
 @Component({
   selector: 'app-users',
@@ -20,7 +19,7 @@ export class UsersComponent implements OnInit {
     private usersService: UsersService,
     private router: Router,
   ) { 
-    this.user = Object.assign({}, USER);
+    this.user = new User();
   }
 
   ngOnInit(): void {
@@ -39,11 +38,11 @@ export class UsersComponent implements OnInit {
           this.users.push(user)
         }
       });
-    this.user = Object.assign({}, USER);
+    this.user = new User();
   }
 
   editMode(userId: number): void {
-    this.user = Object.assign({}, this.users.find(user => user.id === userId));
+    this.user = this.users.find(user => user.id === userId);
     this.user.password = "";
     this.edit = true;
   }
@@ -60,7 +59,7 @@ export class UsersComponent implements OnInit {
   }
 
   cancelEdit(): void {
-    this.user = Object.assign({}, USER);
+    this.user = new User();
     this.edit = false;
   }
 
