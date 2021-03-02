@@ -52,6 +52,15 @@ export class RoomsService {
     );
   }
 
+  updateRoom(room: Room): Observable<any> {
+    const url = this.roomsUrl + `/${room.id}`;
+    return this.http.put<Room>(url, room, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<any>('updateRoom')
+      )
+    );
+  }
+
   deleteRoom(id: number): Observable<Room> {
     const url = this.roomsUrl + `/${id}`;
     return this.http.delete<Room>(url, this.httpOptions)

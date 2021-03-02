@@ -5,7 +5,6 @@ import { Room } from '../room';
 import { Reservation } from '../reservation';
 import { ReservationsService } from '../reservations/reservations.service';
 import { RoomsService} from './rooms.service';
-import { ROOM } from '../initializer';
 
 @Component({
   selector: 'app-rooms',
@@ -17,7 +16,9 @@ export class RoomsComponent implements OnInit {
   rooms: Room[];
   room: Room;
   id = +this.route.snapshot.paramMap.get('id');
-  roomFormData: FormData;
+  imageFormData: FormData;
+  edit: boolean;
+  imageToShow: string;
 
   @ViewChild('imageUploader') imageUploader:ElementRef;
 
@@ -27,12 +28,14 @@ export class RoomsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.room = Object.assign({}, ROOM);
-    this.roomFormData = new FormData();
+    this.room = new Room();
+    this.imageFormData = new FormData();
   }
 
   ngOnInit(): void {
     this.getRooms();
+    this.edit = false;
+    this.imageToShow = '';
   }
 
   getRooms(): void {
@@ -42,7 +45,7 @@ export class RoomsComponent implements OnInit {
   }
 
   addRoom(): void {
-    this.roomsService.addImage(this.roomFormData)
+    this.roomsService.addImage(this.imageFormData)
       .subscribe(imageUrl => {
         this.room.image = imageUrl;
         this.roomsService.addRoom(this.room)
@@ -54,14 +57,38 @@ export class RoomsComponent implements OnInit {
         )      
       }
     );    
-    this.room = Object.assign({}, ROOM);
+    this.room = new Room();
     this.room.hotelId = this.id;
     this.imageUploader.nativeElement.value = null;
+  }
+
+  editMode(roomId: number): void {
+    this.room = this.rooms.find(room => room.id === roomId);
+    this.imageToShow = this.room.image;
+    this.edit = true;
+  }
+
+  updateRoom(): void {
+    this.roomsService.addImage(this.imageFormData)
+      .subscribe(imageUrl => {
+        this.room.image = imageUrl;
+        this.roomsService.updateRoom(this.room)
+          .subscribe();
+        this.cancelEdit();
+      }
+    );   
   }
 
   deleteRoom(roomId: number): void {
     this.rooms = this.rooms.filter(room => room.id !== roomId);
     this.roomsService.deleteRoom(roomId).subscribe();
+  }
+
+  cancelEdit(): void {
+    this.room = new Room();
+    this.imageToShow = "";
+    this.edit = false;
+    this.imageUploader.nativeElement.value = null;
   }
 
   openReservations(roomId: number): void {
@@ -73,7 +100,13 @@ export class RoomsComponent implements OnInit {
 
   onSelectFile(event: any) {
     if (event.target.files && event.target.files[0]) {
-      this.roomFormData.append('image', event.target.files[0]);
+      this.imageFormData.append('image', event.target.files[0]);
+
+      let imageReader = new FileReader();
+      imageReader.readAsDataURL(event.target.files[0]);
+      imageReader.onloadend = () => {
+        this.imageToShow = imageReader.result;
+      }  
     }   
   }
 }

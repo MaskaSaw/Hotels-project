@@ -20,12 +20,8 @@ namespace Hotels.ImageProcessing
         {
             string imageName, imagePath;
 
-            do
-            {
-                imageName = CreateUniqueName(Path.GetExtension(image.FileName));
-                imagePath = Path.Combine(_hostEnvironment.WebRootPath, imageName);
-            }
-            while (File.Exists(imagePath));
+            imageName = CreateUniqueName(Path.GetExtension(image.FileName));
+            imagePath = Path.Combine(_hostEnvironment.WebRootPath, imageName);
 
             using (var fileStream = new FileStream(imagePath, FileMode.Create))
             {
@@ -46,8 +42,7 @@ namespace Hotels.ImageProcessing
 
         private string CreateUniqueName(string extension)
         {
-            var imageName = Guid.NewGuid();
-            return imageName + extension;
+            return $"{Guid.NewGuid()}{extension}";
         }
     }
 }

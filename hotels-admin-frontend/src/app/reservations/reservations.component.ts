@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 
 import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
-import { RESERVATION } from '../initializer';
 
 @Component({
   selector: 'app-reservations',
@@ -18,6 +17,7 @@ export class ReservationsComponent implements OnInit {
   reservation: Reservation;
   routePart: string;
   id: number;
+  edit: boolean;
 
   private routeSubscription: Subscription;
   constructor(
@@ -25,7 +25,7 @@ export class ReservationsComponent implements OnInit {
       private route: ActivatedRoute
     ) { 
       this.routeSubscription = route.params.subscribe(params=>this.id=params['id']);
-      this.reservation = Object.assign({}, RESERVATION);
+      this.reservation = new Reservation();
     }
   
   ngOnInit(): void { 
@@ -44,6 +44,8 @@ export class ReservationsComponent implements OnInit {
         .subscribe(reservations => this.reservations = reservations
       );
     }
+
+    this.edit = false;
   }
 
   addReservation(): void {
@@ -53,12 +55,36 @@ export class ReservationsComponent implements OnInit {
           this.reservations.push(reservation);
         }
       });
-    this.reservation = Object.assign({}, RESERVATION); 
+    this.reservation = new Reservation(); 
+  }
+
+  editMode(reservationId: number): void {
+    this.reservation = this.reservations.find(reservation => reservation.id === reservationId);
+    this.edit = true;
+  }
+
+  updateReservation(): void {
+    this.reservationsService.updateReservation(this.reservation)
+      .subscribe();
+    this.cancelEdit(); 
   }
 
   deleteReservation(reservationId: number): void {
     this.reservations = this.reservations.filter(reservation => reservation.id !== reservationId);
     this.reservationsService.deleteReservation(reservationId).subscribe();
+  }
+
+  cancelEdit(): void {
+    this.reservation = new Reservation();
+    this.edit = false;
+  }
+
+  parseDate(dateString: string): Date{
+    if (dateString) {
+      return new Date(dateString);
+    }
+    
+    return null;
   }
 
   isRoom(): boolean {

@@ -25,12 +25,12 @@ namespace Hotels.Authentication
             if (user == null)
             {
                 return null;
-            }         
+            }
 
             if (!VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
             {
                 return null;
-            }               
+            }
 
             return user;
         }
@@ -79,7 +79,7 @@ namespace Hotels.Authentication
             {
                 return true;
             }
-                
+
             return false;
         }
     }

@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { User } from '../user';
-import { ReservationsService } from '../reservations/reservations.service';
 import { UsersService } from './users.service'
-import { Reservation } from '../reservation';
-import { USER } from '../initializer';
 
 @Component({
   selector: 'app-users',
@@ -16,21 +13,21 @@ export class UsersComponent implements OnInit {
 
   users: User[];
   user: User;
+  edit: boolean;
 
   constructor(
-    private reservationsService: ReservationsService,
     private usersService: UsersService,
     private router: Router,
   ) { 
-    this.user = Object.assign({}, USER);
+    this.user = new User();
   }
 
   ngOnInit(): void {
     this.getUsers();
+    this.edit = false;
   }
 
   openReservations(userId: number): void {
-    this.reservationsService.storeUserReservations(this.users.find(user => user.id == userId)?.reservations as Reservation[]);
     this.router.navigate([`/users/${userId}/reservations`]);
   }
 
@@ -41,12 +38,29 @@ export class UsersComponent implements OnInit {
           this.users.push(user)
         }
       });
-    this.user = Object.assign({}, USER);
+    this.user = new User();
+  }
+
+  editMode(userId: number): void {
+    this.user = this.users.find(user => user.id === userId);
+    this.user.password = "";
+    this.edit = true;
+  }
+
+  updateUser(): void {
+    this.usersService.updateUser(this.user)
+      .subscribe();
+    this.cancelEdit();
   }
 
   deleteUser(userId: number): void {
     this.users = this.users.filter(user => user.id !== userId);
     this.usersService.deleteUser(userId).subscribe();
+  }
+
+  cancelEdit(): void {
+    this.user = new User();
+    this.edit = false;
   }
 
   getUsers(): void {

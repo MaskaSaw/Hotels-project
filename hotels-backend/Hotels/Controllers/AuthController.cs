@@ -26,13 +26,13 @@ namespace Hotels.Controllers
         }
 
         //POST: api/auth/register
-        [HttpPost("register")] 
+        [HttpPost("register")]
         public async Task<IActionResult> Register(UserDTO userForRegister)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }    
+            }
 
             userForRegister.Login = userForRegister.Login.ToLower();
 

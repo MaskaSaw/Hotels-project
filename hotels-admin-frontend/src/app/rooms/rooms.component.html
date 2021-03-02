@@ -5,11 +5,11 @@
         </li>
         <li> 
             <label>Room number:</label>   
-            <input class="add-input" type="text" [(ngModel)]="room.number"/>  
+            <input class="add-input" type="text" [(ngModel)]="room.roomNumber"/>  
         </li>
         <li> 
             <label>Room type</label> 
-            <input class="add-input" type="text" [(ngModel)]="room.type"/>
+            <input class="add-input" type="text" [(ngModel)]="room.roomType"/>
         </li>
         <li> 
             <label>Vacant beds:</label>   
@@ -30,10 +30,14 @@
         <li> 
             <label>Image</label>
             <input type="file" accept="image/x-png,image/jpeg" (change)="onSelectFile($event)" #imageUploader/>
-            <img [src]="room.image" height="200">      
+            <img [src]="imageToShow" height="200">      
         </li> 
-        <li>
-            <button class="add-button" (click)="addRoom()">Add Room</button>
+        <li *ngIf="!edit">
+            <button (click)="addRoom()">Add Room</button>
+        </li>
+        <li *ngIf="edit">
+            <button (click)="updateRoom()">Save Room {{room.id}}</button>
+            <button (click)="cancelEdit()">Cancel</button>
         </li>
     </ul>   
 </div>
@@ -54,6 +58,7 @@
                 <th>Available</th>
                 <th>Reservations</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -67,6 +72,7 @@
                 <td><input type="checkbox" [(ngModel)]="room.reserved" disabled/></td>
                 <td><input type="checkbox" [(ngModel)]="room.available" disabled/></td>
                 <td><button class="open-button" (click)="openReservations(room.id)">Reservations</button></td>
+                <td><button class="open-button" (click)="editMode(room.id)">Edit</button></td>
                 <td><button class="del-button" (click)="deleteRoom(room.id)">Delete</button></td>
             </tr>
         </tbody>

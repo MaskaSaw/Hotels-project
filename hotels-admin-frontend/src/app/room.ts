@@ -1,6 +1,6 @@
 import { Reservation } from "./reservation";
 
-export interface Room {
+export class Room {
     id: number;
     roomType: string;
     vacantBeds: number;
@@ -11,4 +11,17 @@ export interface Room {
     roomNumber: string;
     hotelId: number;
     reservations: Reservation[];
+
+    constructor() {
+        this.id = 0;
+        this.hotelId = 0;
+        this.roomType = '';
+        this.roomNumber = '';
+        this.vacantBeds = 0;
+        this.cost = 0;
+        this.available = false;
+        this.reserved = false;
+        this.image = '';
+        this.reservations = [];
+    }
 }

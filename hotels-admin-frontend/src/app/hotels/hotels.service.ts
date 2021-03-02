@@ -55,6 +55,15 @@ export class HotelsService {
       )
     );
   }
+
+  updateHotel(hotel: Hotel): Observable<any> {
+    const url = this.hotelsUrl + `/${hotel.id}`;
+    return this.http.put<Hotel>(url, hotel, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<any>('updateHotel')
+      )
+    );
+  }
   
   deleteHotel(id: number): Observable<Hotel> {
     const url = this.hotelsUrl + `/${id}`;

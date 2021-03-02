@@ -18,8 +18,12 @@
                 <option value="User">User</option>
             </select> 
         </li>
-        <li>
+        <li *ngIf="!edit">
             <button class="add-button" (click)="addUser()">Add user</button>
+        </li>
+        <li *ngIf="edit">
+            <button (click)="updateUser()">Save User {{user.id}}</button>
+            <button (click)="cancelEdit()">Cancel</button>
         </li>
     </ul>   
 </div>
@@ -32,9 +36,9 @@
             <tr> 
                 <th>Id</th>
                 <th>Login</th>
-                <th>Password</th>
                 <th>Role</th>
                 <th>Reservations</th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -42,9 +46,9 @@
             <tr *ngFor="let user of users">
                 <td>{{user.id}}</td>
                 <td>{{user.login}}</td>
-                <td>{{user.password}}</td>
                 <td>{{user.role}}</td>
                 <td><button class="open-button" (click)="openReservations(user.id)">Reservations</button></td>
+                <td><button class="open-button" (click)="editMode(user.id)">Edit</button></td>
                 <td><button class="del-button" (click)="deleteUser(user.id)">Delete</button></td>
             </tr>
         </tbody>

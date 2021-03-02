@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 
 import { Hotel } from '../hotel';
 import { HotelsService } from './hotels.service';
-import { HOTEL } from '../initializer';
 
 @Component({
   selector: 'app-hotels',
@@ -14,6 +13,8 @@ export class HotelsComponent implements OnInit {
   hotels: Hotel[];
   hotel: Hotel;
   imageFormData: FormData;
+  edit: boolean;
+  imageToShow: string;
 
   @ViewChild('imageUploader') imageUploader:ElementRef;
 
@@ -21,12 +22,14 @@ export class HotelsComponent implements OnInit {
     private router: Router,
     private hotelsService: HotelsService,
   ) {
-    this.hotel = Object.assign({}, HOTEL)
+    this.hotel = new Hotel();
     this.imageFormData = new FormData();
   }
 
   ngOnInit(): void {
     this.getHotels();
+    this.edit = false;
+    this.imageToShow = '';
   }
 
   getHotels(): void {
@@ -45,11 +48,29 @@ export class HotelsComponent implements OnInit {
             }
           }
         );
+
+        this.hotel = new Hotel();
+        this.imageUploader.nativeElement.value = null;
       }
     )
-        
-    this.hotel = Object.assign({}, HOTEL);
+  }
+
+  editMode(hotelId: number): void {
+    this.hotel = this.hotels.find(hotel => hotel.id === hotelId);
+    this.imageToShow = this.hotel.image;
+    this.edit = true;
     this.imageUploader.nativeElement.value = null;
+  }
+
+  updateHotel(): void {
+    this.hotelsService.addImage(this.imageFormData)
+      .subscribe(imageUrl => {
+        this.hotel.image = imageUrl;
+        this.hotelsService.updateHotel(this.hotel)
+          .subscribe();
+        this.cancelEdit();
+      }
+    );   
   }
 
   deleteHotel(hotelId: number): void {
@@ -61,9 +82,22 @@ export class HotelsComponent implements OnInit {
     this.router.navigate([`hotels/${hotelId}/rooms`]);
   }
 
+  cancelEdit(): void {
+    this.hotel = new Hotel();
+    this.imageToShow = "";
+    this.edit = false;
+    this.imageUploader.nativeElement.value = null;
+  }
+
   onSelectFile(event: any) { 
     if (event.target.files && event.target.files[0]) {
-      this.imageFormData.append('image', event.target.files[0]);
+      this.imageFormData.set('image', event.target.files[0]);
+
+      let imageReader = new FileReader();
+      imageReader.readAsDataURL(event.target.files[0]);
+      imageReader.onloadend = () => {
+        this.imageToShow = imageReader.result;
+      }  
     }   
   }
 
