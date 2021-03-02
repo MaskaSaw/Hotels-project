@@ -45,18 +45,28 @@ export class RoomsComponent implements OnInit {
   }
 
   addRoom(): void {
-    this.roomsService.addImage(this.imageFormData)
-      .subscribe(imageUrl => {
-        this.room.image = imageUrl;
-        this.roomsService.addRoom(this.room)
-          .subscribe(room => {
-            if (room !== undefined) {
-              this.rooms.push(room);
+    if (this.imageUploader.nativeElement.value) {
+      this.roomsService.addImage(this.imageFormData)
+        .subscribe(imageUrl => {
+          this.room.image = imageUrl;
+          this.roomsService.addRoom(this.room)
+            .subscribe(room => {
+              if (room !== undefined) {
+                this.rooms.push(room);
+              }
             }
-          }
-        )      
+          );      
+        }
+      );    
+    }
+    this.roomsService.addRoom(this.room)
+      .subscribe(room => {
+        if (room !== undefined) {
+          this.rooms.push(room);
+        }
       }
-    );    
+    ); 
+
     this.room = new Room();
     this.room.hotelId = this.id;
     this.imageUploader.nativeElement.value = null;
@@ -69,14 +79,19 @@ export class RoomsComponent implements OnInit {
   }
 
   updateRoom(): void {
-    this.roomsService.addImage(this.imageFormData)
-      .subscribe(imageUrl => {
-        this.room.image = imageUrl;
-        this.roomsService.updateRoom(this.room)
-          .subscribe();
-        this.cancelEdit();
-      }
-    );   
+    if (this.imageUploader.nativeElement.value) {
+      this.roomsService.addImage(this.imageFormData)
+        .subscribe(imageUrl => {
+          this.room.image = imageUrl;
+          this.roomsService.updateRoom(this.room)
+            .subscribe();      
+        }
+      ); 
+    }
+    this.roomsService.updateRoom(this.room)
+      .subscribe(); 
+
+    this.cancelEdit();
   }
 
   deleteRoom(roomId: number): void {
