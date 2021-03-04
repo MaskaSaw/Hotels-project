@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import  jwt_decode from 'jwt-decode';
 
 import { User } from '../user';
 import { environment } from '../../environments/environment';
@@ -30,9 +31,12 @@ export class AuthService {
     .pipe(
       catchError(this.handleError<any>('login'))
     )
-     .subscribe((resp: any) => {
-       this.router.navigate(['/hotels']);
-       localStorage.setItem('auth_token', resp.tokenString);
+     .subscribe((resp: any) => {     
+       let decodedToken = jwt_decode(resp.tokenString);
+       if (decodedToken.role === 'Admin') {
+        localStorage.setItem('auth_token', resp.tokenString);
+        this.router.navigate(['/hotels']);
+       }
      })
   }
 

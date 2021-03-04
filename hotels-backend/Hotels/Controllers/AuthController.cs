@@ -62,22 +62,7 @@ namespace Hotels.Controllers
             return Ok(new { tokenString });
         }
 
-        [HttpPost("loginAdmin")]
-        public async Task<IActionResult> LoginAdmin([FromBody] UserDTO userForLogin)
-        {
-            var userFromRepo = await _authService.Login(userForLogin.Login.ToLower(), userForLogin.Password);
-
-            if (userFromRepo == null || userFromRepo.Role != "Admin")
-            {
-                return Unauthorized();
-            }
-
-            var tokenString = CreateTokenString(userFromRepo);
-
-            return Ok(new { tokenString });
-        }
-
-        public string CreateTokenString(User user)
+        private string CreateTokenString(User user)
         {
             //generate token
             var tokenHandler = new JwtSecurityTokenHandler();

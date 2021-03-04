@@ -4,11 +4,13 @@ import { Router } from '@angular/router';
 import { User } from '../user';
 import { UsersService } from './users.service';
 import { AuthService } from '../login/auth.service';
+import { AuthGuard } from '../auth.guard';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.less']
+  styleUrls: ['./users.component.less'],
+  providers: [ AuthGuard ]
 })
 export class UsersComponent implements OnInit {
 
@@ -35,28 +37,18 @@ export class UsersComponent implements OnInit {
   }
 
   openReservations(userId: number): void {
-    if (this.authService.userLoggedIn) {
-      this.router.navigate([`/users/${userId}/reservations`]);
-    }
-    else {
-      this.authService.logout();
-    }
+    this.router.navigate([`/users/${userId}/reservations`]);
   }
 
   addUser(): void {
-    if (this.authService.userLoggedIn) {
-      this.usersService.addUser(this.user)
-        .subscribe(user =>  {
-          if (user !== undefined) {
-            this.users.push(user)
-          }
-        });
+    this.usersService.addUser(this.user)
+      .subscribe(user =>  {
+        if (user !== undefined) {
+          this.users.push(user)
+        }
+      });
 
-      this.user = new User();
-    }
-    else {
-      this.authService.logout();
-    } 
+    this.user = new User();
   }
 
   editMode(userId: number): void {
@@ -66,24 +58,14 @@ export class UsersComponent implements OnInit {
   }
 
   updateUser(): void {
-    if (this.authService.userLoggedIn) {
-      this.usersService.updateUser(this.user)
-        .subscribe();
-      this.cancelEdit();
-    }
-    else {
-      this.authService.logout();
-    }  
+    this.usersService.updateUser(this.user)
+      .subscribe();
+    this.cancelEdit();
   }
 
   deleteUser(userId: number): void {
-    if (this.authService.userLoggedIn) {
       this.users = this.users.filter(user => user.id !== userId);
-      this.usersService.deleteUser(userId).subscribe();
-    }
-    else {
-      this.authService.logout();
-    }   
+      this.usersService.deleteUser(userId).subscribe();   
   }
 
   cancelEdit(): void {

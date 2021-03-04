@@ -8,7 +8,7 @@ import { HotelsService } from './hotels.service';
 @Component({
   selector: 'app-hotels',
   templateUrl: './hotels.component.html',
-  styleUrls: ['./hotels.component.less']
+  styleUrls: ['./hotels.component.less'],
 })
 export class HotelsComponent implements OnInit {
   hotels: Hotel[];
@@ -24,13 +24,8 @@ export class HotelsComponent implements OnInit {
     private hotelsService: HotelsService,
     private authService: AuthService
   ) {
-    if (this.authService.userLoggedIn) {
-      this.hotel = new Hotel();
-      this.imageFormData = new FormData();
-    }
-    else {
-      this.authService.logout();
-    }   
+    this.hotel = new Hotel();
+    this.imageFormData = new FormData();
   }
 
   ngOnInit(): void {
@@ -40,45 +35,35 @@ export class HotelsComponent implements OnInit {
   }
 
   getHotels(): void {
-    if (this.authService.userLoggedIn) {
-      this.hotelsService.getHotels()
+    this.hotelsService.getHotels()
       .subscribe(hotels => this.hotels = hotels);
-    }
-    else {
-      this.authService.logout();
-    }
   }
 
   addHotel(): void {
-    if (this.authService.userLoggedIn) {
-      if (this.imageUploader.nativeElement.value) {
-        this.hotelsService.addImage(this.imageFormData)
-          .subscribe(imageUrl => {
-            this.hotel.image = imageUrl;
-            this.hotelsService.addHotel(this.hotel)
-              .subscribe(hotel => {
-                if (hotel !== undefined) {
-                  this.hotels.push(hotel);
-                }
+    if (this.imageUploader.nativeElement.value) {
+      this.hotelsService.addImage(this.imageFormData)
+        .subscribe(imageUrl => {
+          this.hotel.image = imageUrl;
+          this.hotelsService.addHotel(this.hotel)
+            .subscribe(hotel => {
+              if (hotel !== undefined) {
+                this.hotels.push(hotel);
               }
-            );
-          }
-        )
-      }
-      this.hotelsService.addHotel(this.hotel)
-        .subscribe(hotel => {
-          if (hotel !== undefined) {
-            this.hotels.push(hotel);
-          }
+            }
+          );
         }
-      );
-      
-      this.hotel = new Hotel();
-      this.imageUploader.nativeElement.value = null;
+      )
     }
-    else {
-      this.authService.logout();
-    }   
+    this.hotelsService.addHotel(this.hotel)
+      .subscribe(hotel => {
+        if (hotel !== undefined) {
+          this.hotels.push(hotel);
+        }
+      }
+    );
+    
+    this.hotel = new Hotel();
+    this.imageUploader.nativeElement.value = null;  
   }
 
   editMode(hotelId: number): void {
@@ -89,34 +74,24 @@ export class HotelsComponent implements OnInit {
   }
 
   updateHotel(): void {
-    if (this.authService.userLoggedIn) {
-      if (this.imageUploader.nativeElement.value) {
-        this.hotelsService.addImage(this.imageFormData)
-          .subscribe(imageUrl => {
-            this.hotel.image = imageUrl;
-            this.hotelsService.updateHotel(this.hotel)
-              .subscribe();
-          }
-        );   
-      }
-      this.hotelsService.updateHotel(this.hotel)
-        .subscribe();
-  
-      this.cancelEdit();
+    if (this.imageUploader.nativeElement.value) {
+      this.hotelsService.addImage(this.imageFormData)
+        .subscribe(imageUrl => {
+          this.hotel.image = imageUrl;
+          this.hotelsService.updateHotel(this.hotel)
+            .subscribe();
+        }
+      );   
     }
-    else {
-      this.authService.logout();
-    }    
+    this.hotelsService.updateHotel(this.hotel)
+      .subscribe();
+
+    this.cancelEdit();  
   }
 
   deleteHotel(hotelId: number): void {
-    if (this.authService.userLoggedIn) {
-      this.hotels = this.hotels.filter(hotel => hotel.id !== hotelId);
+    this.hotels = this.hotels.filter(hotel => hotel.id !== hotelId);
     this.hotelsService.deleteHotel(hotelId).subscribe();
-    }
-    else {
-      this.authService.logout();
-    }
   }
 
   openRooms(hotelId: number): void {

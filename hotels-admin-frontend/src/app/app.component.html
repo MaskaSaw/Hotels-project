@@ -9,7 +9,7 @@
             <li><a class="nav-link" routerLink="users" >Users</a></li>
             <li style="float:right" class ="nav-link" (click)="logout()" *ngIf="authService.userLoggedIn" >Logout</li>
         </ul>
-    </nav>   
+    </nav>
     <router-outlet></router-outlet>
     <app-messages></app-messages>
 </div>
