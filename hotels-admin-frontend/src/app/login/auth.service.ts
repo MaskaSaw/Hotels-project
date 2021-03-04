@@ -31,13 +31,12 @@ export class AuthService {
     .pipe(
       catchError(this.handleError<any>('login'))
     )
-     .subscribe((resp: any) => {     
-       let decodedToken = jwt_decode(resp.tokenString);
-       if (decodedToken.role === 'Admin') {
+    .subscribe((resp: any) => {
+      if (jwt_decode(resp.tokenString).role === 'Admin') {
         localStorage.setItem('auth_token', resp.tokenString);
         this.router.navigate(['/hotels']);
-       }
-     })
+      }
+    })
   }
 
   logout(): void {

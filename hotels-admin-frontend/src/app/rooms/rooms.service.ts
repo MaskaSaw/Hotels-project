@@ -30,11 +30,7 @@ export class RoomsService {
     private http: HttpClient,
     private messageService: MessageService,
     private authService: AuthService
-  ) {
-    if (!authService.userLoggedIn) {
-      this.authService.logout();
-    }
-  }
+  ) { }
 
   getRooms(id: number): Observable<Room[]> {
     const url = `${this.hotelsUrl}/${id}/rooms`;

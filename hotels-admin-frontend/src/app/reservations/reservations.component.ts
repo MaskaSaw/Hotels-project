@@ -69,14 +69,14 @@ export class ReservationsComponent implements OnInit {
   }
 
   updateReservation(): void {
-      this.reservationsService.updateReservation(this.reservation)
-        .subscribe();
-      this.cancelEdit();    
+    this.reservationsService.updateReservation(this.reservation)
+      .subscribe();
+    this.cancelEdit();
   }
 
   deleteReservation(reservationId: number): void {
-      this.reservations = this.reservations.filter(reservation => reservation.id !== reservationId);
-      this.reservationsService.deleteReservation(reservationId).subscribe();  
+    this.reservations = this.reservations.filter(reservation => reservation.id !== reservationId);
+    this.reservationsService.deleteReservation(reservationId).subscribe();  
   }
 
   cancelEdit(): void {

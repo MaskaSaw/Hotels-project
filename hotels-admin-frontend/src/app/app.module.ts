@@ -23,13 +23,13 @@ import { AuthGuard } from './auth.guard';
     ReservationsComponent,
     UsersComponent,
     MessagesComponent,
-    TimeFormatPipe,
+    TimeFormatPipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

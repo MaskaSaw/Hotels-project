@@ -8,7 +8,7 @@ import { HotelsService } from './hotels.service';
 @Component({
   selector: 'app-hotels',
   templateUrl: './hotels.component.html',
-  styleUrls: ['./hotels.component.less'],
+  styleUrls: ['./hotels.component.less']
 })
 export class HotelsComponent implements OnInit {
   hotels: Hotel[];

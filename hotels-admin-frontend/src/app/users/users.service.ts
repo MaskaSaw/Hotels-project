@@ -29,11 +29,7 @@ export class UsersService {
     private http: HttpClient,
     private messageService: MessageService,
     private authService: AuthService
-  ) { 
-    if (!this.authService.userLoggedIn) {
-      this.authService.logout();
-    }
-  }
+  ) { }
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.usersUrl, {

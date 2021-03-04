@@ -30,11 +30,7 @@ export class HotelsService {
     private http: HttpClient,
     private messageService: MessageService,
     private authService: AuthService
-  ) { 
-    if (!authService.userLoggedIn) {
-      this.authService.logout();
-    }
-  }
+  ) { }
 
   getHotels(): Observable<Hotel[]> {
     return this.http.get<Hotel[]>(this.hotelsUrl, {

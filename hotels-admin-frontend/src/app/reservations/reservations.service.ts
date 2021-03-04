@@ -32,11 +32,7 @@ export class ReservationsService {
     private http: HttpClient,
     private messageService: MessageService,
     private authService: AuthService
-  ) {
-    if (!authService.userLoggedIn) {
-      this.authService.logout();
-    }
-  }
+  ) { }
 
   storeRoomReservations(reservations: Reservation[]): void {
     this.reservations = reservations;
