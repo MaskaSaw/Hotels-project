@@ -7,6 +7,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Room } from '../room';
 import { ApiPaths } from '../api-paths';
 import { MessageService } from '../messages/message.service';
+import { AuthService } from '../login/auth.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -19,12 +20,16 @@ export class RoomsService {
   private imagesUrl = environment.baseUrl + ApiPaths.Images;
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': this.authService.getToken 
+    })
   };
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: AuthService
   ) { }
 
   getRooms(id: number): Observable<Room[]> {
@@ -72,7 +77,10 @@ export class RoomsService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(error); 
+      console.error(error);
+      if (error.status === 401) {
+        this.authService.logout();
+      } 
   
       this.log(`${operation} failed: ${error.message}`);
   

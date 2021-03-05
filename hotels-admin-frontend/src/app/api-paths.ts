@@ -1,5 +1,5 @@
 export enum ApiPaths {
-    Auth = '/Auth/login',
+    Auth = '/auth/login',
     Hotels = '/hotels',
     Rooms = '/rooms',
     Users = '/users',

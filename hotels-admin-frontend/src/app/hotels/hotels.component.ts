@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Hotel } from '../hotel';
+import { AuthService } from '../login/auth.service';
 import { HotelsService } from './hotels.service';
 
 @Component({
@@ -21,6 +22,7 @@ export class HotelsComponent implements OnInit {
   constructor(
     private router: Router,
     private hotelsService: HotelsService,
+    private authService: AuthService
   ) {
     this.hotel = new Hotel();
     this.imageFormData = new FormData();
@@ -38,21 +40,30 @@ export class HotelsComponent implements OnInit {
   }
 
   addHotel(): void {
-    this.hotelsService.addImage(this.imageFormData)
-      .subscribe(imageUrl => {
-        this.hotel.image = imageUrl;
-        this.hotelsService.addHotel(this.hotel)
-          .subscribe(hotel => {
-            if (hotel !== undefined) {
-              this.hotels.push(hotel);
+    if (this.imageUploader.nativeElement.value) {
+      this.hotelsService.addImage(this.imageFormData)
+        .subscribe(imageUrl => {
+          this.hotel.image = imageUrl;
+          this.hotelsService.addHotel(this.hotel)
+            .subscribe(hotel => {
+              if (hotel !== undefined) {
+                this.hotels.push(hotel);
+              }
             }
-          }
-        );
-
-        this.hotel = new Hotel();
-        this.imageUploader.nativeElement.value = null;
+          );
+        }
+      )
+    }
+    this.hotelsService.addHotel(this.hotel)
+      .subscribe(hotel => {
+        if (hotel !== undefined) {
+          this.hotels.push(hotel);
+        }
       }
-    )
+    );
+    
+    this.hotel = new Hotel();
+    this.imageUploader.nativeElement.value = null;  
   }
 
   editMode(hotelId: number): void {
@@ -63,14 +74,19 @@ export class HotelsComponent implements OnInit {
   }
 
   updateHotel(): void {
-    this.hotelsService.addImage(this.imageFormData)
-      .subscribe(imageUrl => {
-        this.hotel.image = imageUrl;
-        this.hotelsService.updateHotel(this.hotel)
-          .subscribe();
-        this.cancelEdit();
-      }
-    );   
+    if (this.imageUploader.nativeElement.value) {
+      this.hotelsService.addImage(this.imageFormData)
+        .subscribe(imageUrl => {
+          this.hotel.image = imageUrl;
+          this.hotelsService.updateHotel(this.hotel)
+            .subscribe();
+        }
+      );   
+    }
+    this.hotelsService.updateHotel(this.hotel)
+      .subscribe();
+
+    this.cancelEdit();  
   }
 
   deleteHotel(hotelId: number): void {

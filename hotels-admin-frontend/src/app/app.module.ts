@@ -12,6 +12,7 @@ import { ReservationsComponent } from './reservations/reservations.component';
 import { UsersComponent } from './users/users.component';
 import { MessagesComponent } from './messages/messages.component';
 import { TimeFormatPipe } from './pipes';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   declarations: [
@@ -28,8 +29,9 @@ import { TimeFormatPipe } from './pipes';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule,
+    HttpClientModule
   ],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

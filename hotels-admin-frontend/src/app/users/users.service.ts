@@ -7,6 +7,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { User } from '../user';
 import { ApiPaths } from '../api-paths';
 import { MessageService } from '../messages/message.service';
+import { AuthService } from '../login/auth.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -18,16 +19,21 @@ export class UsersService {
   private itemsPerPage = 100;
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': this.authService.getToken 
+    })
   };
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: AuthService
   ) { }
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.usersUrl, {
+      headers: this.httpOptions.headers,
       params: {
         page: '1',
         itemsPerPage: this.itemsPerPage.toString()
@@ -68,6 +74,9 @@ export class UsersService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
+      if (error.status === 401) {
+        this.authService.logout();
+      } 
 
       this.log(`${operation} failed: ${error.message}`);
   

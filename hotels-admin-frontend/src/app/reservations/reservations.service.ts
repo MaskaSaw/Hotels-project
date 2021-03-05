@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthService } from '../login/auth.service';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -21,12 +22,16 @@ export class ReservationsService {
   private reservationsUrl = environment.baseUrl + ApiPaths.Reservations;
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': this.authService.getToken 
+    })
   };
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: AuthService
   ) { }
 
   storeRoomReservations(reservations: Reservation[]): void {
@@ -95,6 +100,9 @@ export class ReservationsService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
+      if (error.status === 401) {
+        this.authService.logout();
+      }
   
       this.log(`${operation} failed: ${error.message}`);
   

@@ -5,11 +5,14 @@ import { Subscription } from 'rxjs';
 
 import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
+import { AuthService } from '../login/auth.service';
+import { AuthGuard } from '../auth.guard';
 
 @Component({
   selector: 'app-reservations',
   templateUrl: './reservations.component.html',
-  styleUrls: ['./reservations.component.less']
+  styleUrls: ['./reservations.component.less'],
+  providers: [ AuthGuard ]
 })
 export class ReservationsComponent implements OnInit {
 
@@ -22,10 +25,11 @@ export class ReservationsComponent implements OnInit {
   private routeSubscription: Subscription;
   constructor(
       private reservationsService: ReservationsService,
-      private route: ActivatedRoute
+      private route: ActivatedRoute,
+      private authService: AuthService
     ) { 
       this.routeSubscription = route.params.subscribe(params=>this.id=params['id']);
-      this.reservation = new Reservation();
+      this.reservation = new Reservation(); 
     }
   
   ngOnInit(): void { 
@@ -55,7 +59,8 @@ export class ReservationsComponent implements OnInit {
           this.reservations.push(reservation);
         }
       });
-    this.reservation = new Reservation(); 
+
+    this.reservation = new Reservation();
   }
 
   editMode(reservationId: number): void {
@@ -66,12 +71,12 @@ export class ReservationsComponent implements OnInit {
   updateReservation(): void {
     this.reservationsService.updateReservation(this.reservation)
       .subscribe();
-    this.cancelEdit(); 
+    this.cancelEdit();
   }
 
   deleteReservation(reservationId: number): void {
     this.reservations = this.reservations.filter(reservation => reservation.id !== reservationId);
-    this.reservationsService.deleteReservation(reservationId).subscribe();
+    this.reservationsService.deleteReservation(reservationId).subscribe();  
   }
 
   cancelEdit(): void {

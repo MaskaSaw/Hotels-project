@@ -8,6 +8,7 @@ import { Hotel } from '../hotel';
 import { ApiPaths } from '../api-paths';
 import { environment } from 'src/environments/environment';
 import { MessageService } from '../messages/message.service';
+import { AuthService } from '../login/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,12 +20,16 @@ export class HotelsService {
   private itemsPerPage = 100;
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': this.authService.getToken 
+    })
   };
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: AuthService
   ) { }
 
   getHotels(): Observable<Hotel[]> {
@@ -77,6 +82,9 @@ export class HotelsService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
+      if (error.status === 401) {
+        this.authService.logout();
+      }
   
       this.log(`${operation} failed: ${error.message}`);
   

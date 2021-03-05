@@ -1,4 +1,5 @@
-<div *ngIf="authService.userLoggedIn" >
+<h3 *ngIf="authService.userLoggedIn">You are logged in. Click "Logout" to enter as another user</h3>   
+<div *ngIf="!authService.userLoggedIn" >
     <br>
     <h3>Please, enter your login and password</h3>
     <br>

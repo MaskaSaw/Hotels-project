@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { User } from '../user';
-import { UsersService } from './users.service'
+import { UsersService } from './users.service';
+import { AuthService } from '../login/auth.service';
+import { AuthGuard } from '../auth.guard';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.less']
+  styleUrls: ['./users.component.less'],
+  providers: [ AuthGuard ]
 })
 export class UsersComponent implements OnInit {
 
@@ -17,9 +20,15 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private usersService: UsersService,
+    private authService: AuthService,
     private router: Router,
   ) { 
-    this.user = new User();
+    if (this.authService.userLoggedIn) {
+      this.user = new User();
+    }
+    else {
+      this.authService.logout();
+    }  
   }
 
   ngOnInit(): void {
@@ -38,6 +47,7 @@ export class UsersComponent implements OnInit {
           this.users.push(user)
         }
       });
+
     this.user = new User();
   }
 

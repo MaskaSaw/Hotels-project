@@ -52,11 +52,18 @@ namespace Hotels.Controllers
         {
             var userFromRepo = await _authService.Login(userForLogin.Login.ToLower(), userForLogin.Password);
 
-            if (userFromRepo == null) //User login failed
+            if (userFromRepo == null)
             {
                 return Unauthorized();
             }
 
+            var tokenString = CreateTokenString(userFromRepo);
+
+            return Ok(new { tokenString });
+        }
+
+        private string CreateTokenString(User user)
+        {
             //generate token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:TokenSecretKey").Value);
@@ -66,20 +73,21 @@ namespace Hotels.Controllers
                 Subject = new ClaimsIdentity(
                     new Claim[]
                     {
-                        new Claim(ClaimTypes.NameIdentifier,userFromRepo.Id.ToString()),
-                        new Claim(ClaimTypes.Name, userFromRepo.Login),
-                        new Claim(ClaimTypes.Role, userFromRepo.Role)
+                        new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
+                        new Claim(ClaimTypes.Name, user.Login),
+                        new Claim(ClaimTypes.Role, user.Role)
                     }
                 ),
 
                 Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha512Signature
+                )
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            return Ok(new { tokenString });
+            return tokenHandler.WriteToken(token);
         }
     }
 }
