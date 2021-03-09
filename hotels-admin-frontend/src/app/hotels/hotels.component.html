@@ -94,7 +94,7 @@
         <li> 
             <label>Image</label>
             <input type="file" accept="image/x-png,image/jpeg" (change)="onSelectFile($event)" #imageUploader/>
-            <img [src]="imageToShow" height="150">      
+            <img [ngClass]="imageToShow ? 'opened-image' : 'closed-image'" [src]="imageToShow">      
         </li>        
         <li *ngIf="!edit">
             <button [disabled]="name.invalid || country.invalid || city.invalid || address.invalid" 

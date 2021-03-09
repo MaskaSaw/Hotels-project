@@ -4,7 +4,7 @@
             <h2>Add new reservation</h2>
         </li>
         <li> 
-            <label>User id:</label>   
+            <label>User id*:</label>   
             <input class="add-input" 
                 name="userId" 
                 type="text" 
@@ -15,15 +15,15 @@
                 int="true"/>
             <div *ngIf="!userId.valid && (userId.dirty || userId.touched)">
                 <div *ngIf="userId.errors.range">
-                    UserId length should be greater then 0
+                    User Id should be greater then 0
                 </div>
                 <div *ngIf="userId.errors.nonDigitCharacters">
-                    Number should be valid
+                    User Id should be valid
                 </div>
             </div>  
         </li>
         <li> 
-            <label>Room id</label> 
+            <label>Room id*:</label> 
             <input class="add-input" 
                 name="roomId" 
                 type="text" 
@@ -34,15 +34,15 @@
                 int="true"/>
             <div *ngIf="!roomId.valid && (roomId.dirty || roomId.touched)">
                 <div *ngIf="roomId.errors.range">
-                    RoomId length should be greater then 0
+                    Room Id should be greater then 0
                 </div>
                 <div *ngIf="roomId.errors.nonDigitCharacters">
-                    Number should be valid
+                    Room Id should be valid
                 </div>
             </div>
         </li>
         <li> 
-            <label>Start date:</label>   
+            <label>Start date*:</label>   
             <input type="date" 
                 name="startDate" 
                 [ngModel]="reservation.startDate | date:'yyyy-MM-dd'" 
@@ -57,7 +57,7 @@
                 </div>
             </div>
         <li>
-            <label>End date:</label>
+            <label>End date*:</label>
             <input type="date" 
                 name="endDate" 
                 [ngModel]="reservation.endDate | date:'yyyy-MM-dd'" 

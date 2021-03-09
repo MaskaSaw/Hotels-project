@@ -66,7 +66,7 @@
                     Cost should be greater then zero
                 </div>
                 <div *ngIf="cost.errors.nonDigitCharacters">
-                    COst value should be correct
+                    Cost value should be correct
                 </div>
             </div>
         </li>
@@ -81,7 +81,7 @@
         <li> 
             <label>Image</label>
             <input type="file" accept="image/x-png,image/jpeg" (change)="onSelectFile($event)" #imageUploader/>
-            <img [src]="imageToShow" height="200">      
+            <img [ngClass]="imageToShow ? 'opened-image' : 'closed-image'" [src]="imageToShow">      
         </li> 
         <li *ngIf="!edit">
             <button [disabled]="number.invalid || beds.invalid || cost.invalid" 
