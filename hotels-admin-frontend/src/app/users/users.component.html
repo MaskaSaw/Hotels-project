@@ -5,11 +5,37 @@
         </li>
         <li> 
             <label>Login:</label>   
-            <input class="add-input" type="text" [(ngModel)]="user.login"/>  
+            <input class="add-input" 
+                name="login" 
+                type="text" 
+                [(ngModel)]="user.login" 
+                #login="ngModel" 
+                digitCharacterValidator 
+                required 
+                len="20"/>
+            <div *ngIf="!login.valid && (login.dirty || login.touched)">
+                <div *ngIf="login.errors.length">
+                    Login length should be greater then zero
+                </div>
+                <div *ngIf="login.errors.specialCharacters">
+                    Special characters are not allowed
+                </div>
+            </div>  
         </li>
         <li> 
             <label>Password</label> 
-            <input class="add-input" type="text" [(ngModel)]="user.password"/>
+            <input class="add-input" 
+                name="password" 
+                type="text" 
+                [(ngModel)]="user.password" 
+                #password="ngModel" 
+                passwordValidator 
+                required/>
+            <div *ngIf="!password.valid && (password.dirty || password.touched)">
+                <div *ngIf="password.errors.length">
+                    Room password length should be between 4 and 10 characters
+                </div>
+            </div>
         </li>
         <li> 
             <label>Role:</label>   
@@ -19,10 +45,16 @@
             </select> 
         </li>
         <li *ngIf="!edit">
-            <button class="add-button" (click)="addUser()">Add user</button>
+            <button [disabled]="login.invalid || password.invalid" 
+                (click)="addUser()">
+                Add user
+            </button>
         </li>
         <li *ngIf="edit">
-            <button (click)="updateUser()">Save User {{user.id}}</button>
+            <button [disabled]="login.invalid || password.invalid" 
+                (click)="updateUser()">
+                Save User {{user.id}}
+            </button>
             <button (click)="cancelEdit()">Cancel</button>
         </li>
     </ul>   

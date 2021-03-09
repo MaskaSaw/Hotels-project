@@ -4,20 +4,71 @@
             <h2>Add new room</h2>
         </li>
         <li> 
-            <label>Room number:</label>   
-            <input class="add-input" type="text" [(ngModel)]="room.roomNumber"/>  
+            <label>Room number*:</label>   
+            <input class="add-input" 
+                name="number" 
+                type="text" 
+                [(ngModel)]="room.roomNumber" 
+                #number="ngModel" 
+                digitCharacterValidator 
+                required 
+                len="20"/>
+            <div *ngIf="!number.valid && (number.dirty || number.touched)">
+                <div *ngIf="number.errors.length">
+                    Room number length should be greater then 0 and lesser than {{name.errors.maxLength}}
+                </div>
+                <div *ngIf="number.errors.specialCharacters">
+                    Special characters are not allowed
+                </div>
+            </div>
         </li>
         <li> 
-            <label>Room type</label> 
-            <input class="add-input" type="text" [(ngModel)]="room.roomType"/>
+            <label>Room type*</label> 
+            <select class="add-select" [(ngModel)]="room.roomType">
+                <option value="Standart">Standart</option>
+                <option value="Elite">Elite</option>
+                <option value="Lux">Lux</option>
+                <option value="President lux">President Lux</option>
+            </select>
         </li>
+        
         <li> 
-            <label>Vacant beds:</label>   
-            <input class="add-input" type="text" [(ngModel)]="room.vacantBeds"/>  
+            <label>Vacant beds*:</label>   
+            <input class="add-input" 
+                name="beds" 
+                type="text" 
+                [(ngModel)]="room.vacantBeds" 
+                #beds="ngModel" 
+                digitValidator 
+                required 
+                int=true/>
+            <div *ngIf="!beds.valid && (beds.dirty || beds.touched)">
+                <div *ngIf="beds.errors.range">
+                    Number of beds should be greater then zero
+                </div>
+                <div *ngIf="beds.errors.nonDigitCharacters">
+                    Number should be correct
+                </div>
+            </div>
         </li>
         <li>
-            <label>Cost:</label>
-            <input class="add-input" type="text" [(ngModel)]="room.cost"/>
+            <label>Cost, $*:</label>
+            <input class="add-input" 
+                name="cost" 
+                type="text" 
+                [(ngModel)]="room.cost" 
+                #cost="ngModel" 
+                digitValidator 
+                required 
+                int=false/>
+            <div *ngIf="!cost.valid && (cost.dirty || cost.touched)">
+                <div *ngIf="cost.errors.range">
+                    Cost should be greater then zero
+                </div>
+                <div *ngIf="cost.errors.nonDigitCharacters">
+                    COst value should be correct
+                </div>
+            </div>
         </li>
         <li> 
             <label>Reserved</label>
@@ -33,10 +84,16 @@
             <img [src]="imageToShow" height="200">      
         </li> 
         <li *ngIf="!edit">
-            <button (click)="addRoom()">Add Room</button>
+            <button [disabled]="number.invalid || beds.invalid || cost.invalid" 
+                (click)="addRoom()">
+                Add Room
+            </button>
         </li>
         <li *ngIf="edit">
-            <button (click)="updateRoom()">Save Room {{room.id}}</button>
+            <button [disabled]="number.invalid || beds.invalid || cost.invalid"
+                (click)="updateRoom()">
+                Save Room {{room.id}}
+            </button>
             <button (click)="cancelEdit()">Cancel</button>
         </li>
     </ul>   

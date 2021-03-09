@@ -15,7 +15,7 @@ export class Room {
     constructor() {
         this.id = 0;
         this.hotelId = 0;
-        this.roomType = '';
+        this.roomType = 'Standart';
         this.roomNumber = '';
         this.vacantBeds = 0;
         this.cost = 0;

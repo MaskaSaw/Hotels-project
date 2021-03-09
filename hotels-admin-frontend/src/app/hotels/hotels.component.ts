@@ -49,21 +49,24 @@ export class HotelsComponent implements OnInit {
               if (hotel !== undefined) {
                 this.hotels.push(hotel);
               }
+              this.hotel = new Hotel();
+              this.imageUploader.nativeElement.value = null;  
             }
           );
         }
       )
     }
-    this.hotelsService.addHotel(this.hotel)
-      .subscribe(hotel => {
-        if (hotel !== undefined) {
-          this.hotels.push(hotel);
+    else {
+      this.hotelsService.addHotel(this.hotel)
+        .subscribe(hotel => {
+          if (hotel !== undefined) {
+            this.hotels.push(hotel);
+          }
+          this.hotel = new Hotel();
+          this.imageUploader.nativeElement.value = null;  
         }
-      }
-    );
-    
-    this.hotel = new Hotel();
-    this.imageUploader.nativeElement.value = null;  
+      );
+    } 
   }
 
   editMode(hotelId: number): void {
@@ -83,8 +86,10 @@ export class HotelsComponent implements OnInit {
         }
       );   
     }
-    this.hotelsService.updateHotel(this.hotel)
-      .subscribe();
+    else {
+      this.hotelsService.updateHotel(this.hotel)
+        .subscribe();
+    }
 
     this.cancelEdit();  
   }

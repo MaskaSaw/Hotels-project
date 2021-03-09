@@ -49,6 +49,7 @@ export class ReservationsComponent implements OnInit {
       );
     }
 
+    this.dateIsValid = true;
     this.edit = false;
   }
 
@@ -86,7 +87,7 @@ export class ReservationsComponent implements OnInit {
 
   parseDate(dateString: string): Date{
     if (dateString) {
-      return new Date(dateString);
+      return new Date(dateString);;
     }
     
     return null;
