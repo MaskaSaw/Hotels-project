@@ -2,19 +2,19 @@ import { Validator, NG_VALIDATORS, FormControl } from '@angular/forms'
 import { Directive, forwardRef, Input } from '@angular/core';
  
 @Directive({
-  selector: '[alphaNumericValidator]',
+  selector: '[nameValidator]',
   providers: [
-    { provide: NG_VALIDATORS, useExisting: AlphaNumericValidatorDirective, multi: true }
+    { provide: NG_VALIDATORS, useExisting: NameValidatorDirective, multi: true }
   ]
 })
-export class AlphaNumericValidatorDirective implements Validator {
+export class NameValidatorDirective implements Validator {
 
   @Input("len") len: number;
  
   validate(control: FormControl) {
     
     const value: string = control.value;
-    const format = /[`!?@#$%^&*()_+\=\[\]{};':"\\|<>\/~]/;
+    const format = /[^\w\-/,. *S]/;
     
     if (value !== null) {
       if (value.length === 0 || value.length > this.len) {

@@ -10,14 +10,14 @@
                 type="text" 
                 [(ngModel)]="user.login" 
                 #login="ngModel" 
-                alphaNumericValidator
+                nameValidator
                 required 
                 len="20"/>
             <div *ngIf="!login.valid && (login.dirty || login.touched)">
                 <div *ngIf="login.errors.length">
                     Login length should be greater then zero
                 </div>
-                <div *ngIf="login.errors.specialCharacters">
+                <div *ngIf="login.errors.format">
                     Special characters are not allowed
                 </div>
             </div>  

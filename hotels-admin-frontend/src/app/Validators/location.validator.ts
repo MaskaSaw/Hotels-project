@@ -15,7 +15,7 @@ export class LocationValidatorDirective implements Validator {
   validate(control: FormControl) {
     
     const value: string = control.value;
-    const format = /[`!?№@#$%^&*()_+\=\[\]{};':"\\|,.<>\/~(1-9)]/;
+    const format = /[^a-zA-Z\-']/;
     
     if (value !== null) {
       if (value.length === 0 || value.length > this.len) {
@@ -23,7 +23,7 @@ export class LocationValidatorDirective implements Validator {
       }
   
       if (format.test(value)) {
-        return { 'specialCharacters': true }
+        return { 'format': true }
       }
     
       return null;

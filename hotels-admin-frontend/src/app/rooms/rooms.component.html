@@ -10,14 +10,14 @@
                 type="text" 
                 [(ngModel)]="room.roomNumber" 
                 #number="ngModel" 
-                alphaNumericValidator
+                nameValidator
                 required 
                 len="20"/>
             <div *ngIf="!number.valid && (number.dirty || number.touched)">
                 <div *ngIf="number.errors.length">
                     Room number length should be greater then 0 and lesser than {{name.errors.maxLength}}
                 </div>
-                <div *ngIf="number.errors.specialCharacters">
+                <div *ngIf="number.errors.format">
                     Special characters are not allowed
                 </div>
             </div>

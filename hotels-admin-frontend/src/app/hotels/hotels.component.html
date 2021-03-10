@@ -11,13 +11,13 @@
                 [(ngModel)]="hotel.name" 
                 #name="ngModel" 
                 required 
-                alphaNumericValidator 
+                nameValidator 
                 len="50"/>
             <div *ngIf="!name.valid && (name.dirty || name.touched)">
                 <div *ngIf="name.errors.length">
                     Name length should be greater then 0 and lesser than {{name.errors.maxLength}}
                 </div>
-                <div *ngIf="name.errors.specialCharacters">
+                <div *ngIf="name.errors.format">
                     Special characters are not allowed
                 </div>
             </div>
@@ -36,7 +36,7 @@
                 <div *ngIf="country.errors.length">
                     Country name length should be greater then 0 and lesser than {{country.errors.maxLength}}
                 </div>
-                <div *ngIf="country.errors.specialCharacters">
+                <div *ngIf="country.errors.format">
                     Country name should only contain letters and dashes 
                 </div>
             </div>  
@@ -55,7 +55,7 @@
                 <div *ngIf="city.errors.length">
                     City name length should be greater then 0 and lesser than {{city.errors.maxLength}}
                 </div>
-                <div *ngIf="city.errors.specialCharacters">
+                <div *ngIf="city.errors.format">
                     City name should only contain letters and dashes
                 </div>
             </div> 
@@ -68,14 +68,11 @@
                 [(ngModel)]="hotel.address" 
                 #address="ngModel" 
                 required 
-                alphaNumericValidator 
-                len="50"/>
+                maxlength="50"
+                minlength="1"/>
             <div *ngIf="!address.valid && (address.dirty || address.touched)">
-                <div *ngIf="address.errors.length">
+                <div *ngIf="address.invalid">
                     Address length should be greater then 0 and lesser than {{address.errors.maxLength}}
-                </div>
-                <div *ngIf="address.errors.specialCharacters">
-                    Special characters are not allowed
                 </div>
             </div>   
         </li> 
