@@ -116,7 +116,7 @@ namespace Hotels.Controllers
             }
 
             _context.Hotels.Remove(hotel);
-            if (hotel.Image != "")
+            if (string.IsNullOrEmpty(hotel.Image))
             {
                 _imageService.DeleteImage(hotel.Image);
             }

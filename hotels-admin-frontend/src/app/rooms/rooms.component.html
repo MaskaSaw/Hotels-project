@@ -10,7 +10,7 @@
                 type="text" 
                 [(ngModel)]="room.roomNumber" 
                 #number="ngModel" 
-                digitCharacterValidator 
+                alphaNumericValidator
                 required 
                 len="20"/>
             <div *ngIf="!number.valid && (number.dirty || number.touched)">
@@ -23,7 +23,7 @@
             </div>
         </li>
         <li> 
-            <label>Room type*</label> 
+            <label>Room type</label> 
             <select class="add-select" [(ngModel)]="room.roomType">
                 <option value="Standart">Standart</option>
                 <option value="Elite">Elite</option>

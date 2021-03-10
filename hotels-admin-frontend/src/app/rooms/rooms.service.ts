@@ -19,12 +19,14 @@ export class RoomsService {
   private roomsUrl = environment.baseUrl + ApiPaths.Rooms;
   private imagesUrl = environment.baseUrl + ApiPaths.Images;
 
-  httpOptions = {
-    headers: new HttpHeaders({ 
-      'Content-Type': 'application/json',
-      'Authorization': this.authService.getToken 
-    })
-  };
+  private get httpOptions(): object {
+    return {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': this.authService.getToken 
+      })
+    };
+  }
 
   constructor(
     private http: HttpClient,

@@ -87,7 +87,7 @@ export class ReservationsComponent implements OnInit {
 
   parseDate(dateString: string): Date{
     if (dateString) {
-      return new Date(dateString);;
+      return new Date(dateString);
     }
     
     return null;

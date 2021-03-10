@@ -11,7 +11,7 @@
                 [(ngModel)]="hotel.name" 
                 #name="ngModel" 
                 required 
-                digitCharacterValidator 
+                alphaNumericValidator 
                 len="50"/>
             <div *ngIf="!name.valid && (name.dirty || name.touched)">
                 <div *ngIf="name.errors.length">
@@ -68,7 +68,7 @@
                 [(ngModel)]="hotel.address" 
                 #address="ngModel" 
                 required 
-                digitCharacterValidator 
+                alphaNumericValidator 
                 len="50"/>
             <div *ngIf="!address.valid && (address.dirty || address.touched)">
                 <div *ngIf="address.errors.length">

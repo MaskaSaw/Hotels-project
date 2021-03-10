@@ -13,7 +13,7 @@ import { UsersComponent } from './users/users.component';
 import { MessagesComponent } from './messages/messages.component';
 import { TimeFormatPipe } from './pipes';
 import { AuthGuard } from './auth.guard';
-import { DigitCharacterValidatorDirective } from './Validators/digit-character.validator';
+import { AlphaNumericValidatorDirective } from './Validators/alphanumeric.validator';
 import { LocationValidatorDirective } from './Validators/location.validator';
 import { DigitValidatorDirective } from './Validators/digit.validator';
 import { PasswordValidatorDirective } from './Validators/password.validator';
@@ -29,7 +29,7 @@ import { DateValidatorDirective } from './Validators/date.validator';
     UsersComponent,
     MessagesComponent,
     TimeFormatPipe,
-    DigitCharacterValidatorDirective,
+    AlphaNumericValidatorDirective,
     LocationValidatorDirective,
     DigitValidatorDirective,
     PasswordValidatorDirective,

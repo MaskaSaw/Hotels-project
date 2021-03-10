@@ -10,7 +10,7 @@
                 type="text" 
                 [(ngModel)]="user.login" 
                 #login="ngModel" 
-                digitCharacterValidator 
+                alphaNumericValidator
                 required 
                 len="20"/>
             <div *ngIf="!login.valid && (login.dirty || login.touched)">
@@ -29,7 +29,7 @@
                 type="text" 
                 [(ngModel)]="user.password" 
                 #password="ngModel" 
-                passwordValidator 
+                passwordValidator
                 required/>
             <div *ngIf="!password.valid && (password.dirty || password.touched)">
                 <div *ngIf="password.errors.length">

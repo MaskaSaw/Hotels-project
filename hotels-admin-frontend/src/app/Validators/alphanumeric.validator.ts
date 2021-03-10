@@ -2,14 +2,14 @@ import { Validator, NG_VALIDATORS, FormControl } from '@angular/forms'
 import { Directive, forwardRef, Input } from '@angular/core';
  
 @Directive({
-  selector: '[digitCharacterValidator]',
+  selector: '[alphaNumericValidator]',
   providers: [
-    { provide: NG_VALIDATORS, useExisting: DigitCharacterValidatorDirective, multi: true }
+    { provide: NG_VALIDATORS, useExisting: AlphaNumericValidatorDirective, multi: true }
   ]
 })
-export class DigitCharacterValidatorDirective implements Validator {
+export class AlphaNumericValidatorDirective implements Validator {
 
-  @Input("len") len:number;
+  @Input("len") len: number;
  
   validate(control: FormControl) {
     
@@ -22,7 +22,7 @@ export class DigitCharacterValidatorDirective implements Validator {
       }
   
       if (format.test(value)) {
-        return { 'specialCharacters': true }
+        return { 'format': true }
       }
    
       return null;

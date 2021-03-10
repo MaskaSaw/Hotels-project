@@ -19,12 +19,14 @@ export class HotelsService {
   private imagesUrl = environment.baseUrl + ApiPaths.Images;
   private itemsPerPage = 100;
 
-  httpOptions = {
-    headers: new HttpHeaders({ 
-      'Content-Type': 'application/json',
-      'Authorization': this.authService.getToken 
-    })
-  };
+  private get httpOptions(): object {
+    return {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': this.authService.getToken 
+      })
+    };
+  }
 
   constructor(
     private http: HttpClient,
