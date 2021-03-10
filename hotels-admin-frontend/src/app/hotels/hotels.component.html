@@ -4,20 +4,77 @@
             <h2>Add new hotel</h2>
         </li>
         <li> 
-            <label>Name:</label> 
-            <input class="add-input" type="text" [(ngModel)]="hotel.name"/>
+            <label>Name:*</label> 
+            <input class="add-input" 
+                name="name" 
+                type="text" 
+                [(ngModel)]="hotel.name" 
+                #name="ngModel" 
+                required 
+                nameValidator 
+                len="50"/>
+            <div *ngIf="!name.valid && (name.dirty || name.touched)">
+                <div *ngIf="name.errors.length">
+                    Name length should be greater then 0 and lesser than {{name.errors.maxLength}}
+                </div>
+                <div *ngIf="name.errors.format">
+                    Special characters are not allowed
+                </div>
+            </div>
         </li>
         <li> 
-            <label>Country:</label>   
-            <input class="add-input" type="text" [(ngModel)]="hotel.country"/>  
+            <label>Country:*</label>   
+            <input class="add-input" 
+                name="country" 
+                type="text" 
+                [(ngModel)]="hotel.country" 
+                #country="ngModel" 
+                required 
+                locationValidator 
+                len="20"/>
+            <div *ngIf="!country.valid && (country.dirty || country.touched)">
+                <div *ngIf="country.errors.length">
+                    Country name length should be greater then 0 and lesser than {{country.errors.maxLength}}
+                </div>
+                <div *ngIf="country.errors.format">
+                    Country name should only contain letters and dashes 
+                </div>
+            </div>  
         </li>
         <li>
-            <label>City:</label>
-            <input class="add-input" type="text" [(ngModel)]="hotel.city"/>
+            <label>City:*</label>
+            <input class="add-input" 
+                name="city" 
+                type="text" 
+                [(ngModel)]="hotel.city" 
+                #city="ngModel" 
+                required 
+                locationValidator 
+                len="20"/>
+            <div *ngIf="!city.valid && (city.dirty || city.touched)">
+                <div *ngIf="city.errors.length">
+                    City name length should be greater then 0 and lesser than {{city.errors.maxLength}}
+                </div>
+                <div *ngIf="city.errors.format">
+                    City name should only contain letters and dashes
+                </div>
+            </div> 
         </li>
         <li> 
-            <label>Address:</label>
-            <input class="add-input" type="text" [(ngModel)]="hotel.address"/>   
+            <label>Address:*</label>
+            <input class="add-input" 
+                name="address" 
+                type="text" 
+                [(ngModel)]="hotel.address" 
+                #address="ngModel" 
+                required 
+                maxlength="50"
+                minlength="1"/>
+            <div *ngIf="!address.valid && (address.dirty || address.touched)">
+                <div *ngIf="address.invalid">
+                    Address length should be greater then 0 and lesser than {{address.errors.maxLength}}
+                </div>
+            </div>   
         </li> 
         <li> 
             <label>Parking</label>
@@ -34,13 +91,19 @@
         <li> 
             <label>Image</label>
             <input type="file" accept="image/x-png,image/jpeg" (change)="onSelectFile($event)" #imageUploader/>
-            <img [src]="imageToShow" height="150">      
+            <img [ngClass]="imageToShow ? 'opened-image' : 'closed-image'" [src]="imageToShow">      
         </li>        
         <li *ngIf="!edit">
-            <button (click)="addHotel()">Add Hotel</button>
+            <button [disabled]="name.invalid || country.invalid || city.invalid || address.invalid" 
+                (click)="addHotel()">
+                Add Hotel
+            </button>
         </li>
         <li *ngIf="edit">
-            <button (click)="updateHotel()">Save Hotel {{hotel.id}}</button>
+            <button [disabled]="name.invalid || country.invalid || city.invalid || address.invalid" 
+                (click)="updateHotel()">
+                Save Hotel {{hotel.id}}
+            </button>
             <button (click)="cancelEdit()">Cancel</button>
         </li>      
     </ul>   

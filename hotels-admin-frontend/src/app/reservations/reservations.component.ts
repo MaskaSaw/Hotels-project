@@ -49,6 +49,7 @@ export class ReservationsComponent implements OnInit {
       );
     }
 
+    this.dateIsValid = true;
     this.edit = false;
   }
 

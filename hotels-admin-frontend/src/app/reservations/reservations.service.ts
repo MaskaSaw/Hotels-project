@@ -21,12 +21,14 @@ export class ReservationsService {
   private usersUrl = environment.baseUrl + ApiPaths.Users;
   private reservationsUrl = environment.baseUrl + ApiPaths.Reservations;
 
-  httpOptions = {
-    headers: new HttpHeaders({ 
-      'Content-Type': 'application/json',
-      'Authorization': this.authService.getToken 
-    })
-  };
+  private get httpOptions(): object {
+    return {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': this.authService.getToken 
+      })
+    };
+  }
 
   constructor(
     private http: HttpClient,

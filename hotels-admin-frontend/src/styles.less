@@ -1,4 +1,5 @@
 @customBlue:  rgb(51, 122, 183);
+@customLightBlue: rgb(176, 218, 255);
 
 input.ng-touched.ng-dirty.ng-invalid {
     border:solid red 2px;
@@ -62,6 +63,24 @@ th, td {
             background-color: @customBlue;
             color: white;
         }
+
+        &:disabled {
+            color: @customLightBlue;
+            border-color: @customLightBlue;
+
+            &:hover {
+                background-color: @customLightBlue;
+                color: white;
+            }
+        }       
+    }
+
+    .opened-image {
+        height: 200px;
+    }
+
+    .closed-image {
+        height: 0;
     }
 
     *:focus {
@@ -76,7 +95,7 @@ th, td {
 }
 
 .add-select {
-    width: 100px;
+    width: 15%;
 }
 
 .del-button {

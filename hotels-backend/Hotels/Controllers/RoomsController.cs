@@ -104,7 +104,10 @@ namespace Hotels.Controllers
             }
 
             _context.Rooms.Remove(room);
-            _imageService.DeleteImage(room.Image);
+            if (string.IsNullOrEmpty(room.Image))
+            {
+                _imageService.DeleteImage(room.Image);
+            }
             await _context.SaveChangesAsync();
 
             return NoContent();

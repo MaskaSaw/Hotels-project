@@ -18,12 +18,14 @@ export class UsersService {
   private usersUrl = environment.baseUrl + ApiPaths.Users;
   private itemsPerPage = 100;
 
-  httpOptions = {
-    headers: new HttpHeaders({ 
-      'Content-Type': 'application/json',
-      'Authorization': this.authService.getToken 
-    })
-  };
+  private get httpOptions(): object {
+    return {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': this.authService.getToken 
+      })
+    };
+  }
 
   constructor(
     private http: HttpClient,

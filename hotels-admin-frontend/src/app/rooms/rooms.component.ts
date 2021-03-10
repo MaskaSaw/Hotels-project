@@ -59,22 +59,26 @@ export class RoomsComponent implements OnInit {
               if (room !== undefined) {
                 this.rooms.push(room);
               }
+              this.room = new Room();
+              this.room.hotelId = this.id;
+              this.imageUploader.nativeElement.value = null;
             }
           );      
         }
       );    
     }
-    this.roomsService.addRoom(this.room)
-      .subscribe(room => {
-        if (room !== undefined) {
-          this.rooms.push(room);
+    else {
+      this.roomsService.addRoom(this.room)
+        .subscribe(room => {
+          if (room !== undefined) {
+            this.rooms.push(room);
+          }
+          this.room = new Room();
+          this.room.hotelId = this.id;
+          this.imageUploader.nativeElement.value = null;
         }
-      }
-    ); 
-
-    this.room = new Room();
-    this.room.hotelId = this.id;
-    this.imageUploader.nativeElement.value = null;
+      ); 
+    } 
   }
 
   editMode(roomId: number): void {

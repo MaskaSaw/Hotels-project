@@ -4,19 +4,73 @@
             <h2>Add new reservation</h2>
         </li>
         <li> 
-            <label>User id:</label>   
-            <input class="add-input" type="text" [(ngModel)]="reservation.userId" />  
+            <label>User id*:</label>   
+            <input class="add-input" 
+                name="userId" 
+                type="text" 
+                [(ngModel)]="reservation.userId" 
+                #userId="ngModel"
+                digitValidator 
+                required 
+                int="true"/>
+            <div *ngIf="!userId.valid && (userId.dirty || userId.touched)">
+                <div *ngIf="userId.errors.range">
+                    User Id should be greater then 0
+                </div>
+                <div *ngIf="userId.errors.nonDigitCharacters">
+                    User Id should be valid
+                </div>
+            </div>  
         </li>
         <li> 
-            <label>Room id</label> 
-            <input class="add-input" type="text" [(ngModel)]="reservation.roomId"/>
+            <label>Room id*:</label> 
+            <input class="add-input" 
+                name="roomId" 
+                type="text" 
+                [(ngModel)]="reservation.roomId" 
+                #roomId="ngModel" 
+                digitValidator 
+                required 
+                int="true"/>
+            <div *ngIf="!roomId.valid && (roomId.dirty || roomId.touched)">
+                <div *ngIf="roomId.errors.range">
+                    Room Id should be greater then 0
+                </div>
+                <div *ngIf="roomId.errors.nonDigitCharacters">
+                    Room Id should be valid
+                </div>
+            </div>
         </li>
         <li> 
-            <label>Start date:</label>   
-            <input type="date" [ngModel]="reservation.startDate | date:'yyyy-MM-dd'" (ngModelChange)="reservation.startDate = parseDate($event.target.value)"/>
+            <label>Start date*:</label>   
+            <input type="date" 
+                name="startDate" 
+                [ngModel]="reservation.startDate | date:'yyyy-MM-dd'" 
+                (ngModelChange)="reservation.startDate = parseDate($event.target.value)" 
+                #startDate="ngModel" 
+                dateValidator 
+                [secondDate]="reservation.endDate" 
+                dateType="startDate"/>
+            <div *ngIf="!startDate.valid && (startDate.dirty || startDate.touched)">
+                <div *ngIf="startDate.errors.wrongDate">
+                    Start Date should be lesser then End Date
+                </div>
+            </div>
         <li>
-            <label>End date:</label>
-            <input type="date" [ngModel]="reservation.endDate | date:'yyyy-MM-dd'" (ngModelChange)="reservation.endDate = parseDate($event.target.value)"/>
+            <label>End date*:</label>
+            <input type="date" 
+                name="endDate" 
+                [ngModel]="reservation.endDate | date:'yyyy-MM-dd'" 
+                (ngModelChange)="reservation.endDate = parseDate($event.target.value)" 
+                #endDate="ngModel" 
+                dateValidator 
+                [secondDate]="reservation.startDate" 
+                dateType="endDate"/>
+            <div *ngIf="!endDate.valid && (endDate.dirty || endDate.touched)">
+                <div *ngIf="endDate.errors.wrongDate">
+                    End Date should be greater then Start Date
+                </div>
+            </div>
         </li>
         <li>
             <label>Arrival time:</label>
@@ -39,10 +93,16 @@
             <input type="checkbox" [(ngModel)]="reservation.extraTowels"/>     
         </li> 
         <li *ngIf="!edit">
-            <button class="add-button" (click)="addReservation()">Add reservation</button>
+            <button [disabled]="userId.invalid || roomId.invalid || startDate.invalid || endDate.invalid" 
+                (click)="addReservation()">
+                Add reservation
+            </button>
         </li>
         <li *ngIf="edit">
-            <button (click)="updateReservation()">Save Reservation {{reservation.id}}</button>
+            <button [disabled]="userId.invalid || roomId.invalid || startDate.invalid || endDate.invalid" 
+                (click)="updateReservation()">
+                Save Reservation {{reservation.id}}
+            </button>
             <button (click)="cancelEdit()">Cancel</button>
         </li>
     </ul>   
