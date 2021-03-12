@@ -1,10 +1,45 @@
-<h1>Room number {{room.number}}</h1>
-<img [src]="room.image" height="300px">
-<div>
-	<p>Type: {{room.roomType}}</p>
-	<p>Vacant beds: {{room.vacantBeds}}</p>
-	<p>Cost: {{room.cost}}$ per day</p>
-	<p>Available for reservation: {{room.available}}</p>
+<div class="room-container">
+	<h1>Room number {{room.roomNumber}}</h1>
+	<img [src]="room.image" height="300px">
+	<div>
+		<p>Type: {{room.roomType}}</p>
+		<p>Vacant beds: {{room.vacantBeds}}</p>
+		<p>Cost: {{room.cost}}$ per day</p>
+		<p>Available for reservation: {{room.available}}</p>
+	</div>
+	<button (click)="goBack()"> <-- Back to hotel</button>
+	<button (click)="initReservation()">Make reservation</button>
+	<div *ngIf="reserving" class="reservation-form">
+		<ul>
+			<li>
+				<h2>Please, select your reservation parameters:</h2>
+			</li>
+			<li>
+				<label>Arrival time:</label>
+				<input type="time" [(ngModel)]="reservation.arrivalTime"/>
+			</li>
+			<li>
+				<label>Departure time:</label>
+				<input type="time" [(ngModel)]="reservation.departureTime"/>
+			</li>
+			<li>
+				<h2>Want to order additional services?</h2>
+			</li>
+			<li> 
+				<label>Parking</label>
+				<input class="date-pick" type="checkbox" [(ngModel)]="reservation.parking"/>    
+			</li> 
+			<li> 
+				<label>Massage</label>
+				<input type="checkbox" [(ngModel)]="reservation.massage"/>     
+			</li>  
+			<li> 
+				<label>Extra Towels</label>
+				<input type="checkbox" [(ngModel)]="reservation.extraTowels"/>     
+			</li>
+		</ul>
+		<button (click)="confirmReservation()">Create reservation</button>
+	</div>
 </div>
-<button (click)="goBack()"> <-- Back to hotel</button>
+
 

@@ -1,4 +1,5 @@
-<h1>{{hotel.name}}</h1>
+<div class="hotel-detailed-container">
+	<h1>{{hotel.name}}</h1>
 <img [src]="hotel.image" height="300px">
 <p>{{hotel.country}}, {{hotel.city}}</p>
 <p>{{hotel.address}}</p>
@@ -10,9 +11,14 @@
 			<div class="header" >
 				<h1>{{room.number}}</h1>	
 			</div>	
-			<div class="blur"></div>	
+			<div class="blur"></div>
+			<div class="detail">
+				<p>Room №: {{room.roomNumber}}</p>
+				<p>{{room.roomType}}</p>
+			</div>	
 		</div>
 	</div>		
 </div>
 <br>
 <button (click)="goBack()"> <-- Back to all hotels</button>
+</div>
