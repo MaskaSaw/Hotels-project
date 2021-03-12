@@ -21,7 +21,6 @@ export class RoomsService {
     return {
       headers: new HttpHeaders({ 
         'Content-Type': 'application/json',
-        //'Authorization': this.authService.getToken 
       })
     };
   }
@@ -60,9 +59,6 @@ export class RoomsService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
-      if (error.status === 401) {
-        this.authService.logout();
-      } 
   
       return of(result as T);
     };

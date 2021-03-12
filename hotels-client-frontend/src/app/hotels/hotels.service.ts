@@ -7,7 +7,6 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Hotel } from '../hotel';
 import { ApiPaths } from '../api-paths';
 import { environment } from 'src/environments/environment';
-//import { AuthService } from '../login/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,14 +20,12 @@ export class HotelsService {
     return {
       headers: new HttpHeaders({ 
         'Content-Type': 'application/json',
-       // 'Authorization': this.authService.getToken 
       })
     };
   }
 
   constructor(
     private http: HttpClient,
-   // private authService: AuthService
   ) { }
 
   getHotels(): Observable<Hotel[]> {
@@ -56,9 +53,6 @@ export class HotelsService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
-      if (error.status === 401) {
-       // this.authService.logout();
-      }
   
       return of(result as T);
     };
