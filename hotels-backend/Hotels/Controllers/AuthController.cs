@@ -27,7 +27,7 @@ namespace Hotels.Controllers
 
         //POST: api/auth/register
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserDTO userForRegister)
+        public async Task<IActionResult> Register([FromBody]UserDTO userForRegister)
         {
             if (!ModelState.IsValid)
             {
@@ -43,7 +43,15 @@ namespace Hotels.Controllers
 
             var createdUser = await _authService.Register(userForRegister);
 
-            return Created($"api/Users/{createdUser.Id}", createdUser);
+            UserDTO returnedUser = new UserDTO
+            {
+                Id = createdUser.Id,
+                Login = createdUser.Login,
+                Password = userForRegister.Password,
+                Role = createdUser.Role
+            };
+
+            return Created($"api/Users/{returnedUser.Id}", returnedUser);
         }
 
         //POST: api/auth/login

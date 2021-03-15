@@ -9,6 +9,8 @@ import { HotelsComponent } from './hotels/hotels.component';
 import { HotelDetailedComponent } from './hotel-detailed/hotel-detailed.component';
 import { RoomComponent } from './room/room.component';
 import { ReservationComponent } from './reservation/reservation.component';
+import { AuthenticationComponent } from './authentication/authentication.component';
+import { AuthGuard } from './auth.guard';
 
 
 @NgModule({
@@ -17,7 +19,8 @@ import { ReservationComponent } from './reservation/reservation.component';
     HotelsComponent,
     HotelDetailedComponent,
     RoomComponent,
-    ReservationComponent
+    ReservationComponent,
+    AuthenticationComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +28,7 @@ import { ReservationComponent } from './reservation/reservation.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,10 +2,13 @@
     <div class="header-text">
         <h2 class="beginning">Ne</h2>
         <h2 class="ending">Booking.com</h2>
+        <a routerLink="authentication" *ngIf="authService.userLoggedIn">{{authService.getLogin}}</a>
     </div>
     <nav>
         <ul class="menu">
-            <li><a class="nav-link" routerLink="hotels" >Hotels</a></li>
+            <li style="float: left;" ><a routerLink="hotels" >Hotels</a></li>
+            <li style="float: right;" ><a routerLink="authentication" *ngIf="!authService.userLoggedIn" >Sign in</a></li>
+            <li style="float: right;" (click)="logout()" *ngIf="authService.userLoggedIn" ><p>Logout</p></li>
         </ul>
     </nav> 
 </header>

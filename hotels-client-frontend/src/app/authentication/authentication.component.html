@@ -1,0 +1,39 @@
+<div class="authentication-container">
+	<h3 *ngIf="authService.userLoggedIn">You are logged in. Click "Logout" to enter as another user</h3>   
+	<div *ngIf="!authService.userLoggedIn" >
+		<br>
+		<h3>Please, enter your login and password</h3>
+		<br>
+		<div>
+			<div class="spacer">
+				<label for="login">Login</label>
+				<input type="text" placeholder="Login" [(ngModel)]="login" class="form-control">
+			</div>
+			<div class="spacer">
+				<label for="password">Password</label>
+				<input type="password" placeholder="Password" [(ngModel)]="password" class="form-control"/>
+			</div>
+			<br>
+			<div class="spacer">
+				<button type="submit" class="open-button" (click)="loginUser()">Login</button>
+			</div>
+			<h3>Or, you can register new account:</h3>
+			<div class="spacer">
+				<label for="Login">Login</label>
+				<input type="text" placeholder="Login" [(ngModel)]="registerLogin" class="form-control">
+			</div>
+			<div class="spacer">
+				<label for="password">Password</label>
+				<input type="password" placeholder="Password" [(ngModel)]="registerPassword" class="form-control"/>
+			</div>
+			<div class="spacer">
+				<label for="password">Repeat Password</label>
+				<input type="password" placeholder="Repeat password" [(ngModel)]="registerPasswordRepeat" class="form-control"/>
+			</div>
+			<br>
+			<div class="spacer">
+				<button type="submit" class="open-button" (click)="registerUser()">Register</button>
+			</div>
+		</div>
+	</div>
+</div>
