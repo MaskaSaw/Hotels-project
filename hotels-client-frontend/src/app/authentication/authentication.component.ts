@@ -19,7 +19,7 @@ export class AuthenticationComponent implements OnInit {
     private authService: AuthService
   ) { }
 
-  Login() {
+  loginUser() {
     console.log("you are logging in");
     this.authService.login(
       { 
@@ -31,7 +31,7 @@ export class AuthenticationComponent implements OnInit {
     );  
   }
 
-  Register() {
+  registerUser() {
     this.authService.register(
       { 
         id: 0,

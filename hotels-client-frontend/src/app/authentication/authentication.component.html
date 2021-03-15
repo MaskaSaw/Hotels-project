@@ -6,33 +6,33 @@
 		<br>
 		<div>
 			<div class="spacer">
-				<label for="Login">Login</label>
-				<input type="text" placeholder="login" [(ngModel)]="login" class="form-control">
+				<label for="login">Login</label>
+				<input type="text" placeholder="Login" [(ngModel)]="login" class="form-control">
 			</div>
 			<div class="spacer">
 				<label for="password">Password</label>
-				<input type="password" placeholder="password" [(ngModel)]="password" class="form-control"/>
+				<input type="password" placeholder="Password" [(ngModel)]="password" class="form-control"/>
 			</div>
 			<br>
 			<div class="spacer">
-				<button type="submit" class="open-button" (click)="Login()">Login</button>
+				<button type="submit" class="open-button" (click)="loginUser()">Login</button>
 			</div>
-			<h3 >Or, you can register new account:</h3>
+			<h3>Or, you can register new account:</h3>
 			<div class="spacer">
 				<label for="Login">Login</label>
-				<input type="text" placeholder="login" [(ngModel)]="registerLogin" class="form-control">
+				<input type="text" placeholder="Login" [(ngModel)]="registerLogin" class="form-control">
 			</div>
 			<div class="spacer">
 				<label for="password">Password</label>
-				<input type="password" placeholder="password" [(ngModel)]="registerPassword" class="form-control"/>
+				<input type="password" placeholder="Password" [(ngModel)]="registerPassword" class="form-control"/>
 			</div>
 			<div class="spacer">
 				<label for="password">Repeat Password</label>
-				<input type="password" placeholder="repeat password" [(ngModel)]="registerPasswordRepeat" class="form-control"/>
+				<input type="password" placeholder="Repeat password" [(ngModel)]="registerPasswordRepeat" class="form-control"/>
 			</div>
 			<br>
 			<div class="spacer">
-				<button type="submit" class="open-button" (click)="Register()">Register</button>
+				<button type="submit" class="open-button" (click)="registerUser()">Register</button>
 			</div>
 		</div>
 	</div>
