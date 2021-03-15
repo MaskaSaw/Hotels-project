@@ -8,9 +8,10 @@ header {
     font-family: Helvetica,Arial,sans-serif;
     
     .header-text {
-        padding: 30px 80px;
+        padding: 30px 100px;
 
         h2 {
+            display: inline-block;
             margin: 0;
             text-shadow: 1px 1px black;
         }
@@ -24,6 +25,20 @@ header {
             color: white; 
             display: inline;
         }
+
+        a {
+            float: right;
+            text-decoration: none;
+            font-size: 15pt;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+
+            &:hover{
+                color: yellow;
+            }
+        }
+
     } 
 
     nav {
@@ -31,30 +46,44 @@ header {
 
         ul.menu {
             margin: 0 0 2px 0;
-            padding: 0 80px;
+            padding: 0 100px;
     
             li {
-                display: inline;
-                margin-right: 5px;
+                display: inline-block;
                 font-weight: bold;
                 font-size: 15pt;
-                border-radius: 5px;
+                border-radius: 3px;
+                cursor: pointer;
+                height: 26px;
     
                 a {
                     padding: 0px 10px;
-                    background: white;
+                    background: @customDarkBlue;
                     text-decoration: none;
-                    color: @customDarkBlue;
-                    border-radius: 2px;
+                    color: white;
+                    border-radius: 3px;
+                    height: 26px;
 
                     &:hover {
-                        color: white;
-                        background: @customDarkBlue;
+                        color: @customDarkBlue;
+                        background: white;
                     }
+                }
+
+                p {
+                    margin: 0;
+                    padding: 0 10px;
+                    text-decoration: none;
                 }
                 
                 &:hover {
-                    border: 2px solid white;
+                    color: @customDarkBlue;
+                    background: white;
+
+                    a {   
+                        color: @customDarkBlue;
+                        background: white;
+                    }
                 }
             }
         }
@@ -83,6 +112,16 @@ body {
 .reservation-container {
     text-align: center;
     font-family: Helvetica,Arial,sans-serif;
+}
+
+.authentication-container {
+    text-align: center;
+    font-family: Helvetica,Arial,sans-serif;
+}
+
+input.form-control {
+    width: 20%;
+    margin-left: 40%;
 }
 
 .items-list {

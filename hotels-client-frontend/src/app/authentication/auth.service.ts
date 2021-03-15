@@ -13,7 +13,8 @@ import { ApiPaths } from '../api-paths';
 @Injectable({ providedIn: 'root'})
 export class AuthService {
 
-  private loginUrl = environment.baseUrl + ApiPaths.Auth;
+  private loginUrl = environment.baseUrl + ApiPaths.Auth + '/login';
+  private registerUrl = environment.baseUrl + ApiPaths.Auth + '/register';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -31,23 +32,39 @@ export class AuthService {
     )
     .subscribe((resp: any) => {
       if (jwt_decode(resp.tokenString).role === 'User') {
-        localStorage.setItem('auth_token', resp.tokenString);
+        localStorage.setItem('user_auth_token', resp.tokenString);
         this.router.navigate(['/hotels']);
       }
-    })
+    });
+  }
+
+  register(user: User): void {
+    this.http.post<User>(this.registerUrl, user, {observe:'response'})
+    .pipe(
+      catchError(this.handleError<any>('login'))
+    )
+    .subscribe( resp => {
+      if (resp.status === 201) {
+        this.login(resp.body as User);
+      }
+    });
   }
 
   logout(): void {
-    localStorage.removeItem('auth_token');
-    this.router.navigate(['/login']);
+    localStorage.removeItem('user_auth_token');
+    this.router.navigate(['/authentication']);
   }
 
   public get userLoggedIn(): boolean {
-    return (localStorage.getItem('auth_token') !== null);
+    return (localStorage.getItem('user_auth_token') !== null);
   }
 
   public get getToken(): string {
-    return `Bearer ${localStorage.getItem('auth_token')}`;
+    return `Bearer ${localStorage.getItem('user_auth_token')}`;
+  }
+
+  public get getLogin(): string {
+    return jwt_decode(localStorage.getItem('user_auth_token')).unique_name;   
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
