@@ -28,14 +28,59 @@ namespace Hotels.Controllers
 
         // GET: api/Hotels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels([FromQuery] int page, int itemsPerPage)
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels(
+            [FromQuery] int page,
+            [FromQuery] int itemsPerPage,
+            [FromQuery] string country,
+            [FromQuery] string city,
+            [FromQuery] int? numberOfResidents,
+            [FromQuery] DateTime? checkIn,
+            [FromQuery] DateTime? checkOut
+        )
         {
             int returnedNumberOfItems = (MaxItemsPerPage < itemsPerPage) ? MaxItemsPerPage : itemsPerPage;
-            return await _context.Hotels
-                .Skip((page - 1) * returnedNumberOfItems)
-                .Take(returnedNumberOfItems)
+            var hotels = await _context.Hotels
+                .Where(hotel => !string.IsNullOrEmpty(country) ? hotel.Country == country : true)
+                .Where(hotel => !string.IsNullOrEmpty(city) ? hotel.City == city : true)
                 .Include(hotel => hotel.Rooms)
                 .ToListAsync();
+
+            if (numberOfResidents != null && numberOfResidents != 0)
+            {
+                hotels = hotels.Where(hotel =>
+                    hotel.Rooms
+                        .Where(room => room.VacantBeds >= numberOfResidents)
+                        .ToList()
+                        .Count > 0
+                    )
+                    .ToList();
+            }
+
+            if (checkIn != null && checkOut != null)
+            {
+                for (int i = 0; i > hotels.Count; i++)
+                {
+                    var rooms = hotels[i].Rooms;
+
+                    foreach (var room in rooms)
+                    {
+                        var reservations = room.Reservations.Where(reservation =>
+                            reservation.StartDate > checkOut || reservation.EndDate < checkIn ||
+                            (reservation.StartDate < checkOut && reservation.EndDate > checkIn));
+                    }
+
+                    if (rooms.Count == 0)
+                    {
+                        hotels.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+
+            return hotels
+                    .Skip((page - 1) * returnedNumberOfItems)
+                    .Take(returnedNumberOfItems)
+                    .ToList();
         }
 
         // GET: api/Hotels/5

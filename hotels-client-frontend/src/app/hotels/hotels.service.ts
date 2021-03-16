@@ -28,13 +28,29 @@ export class HotelsService {
     private http: HttpClient,
   ) { }
 
-  getHotels(): Observable<Hotel[]> {
-    return this.http.get<Hotel[]>(this.hotelsUrl, {
-      params: {
+  getHotels(country?: string, city?: string, numberOfResidents?: number, checkIn?: Date, checkOut?: Date): Observable<Hotel[]> {
+
+    let params = {};
+
+    if (checkIn && checkOut) {
+      params = {
+        page: '1',
+        itemsPerPage: this.itemsPerPage.toString(),
+        country: country,
+        city: city,
+        numberOfResidents: numberOfResidents.toString(),
+        checkIn: checkIn.toJSON(),
+        checkOut: checkOut.toJSON()
+      }
+    }
+    else {
+      params = {
         page: '1',
         itemsPerPage: this.itemsPerPage.toString()
       }
-    })
+    }
+    
+    return this.http.get<Hotel[]>(this.hotelsUrl, { params })
       .pipe(
         catchError(this.handleError<Hotel[]>('getHotels', [])
       )

@@ -97,6 +97,23 @@ body {
 .hotels-container {
     text-align: center;
     font-family: Helvetica,Arial,sans-serif;
+
+    .hotels-input {
+
+        input {
+            border: 1px solid @customDarkBlue;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px @customDarkBlue;
+            font-size: 20px;
+            line-height: 1.42857143;
+            margin: 0 10px;
+
+            &:focus {
+                border-color: yellow;
+                border-radius: 4px;
+            }
+        }
+    }
 }
 
 .hotel-detailed-container {

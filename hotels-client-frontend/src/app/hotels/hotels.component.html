@@ -1,5 +1,24 @@
 <div class="hotels-container">
 	<h1>Welcome to the NeBooking.com! Here are the hotels you might be interested in:</h1>
+	<h3>Select date range:</h3>
+	<div class="hotels-input">
+		<input type="text" placeholder="Check-in" [(ngModel)]="checkIn" bsDatepicker [minDate]="minDate">
+		<input type="text" placeholder="Check-out" [(ngModel)]="checkOut" bsDatepicker>
+		<br>
+		<br>
+		<div *ngIf="checkDates()">
+			<input type="text" placeholder="Country" [(ngModel)]="country">
+			<input type="text" placeholder="City" [(ngModel)]="city">
+			<input type="text" placeholder="Number of residents" [(ngModel)]="numberOfResidents">
+			<br>
+			<br>
+			<button (click)="filterHotels()">Find hotels with selected parameters</button>
+		</div>
+		<br>
+		<div *ngIf="hotels.length === 0">
+			<h2>No hotels found!</h2>
+		</div>
+	</div>	  
 	<div class="items-list">
 		<div class="item-container" *ngFor="let hotel of hotels">
 			<div class='item' (click)="openDetailed(hotel.id)">
