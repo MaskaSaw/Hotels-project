@@ -37,11 +37,11 @@ export class HotelsService {
       params = {
         page: '1',
         itemsPerPage: this.itemsPerPage.toString(),
-        country: inputParams.country,
-        city: inputParams.city,
-        numberOfResidents: inputParams.numberOfResidents.toString(),
         checkIn: inputParams.checkIn.toJSON(),
-        checkOut: inputParams.checkOut.toJSON()
+        checkOut: inputParams.checkOut.toJSON(),
+        city: inputParams.city,
+        country: inputParams.country,
+        numberOfResidents: inputParams.numberOfResidents
       }
     }
     else {
