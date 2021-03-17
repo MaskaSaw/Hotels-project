@@ -60,45 +60,4 @@ export class HotelsComponent implements OnInit {
       .subscribe( hotels => this.hotels = hotels)
   }
 
- /* filterHotels(): void {
-    var filteredHotels = this.hotels.filter(this.filterHotelByDates.bind(this));
-
-    if (this.country !== '') {
-      filteredHotels = filteredHotels.filter(hotel => hotel.country === this.country);
-    }
-
-    if (this.city !== '') {
-      filteredHotels = filteredHotels.filter(hotel => hotel.city === this.city);
-    }
-
-    this.hotels = filteredHotels;
-  }
-
-  filterHotelByDates(hotel: Hotel): boolean {
-    return hotel.rooms.filter(this.filterRoomByDates.bind(this))
-      .filter(room => room.vacantBeds >= this.numberOfResidents).length > 0;
-  }
-
-  filterRoomByDates(room: Room): boolean {
-    if (room.reservations !== null) {
-      return room.reservations.filter(this.filterReservationByDates.bind(this)).length > 0;
-    }
-    
-    return true;
-  }
-
-  filterReservationByDates(reservation: Reservation): boolean {
-    if (reservation.startDate <= this.checkIn && reservation.endDate > this.checkIn) {
-      return false;
-    }
-
-    if (reservation.startDate > this.checkIn && reservation.startDate < this.checkOut) {
-      return false;
-    }
-
-    return true
-  }
-
-  */
-
 }
