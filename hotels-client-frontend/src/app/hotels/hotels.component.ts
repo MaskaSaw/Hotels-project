@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Hotel } from '../hotel';
 import { Reservation } from '../reservation';
 import { Room } from '../room';
+import { Params } from '../params';
 import { HotelsService } from './hotels.service';
 
 @Component({
@@ -13,11 +14,7 @@ import { HotelsService } from './hotels.service';
 })
 export class HotelsComponent implements OnInit {
   hotels: Hotel[];
-  checkIn: Date;
-  checkOut: Date;
-  country: string;
-  city: string;
-  numberOfResidents: number;
+  params: Params;
   minDate = new Date(2021,1,1);
 
   constructor(
@@ -27,11 +24,7 @@ export class HotelsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getHotels();
-    this.checkIn = null;
-    this.checkOut = null;
-    this.country = '';
-    this.city = '';
-    this.numberOfResidents = 0;
+    this.params = new Params;
   }
 
   getHotels(): void {
@@ -44,8 +37,8 @@ export class HotelsComponent implements OnInit {
   }
 
   checkDates(): boolean {
-    if (this.checkIn !== null && this.checkOut !== null) {
-      if (!isNaN(this.checkIn) && !isNaN(this.checkOut)) {
+    if (this.params.checkIn !== null && this.params.checkOut !== null) {
+      if (!isNaN(this.params.checkIn) && !isNaN(this.params.checkOut)) {
         return true;
       }
 
@@ -56,7 +49,7 @@ export class HotelsComponent implements OnInit {
   }
 
   filterHotels(): void {
-    this.hotelsService.getHotels(this.country, this.city, this.numberOfResidents, this.checkIn, this.checkOut)
+    this.hotelsService.getHotels(this.params)
       .subscribe( hotels => this.hotels = hotels)
   }
 

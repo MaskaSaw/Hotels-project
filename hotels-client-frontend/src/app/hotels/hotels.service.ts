@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Hotel } from '../hotel';
+import { Params } from '@angular/router';
 import { ApiPaths } from '../api-paths';
 import { environment } from 'src/environments/environment';
 
@@ -28,19 +29,19 @@ export class HotelsService {
     private http: HttpClient,
   ) { }
 
-  getHotels(country?: string, city?: string, numberOfResidents?: number, checkIn?: Date, checkOut?: Date): Observable<Hotel[]> {
+  getHotels(inputParams?: Params): Observable<Hotel[]> {
 
     let params = {};
 
-    if (checkIn && checkOut) {
+    if (inputParams) {
       params = {
         page: '1',
         itemsPerPage: this.itemsPerPage.toString(),
-        country: country,
-        city: city,
-        numberOfResidents: numberOfResidents.toString(),
-        checkIn: checkIn.toJSON(),
-        checkOut: checkOut.toJSON()
+        country: inputParams.country,
+        city: inputParams.city,
+        numberOfResidents: inputParams.numberOfResidents.toString(),
+        checkIn: inputParams.checkIn.toJSON(),
+        checkOut: inputParams.checkOut.toJSON()
       }
     }
     else {
