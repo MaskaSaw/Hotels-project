@@ -28,19 +28,15 @@ namespace Hotels.Controllers
 
         // GET: api/Hotels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels(
-            [FromQuery] int page,
-            [FromQuery] int itemsPerPage,
-            [FromQuery] HotelsParams inputParams
-        )
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels([FromQuery]int page, int itemsPerPage,[FromQuery] HotelsParams inputParams)
         {
             int returnedNumberOfItems = (MaxItemsPerPage < itemsPerPage) ? MaxItemsPerPage : itemsPerPage;
             if (inputParams.CheckIn != null & inputParams.CheckOut != null)
             {
                 var hotels = await _context.Hotels
                 .Include(hotel => hotel.Rooms)
-                .Where(hotel => !string.IsNullOrEmpty(inputParams.Country) ? hotel.Country == inputParams.Country : true)
-                .Where(hotel => !string.IsNullOrEmpty(inputParams.City) ? hotel.City == inputParams.City : true)
+                .Where(hotel => string.IsNullOrEmpty(inputParams.Country) || hotel.Country == inputParams.Country)
+                .Where(hotel => string.IsNullOrEmpty(inputParams.City) || hotel.City == inputParams.City)
                 .ToListAsync();
 
                 if (inputParams.NumberOfResidents != null && inputParams.NumberOfResidents != 0)
