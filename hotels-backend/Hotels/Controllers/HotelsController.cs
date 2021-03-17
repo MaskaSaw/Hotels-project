@@ -37,6 +37,19 @@ namespace Hotels.Controllers
                 .Include(hotel => hotel.Rooms)
                 .Where(hotel => string.IsNullOrEmpty(inputParams.Country) || hotel.Country == inputParams.Country)
                 .Where(hotel => string.IsNullOrEmpty(inputParams.City) || hotel.City == inputParams.City)
+                .Where(hotel =>
+                       hotel.Rooms
+                           .Where(room =>
+                                room.Reservations
+                                    .Where(reservation =>
+                                        reservation.StartDate > inputParams.CheckOut || reservation.EndDate < inputParams.CheckIn ||
+                                        (reservation.StartDate < inputParams.CheckOut && reservation.EndDate > inputParams.CheckIn))
+                                        .ToList()
+                                        .Count > 0
+                                    )
+                           .ToList()
+                           .Count > 0
+                       )
                 .ToListAsync();
 
                 if (inputParams.NumberOfResidents != null && inputParams.NumberOfResidents != 0)
@@ -50,7 +63,7 @@ namespace Hotels.Controllers
                         .ToList();
                 }
 
-                for (int i = 0; i > hotels.Count; i++)
+             /*   for (int i = 0; i > hotels.Count; i++)
                 {
                     var rooms = hotels[i].Rooms;
 
@@ -66,7 +79,7 @@ namespace Hotels.Controllers
                         hotels.RemoveAt(i);
                         i--;
                     }
-                }
+                }*/
 
                 return hotels
                     .Skip((page - 1) * returnedNumberOfItems)
