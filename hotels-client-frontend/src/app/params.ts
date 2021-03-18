@@ -3,13 +3,13 @@ export class Params {
   checkOut: Date;
   country: string;
   city: string;
-  numberOfResidents: number;
+  numberOfResidents: string;
 
   constructor() {
-    this.checkIn = null;
-    this.checkOut = null;
+    this.checkIn = new Date();
+    this.checkOut = new Date();
     this.country = '';
     this.city = '';
-    this.numberOfResidents = 0;
+    this.numberOfResidents = '';
   }
 }

@@ -3,16 +3,16 @@
 	<h3>Select date range:</h3>
 	<div class="hotels-input">
 		<input type="text" placeholder="Check-in" [(ngModel)]="params.checkIn" bsDatepicker [minDate]="minDate">
-		<input type="text" placeholder="Check-out" [(ngModel)]="params.checkOut" bsDatepicker>
+		<input type="text" placeholder="Check-out" [(ngModel)]="params.checkOut" bsDatepicker [minDate]="minDate">
 		<br>
 		<br>
-		<div *ngIf="checkDates()">
+		<div>
 			<input type="text" placeholder="Country" [(ngModel)]="params.country">
 			<input type="text" placeholder="City" [(ngModel)]="params.city">
 			<input type="text" placeholder="Number of residents" [(ngModel)]="params.numberOfResidents">
 			<br>
 			<br>
-			<button (click)="filterHotels()">Find hotels with selected parameters</button>
+			<button [disabled]="!checkParams()" (click)="filterHotels">Find hotels with selected parameters</button>
 		</div>
 		<br>
 		<div *ngIf="hotels.length === 0">

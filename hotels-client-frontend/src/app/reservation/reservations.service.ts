@@ -14,7 +14,7 @@ import { AuthService } from '../authentication/auth.service';
 })
 export class ReservationsService {
 
-  reservation: Reservation;
+  reservation: Reservation = new Reservation;
 
   private roomsUrl = environment.baseUrl + ApiPaths.Rooms;
   private usersUrl = environment.baseUrl + ApiPaths.Users;

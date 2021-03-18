@@ -30,65 +30,44 @@ namespace Hotels.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels([FromQuery]int page, int itemsPerPage,[FromQuery] HotelsParams inputParams)
         {
+            var hotels = _context.Hotels
+                .Include(hotel => hotel.Rooms)
+                .AsQueryable();
+
             int returnedNumberOfItems = (MaxItemsPerPage < itemsPerPage) ? MaxItemsPerPage : itemsPerPage;
             if (inputParams.CheckIn != null & inputParams.CheckOut != null)
             {
-                var hotels = await _context.Hotels
-                .Include(hotel => hotel.Rooms)
-                .Where(hotel => string.IsNullOrEmpty(inputParams.Country) || hotel.Country == inputParams.Country)
-                .Where(hotel => string.IsNullOrEmpty(inputParams.City) || hotel.City == inputParams.City)
-                .Where(hotel =>
-                       hotel.Rooms
-                           .Where(room =>
-                                room.Reservations
-                                    .Where(reservation =>
-                                        reservation.StartDate > inputParams.CheckOut || reservation.EndDate < inputParams.CheckIn ||
-                                        (reservation.StartDate < inputParams.CheckOut && reservation.EndDate > inputParams.CheckIn))
-                                        .ToList()
-                                        .Count > 0
-                                    )
-                           .ToList()
-                           .Count > 0
-                       )
-                .ToListAsync();
+
+                if (!string.IsNullOrEmpty(inputParams.Country))
+                {
+                    hotels = hotels.Where(hotel => hotel.Country == inputParams.Country);
+                }
+
+                if (!string.IsNullOrEmpty(inputParams.City))
+                {
+                    hotels = hotels.Where(hotel => hotel.City == inputParams.City);
+                }
+
+                hotels = hotels
+                    .Where(hotel => hotel.Rooms
+                        .Any(room => room.Reservations.Count > 0 || room.Reservations
+                            .Any(reservation =>
+                                reservation.StartDate > inputParams.CheckOut || reservation.EndDate < inputParams.CheckIn ||
+                                (reservation.StartDate < inputParams.CheckOut && reservation.EndDate > inputParams.CheckIn)
+                            )
+                        )
+                    );
 
                 if (inputParams.NumberOfResidents != null && inputParams.NumberOfResidents != 0)
                 {
-                    hotels = hotels.Where(hotel =>
-                        hotel.Rooms
-                            .Where(room => room.VacantBeds >= inputParams.NumberOfResidents)
-                            .ToList()
-                            .Count > 0
-                        )
-                        .ToList();
+                    hotels = hotels
+                        .Where(hotel => hotel.Rooms
+                            .Any(room => room.VacantBeds >= inputParams.NumberOfResidents)
+                        );
                 }
 
-             /*   for (int i = 0; i > hotels.Count; i++)
-                {
-                    var rooms = hotels[i].Rooms;
-
-                    foreach (var room in rooms)
-                    {
-                        var reservations = room.Reservations.Where(reservation =>
-                            reservation.StartDate > inputParams.CheckOut || reservation.EndDate < inputParams.CheckIn ||
-                            (reservation.StartDate < inputParams.CheckOut && reservation.EndDate > inputParams.CheckIn));
-                    }
-
-                    if (rooms.Count == 0)
-                    {
-                        hotels.RemoveAt(i);
-                        i--;
-                    }
-                }*/
-
-                return hotels
-                    .Skip((page - 1) * returnedNumberOfItems)
-                    .Take(returnedNumberOfItems)
-                    .ToList();
             }
-
-            return await _context.Hotels
-                .Include(hotel => hotel.Rooms)
+            return await hotels
                 .Skip((page - 1) * returnedNumberOfItems)
                 .Take(returnedNumberOfItems)
                 .ToListAsync();

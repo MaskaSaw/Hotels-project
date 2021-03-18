@@ -9,11 +9,11 @@ import { AuthService } from './auth.service';
 })
 export class AuthenticationComponent implements OnInit {
 
-  login: string;
-  password: string;
-  registerLogin: string;
-  registerPassword: string;
-  registerPasswordRepeat: string;
+  login!: string;
+  password!: string;
+  registerLogin!: string;
+  registerPassword!: string;
+  registerPasswordRepeat!: string;
 
   constructor(
     private authService: AuthService

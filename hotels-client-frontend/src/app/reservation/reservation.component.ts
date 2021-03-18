@@ -9,7 +9,8 @@ import { ReservationsService } from './reservations.service';
 })
 export class ReservationComponent implements OnInit {
 
-  reservation: Reservation;
+  reservation: Reservation = new Reservation;
+  
   constructor(
     private reservationsService: ReservationsService
   ) { }
