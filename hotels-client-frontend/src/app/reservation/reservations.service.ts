@@ -14,7 +14,7 @@ import { AuthService } from '../authentication/auth.service';
 })
 export class ReservationsService {
 
-  reservation: Reservation;
+  reservation: Reservation = new Reservation;
 
   private roomsUrl = environment.baseUrl + ApiPaths.Rooms;
   private usersUrl = environment.baseUrl + ApiPaths.Users;
@@ -74,7 +74,7 @@ export class ReservationsService {
   }
 
   takeReservation(): Reservation {
-    this.reservation = JSON.parse(localStorage.getItem('reservation')) as Reservation;
+    this.reservation = JSON.parse(localStorage.getItem('reservation')!) as Reservation;
     return this.reservation;
   }
 

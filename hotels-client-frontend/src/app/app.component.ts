@@ -8,12 +8,16 @@ import { AuthService } from './authentication/auth.service';
 })
 export class AppComponent {
   title = 'hotels-client-frontend';
+  userLoggedIn: boolean = false;
 
   constructor(
-    private authService: AuthService
-  ) {}
+    public authService: AuthService
+  ) {
+    this.userLoggedIn = this.authService.userLoggedIn;
+  }
 
   logout(): void {
     this.authService.logout();
+    this.userLoggedIn = false;
   }
 }

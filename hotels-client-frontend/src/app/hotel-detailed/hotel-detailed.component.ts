@@ -14,9 +14,9 @@ import { RoomsService } from '../room/rooms.service';
 })
 export class HotelDetailedComponent implements OnInit {
 
-  hotel: Hotel;
-  rooms: Room[];
-  id = +this.route.snapshot.paramMap.get('id');
+  hotel: Hotel = new Hotel;
+  rooms: Room[] = [];
+  id: number = 0;
 
   constructor(
     private hotelsService: HotelsService,
@@ -24,7 +24,9 @@ export class HotelDetailedComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private location: Location
-  ) { }
+  ) { 
+    this.id = +this.route.snapshot.paramMap.get('id')!;
+  }
 
   ngOnInit(): void {
     this.getHotel();

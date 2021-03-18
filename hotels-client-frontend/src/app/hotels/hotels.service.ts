@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Hotel } from '../hotel';
+import { Params } from '@angular/router';
 import { ApiPaths } from '../api-paths';
 import { environment } from 'src/environments/environment';
 
@@ -28,13 +29,29 @@ export class HotelsService {
     private http: HttpClient,
   ) { }
 
-  getHotels(): Observable<Hotel[]> {
-    return this.http.get<Hotel[]>(this.hotelsUrl, {
-      params: {
+  getHotels(inputParams?: Params): Observable<Hotel[]> {
+
+    let params = {};
+
+    if (inputParams) {
+      params = {
+        page: '1',
+        itemsPerPage: this.itemsPerPage.toString(),
+        checkIn: inputParams.checkIn.toJSON(),
+        checkOut: inputParams.checkOut.toJSON(),
+        city: inputParams.city,
+        country: inputParams.country,
+        numberOfResidents: inputParams.numberOfResidents
+      }
+    }
+    else {
+      params = {
         page: '1',
         itemsPerPage: this.itemsPerPage.toString()
       }
-    })
+    }
+    
+    return this.http.get<Hotel[]>(this.hotelsUrl, { params })
       .pipe(
         catchError(this.handleError<Hotel[]>('getHotels', [])
       )

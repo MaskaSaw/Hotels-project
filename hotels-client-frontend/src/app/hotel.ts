@@ -1,3 +1,5 @@
+import { Room } from "./room";
+
 export class Hotel {
 
     id: number;
@@ -9,6 +11,7 @@ export class Hotel {
     massage: boolean;
     extraTowels: boolean;
     image: string;
+    rooms: Room[];
 
     constructor() {
         this.id = 0;
@@ -20,6 +23,7 @@ export class Hotel {
         this.massage = false;
         this.extraTowels = false;
         this.image = '';
+        this.rooms = [];
     }
 
 }
