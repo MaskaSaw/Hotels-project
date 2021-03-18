@@ -31,7 +31,7 @@ export class AuthService {
       catchError(this.handleError<any>('login'))
     )
     .subscribe((resp: any) => {
-      if (jwt_decode(resp.tokenString).role === 'User') {
+      if (jwt_decode<any>(resp.tokenString).role === 'User') {
         localStorage.setItem('user_auth_token', resp.tokenString);
         this.router.navigate(['/hotels']);
       }
@@ -64,7 +64,7 @@ export class AuthService {
   }
 
   public get getLogin(): string {
-    return jwt_decode(localStorage.getItem('user_auth_token')).unique_name;   
+    return jwt_decode<any>(localStorage.getItem('user_auth_token')!).unique_name;   
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

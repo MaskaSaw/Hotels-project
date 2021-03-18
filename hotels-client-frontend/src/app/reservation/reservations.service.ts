@@ -74,7 +74,7 @@ export class ReservationsService {
   }
 
   takeReservation(): Reservation {
-    this.reservation = JSON.parse(localStorage.getItem('reservation')) as Reservation;
+    this.reservation = JSON.parse(localStorage.getItem('reservation')!) as Reservation;
     return this.reservation;
   }
 

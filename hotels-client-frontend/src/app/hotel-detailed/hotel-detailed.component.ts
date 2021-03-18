@@ -25,7 +25,7 @@ export class HotelDetailedComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location
   ) { 
-    this.id = +this.route.snapshot.paramMap.get('id');
+    this.id = +this.route.snapshot.paramMap.get('id')!;
   }
 
   ngOnInit(): void {

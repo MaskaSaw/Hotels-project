@@ -36,7 +36,7 @@ export class HotelsComponent implements OnInit {
   }
 
   checkParams(): boolean {
-    if (isNaN(this.params.checkIn) || isNaN(this.params.checkOut)) {
+    if (isNaN(+this.params.checkIn) || isNaN(+this.params.checkOut)) {
       return false;
     }
 

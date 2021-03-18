@@ -28,7 +28,11 @@ namespace Hotels.Controllers
 
         // GET: api/Hotels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels([FromQuery]int page, int itemsPerPage,[FromQuery] HotelsParams inputParams)
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels(
+            [FromQuery] int page,
+            int itemsPerPage,
+            [FromQuery] HotelsParams inputParams
+        )
         {
             var hotels = _context.Hotels
                 .Include(hotel => hotel.Rooms)
@@ -50,10 +54,11 @@ namespace Hotels.Controllers
 
                 hotels = hotels
                     .Where(hotel => hotel.Rooms
-                        .Any(room => room.Reservations.Count > 0 || room.Reservations
+                        .Any(room => room.Reservations.Count == 0 || !room.Reservations
                             .Any(reservation =>
-                                reservation.StartDate > inputParams.CheckOut || reservation.EndDate < inputParams.CheckIn ||
-                                (reservation.StartDate < inputParams.CheckOut && reservation.EndDate > inputParams.CheckIn)
+                                (reservation.EndDate > inputParams.CheckIn && reservation.EndDate < inputParams.CheckOut) ||
+                                (reservation.StartDate > inputParams.CheckIn && reservation.StartDate < inputParams.CheckOut) ||
+                                (reservation.StartDate < inputParams.CheckIn && reservation.EndDate > inputParams.CheckOut)
                             )
                         )
                     );

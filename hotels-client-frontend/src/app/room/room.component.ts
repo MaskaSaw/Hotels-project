@@ -29,7 +29,7 @@ export class RoomComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRoom();
-    this.id = +this.route.snapshot.paramMap.get('id');
+    this.id = +this.route.snapshot.paramMap.get('id')!;
   }
 
   getRoom(): void {
