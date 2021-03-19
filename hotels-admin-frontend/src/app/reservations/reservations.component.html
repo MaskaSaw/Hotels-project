@@ -1,4 +1,4 @@
-<div class="add-form">
+<div class="add-form" *ngIf="editFormOn">
     <ul>
         <li>
             <h2>Add new reservation</h2>
@@ -97,6 +97,7 @@
                 (click)="addReservation()">
                 Add reservation
             </button>
+            <button (click)="closeEditForm()">Cancel</button>
         </li>
         <li *ngIf="edit">
             <button [disabled]="userId.invalid || roomId.invalid || startDate.invalid || endDate.invalid" 
@@ -107,6 +108,7 @@
         </li>
     </ul>   
 </div>
+<button class="open-button open-form-button" (click)="openEditForm()" *ngIf="!editFormOn">Add new reservation</button>
 <div class="page-header">
     <h1>Reservations list</h1>
 </div>

@@ -16,12 +16,13 @@ import { AuthGuard } from '../auth.guard';
 })
 export class RoomsComponent implements OnInit {
 
-  rooms: Room[];
+  rooms: Room[] = [];
   room: Room;
-  id = +this.route.snapshot.paramMap.get('id');
+  id = +this.route.snapshot.paramMap.get('id')!;
   imageFormData: FormData;
-  edit: boolean;
-  imageToShow: string;
+  edit: boolean = false;
+  editFormOn: boolean = false;
+  imageToShow: string = '';
 
   @ViewChild('imageUploader') imageUploader:ElementRef;
 
@@ -81,10 +82,22 @@ export class RoomsComponent implements OnInit {
     } 
   }
 
+  openEditForm(): void {
+    this.editFormOn = true;
+  }
+
+  closeEditForm(): void {
+    this.editFormOn = false;
+    this.room = new Room();
+    this.imageToShow = '';
+    this.imageUploader.nativeElement.value = null;
+  }
+
   editMode(roomId: number): void {
-    this.room = this.rooms.find(room => room.id === roomId);
+    this.room = this.rooms.find(room => room.id === roomId)!;
     this.imageToShow = this.room.image;
     this.edit = true;
+    this.editFormOn = true;
   }
 
   updateRoom(): void {
@@ -109,6 +122,7 @@ export class RoomsComponent implements OnInit {
   }
 
   cancelEdit(): void {
+    this.editFormOn = false;
     this.room = new Room();
     this.imageToShow = "";
     this.edit = false;
@@ -129,7 +143,7 @@ export class RoomsComponent implements OnInit {
       let imageReader = new FileReader();
       imageReader.readAsDataURL(event.target.files[0]);
       imageReader.onloadend = () => {
-        this.imageToShow = imageReader.result;
+        this.imageToShow = imageReader.result as string;
       }  
     }   
   }

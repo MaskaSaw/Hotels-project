@@ -1,13 +1,6 @@
 @customBlue:  rgb(51, 122, 183);
+@customDarkBlue: #003580;
 @customLightBlue: rgb(176, 218, 255);
-
-input.ng-touched.ng-dirty.ng-invalid {
-    border:solid red 2px;
-}
-
-input.ng-touched.ng-dirty.ng-valid {
-    border:solid green 2px;
-}
 
 h1 {
     float: left;
@@ -20,6 +13,14 @@ th, td {
 
 .add-form {
     text-align: left;
+
+    input.ng-touched.ng-dirty.ng-invalid {
+        border:solid red 2px;
+    }
+    
+    input.ng-touched.ng-dirty.ng-valid {
+        border:solid green 2px;
+    }
 
     h2 {
         margin: 0;
@@ -101,9 +102,10 @@ th, td {
 .del-button {
     background-color: white;
     color: red;
-    border-radius: 15%;
+    border-radius: 5px;
     border-color: red;
     font-weight: bold;
+    font-size: 12pt;
 
     &:hover {
         background-color: red;
@@ -116,10 +118,33 @@ th, td {
     color: @customBlue;
     font-weight: bold;
     border-color: @customBlue;
-    border-radius: 15%;
+    border-radius: 5px;
+    font-size: 12pt;
 
     &:hover {
         background-color: @customBlue;
         color: white;
+    }
+}
+
+.open-form-button {
+    float: left;
+    margin-left: 70px;
+    font-size: 15pt;
+}
+
+.filter-input {
+
+    input {
+        border: 1px solid @customBlue;
+        border-radius: 4px;
+        box-shadow: inset 0 1px 1px @customDarkBlue;
+        font-size: 20px;
+        line-height: 1.42857143;
+        margin: 0 10px;
+
+        &:focus {
+            border-color: @customDarkBlue;
+        }
     }
 }

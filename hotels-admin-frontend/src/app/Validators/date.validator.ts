@@ -10,8 +10,8 @@ import { Directive, forwardRef, Input } from '@angular/core';
 })
 export class DateValidatorDirective implements Validator {
 
-  @Input("secondDate") secondDate: Date;
-  @Input("dateType") dateType: string;
+  @Input("secondDate") secondDate: Date = new Date();
+  @Input("dateType") dateType: string = '';
  
   validate(control: FormControl) {
     

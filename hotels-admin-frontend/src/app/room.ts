@@ -6,7 +6,6 @@ export class Room {
     vacantBeds: number;
     cost: number;
     available: boolean;
-    reserved: boolean;
     image: string;
     roomNumber: string;
     hotelId: number;
@@ -20,7 +19,6 @@ export class Room {
         this.vacantBeds = 0;
         this.cost = 0;
         this.available = false;
-        this.reserved = false;
         this.image = '';
         this.reservations = [];
     }

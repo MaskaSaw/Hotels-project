@@ -10,7 +10,7 @@ import { Directive, forwardRef, Input } from '@angular/core';
 })
 export class PasswordValidatorDirective implements Validator {
 
-  @Input("len") len: number;
+  @Input("len") len: number = 0;
  
   validate(control: FormControl) {
     

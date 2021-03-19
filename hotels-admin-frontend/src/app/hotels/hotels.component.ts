@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { Hotel } from '../hotel';
 import { AuthService } from '../login/auth.service';
+import { Params } from '../params';
 import { HotelsService } from './hotels.service';
 
 @Component({
@@ -11,11 +12,13 @@ import { HotelsService } from './hotels.service';
   styleUrls: ['./hotels.component.less']
 })
 export class HotelsComponent implements OnInit {
-  hotels: Hotel[];
-  hotel: Hotel;
-  imageFormData: FormData;
-  edit: boolean;
-  imageToShow: string;
+  hotels: Hotel[] = [];
+  hotel: Hotel = new Hotel();
+  params: Params = new Params();
+  imageFormData: FormData = new FormData();
+  edit: boolean = false;
+  editFormOn: boolean = false;
+  imageToShow: string = '';
 
   @ViewChild('imageUploader') imageUploader:ElementRef;
 
@@ -23,10 +26,7 @@ export class HotelsComponent implements OnInit {
     private router: Router,
     private hotelsService: HotelsService,
     private authService: AuthService
-  ) {
-    this.hotel = new Hotel();
-    this.imageFormData = new FormData();
-  }
+  ) { }
 
   ngOnInit(): void {
     this.getHotels();
@@ -69,10 +69,30 @@ export class HotelsComponent implements OnInit {
     } 
   }
 
+  openEditForm(): void {
+    this.editFormOn = true;
+  }
+
+  closeEditForm(): void {
+    this.editFormOn = false;
+    this.hotel = new Hotel();
+    this.imageToShow = "";
+    this.imageUploader.nativeElement.value = null;
+  }
+
   editMode(hotelId: number): void {
-    this.hotel = this.hotels.find(hotel => hotel.id === hotelId);
+    this.editFormOn = true;
+    this.hotel = this.hotels.find(hotel => hotel.id === hotelId)!;
     this.imageToShow = this.hotel.image;
     this.edit = true;
+    this.imageUploader.nativeElement.value = null;
+  }
+
+  cancelEdit(): void {
+    this.editFormOn = false;
+    this.hotel = new Hotel();
+    this.imageToShow = "";
+    this.edit = false;
     this.imageUploader.nativeElement.value = null;
   }
 
@@ -99,15 +119,18 @@ export class HotelsComponent implements OnInit {
     this.hotelsService.deleteHotel(hotelId).subscribe();
   }
 
-  openRooms(hotelId: number): void {
-    this.router.navigate([`hotels/${hotelId}/rooms`]);
+  filterHotels(): void {
+    this.hotelsService.getHotels(this.params)
+      .subscribe( hotels => this.hotels = hotels);
   }
 
-  cancelEdit(): void {
-    this.hotel = new Hotel();
-    this.imageToShow = "";
-    this.edit = false;
-    this.imageUploader.nativeElement.value = null;
+  clearFilters(): void {
+    this.params = new Params();
+    this.getHotels();
+  }
+
+  openRooms(hotelId: number): void {
+    this.router.navigate([`hotels/${hotelId}/rooms`]);
   }
 
   onSelectFile(event: any) { 
@@ -117,7 +140,7 @@ export class HotelsComponent implements OnInit {
       let imageReader = new FileReader();
       imageReader.readAsDataURL(event.target.files[0]);
       imageReader.onloadend = () => {
-        this.imageToShow = imageReader.result;
+        this.imageToShow = imageReader.result as string;
       }  
     }   
   }

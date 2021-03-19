@@ -1,4 +1,4 @@
-<div class="add-form">
+<div class="add-form" *ngIf="editFormOn">
     <ul>
         <li>
             <h2>Add new hotel</h2>
@@ -77,18 +77,6 @@
             </div>   
         </li> 
         <li> 
-            <label>Parking</label>
-            <input type="checkbox" [(ngModel)]="hotel.parking"/>    
-        </li> 
-        <li> 
-            <label>Massage</label>
-            <input type="checkbox" [(ngModel)]="hotel.massage"/>     
-        </li>  
-        <li> 
-            <label>Extra Towels</label>
-            <input type="checkbox" [(ngModel)]="hotel.extraTowels"/>     
-        </li>
-        <li> 
             <label>Image</label>
             <input type="file" accept="image/x-png,image/jpeg" (change)="onSelectFile($event)" #imageUploader/>
             <img [ngClass]="imageToShow ? 'opened-image' : 'closed-image'" [src]="imageToShow">      
@@ -98,6 +86,7 @@
                 (click)="addHotel()">
                 Add Hotel
             </button>
+            <button (click)="closeEditForm()">Cancel</button>
         </li>
         <li *ngIf="edit">
             <button [disabled]="name.invalid || country.invalid || city.invalid || address.invalid" 
@@ -108,6 +97,17 @@
         </li>      
     </ul>   
 </div>
+<button class="open-button open-form-button" (click)="openEditForm()" *ngIf="!editFormOn">Add new hotel</button>
+<br>
+<div class="filter-input">
+    <h3>Filter hotels by:</h3>
+    <label>Country</label>
+    <input type="text" placeholder="Country" [(ngModel)]="params.country">
+    <label>City</label>
+    <input type="text" placeholder="City" [(ngModel)]="params.city">
+    <button (click)="filterHotels()">Find hotels with selected parameters</button>
+    <button (click)='clearFilters()'>Clear</button>
+</div>
 <div class="page-header">
     <h1>Hotels list</h1>
 </div>
@@ -116,14 +116,11 @@
         <thead>
             <tr>
                 <th>Image</th>
-                <th>Id</th>
                 <th>Name</th>
                 <th>Country</th>
                 <th>City</th>
                 <th>Address</th>
-                <th>Parking</th>
-                <th>Massage</th>
-                <th>ExtraTowels</th>
+                <th>Services</th>
                 <th>Rooms</th>
                 <th></th>
                 <th></th>
@@ -132,14 +129,17 @@
         <tbody>
             <tr *ngFor="let hotel of hotels" >
                 <td><img [src]="hotel.image" height="100"></td>
-                <td>{{hotel.id}}</td>
                 <td>{{hotel.name}}</td>
                 <td>{{hotel.country}}</td>
                 <td>{{hotel.city}}</td>
                 <td>{{hotel.address}}</td>
-                <td><input type="checkbox" [(ngModel)]="hotel.parking" disabled/></td>
-                <td><input type="checkbox" [(ngModel)]="hotel.massage" disabled/></td>
-                <td><input type="checkbox" [(ngModel)]="hotel.extraTowels" disabled/></td>                
+                <td>
+                    <ul *ngFor="let service of hotel.services">
+                        <li>
+                            {{service.name}} - {{service.cost}}$
+                        </li>
+                    </ul>
+                </td>
                 <td><button class="open-button" (click)="openRooms(hotel.id)">Rooms</button></td>
                 <td><button class="open-button" (click)="editMode(hotel.id)">Edit</button></td>
                 <td><button class="del-button" (click)="deleteHotel(hotel.id)">Delete</button></td>

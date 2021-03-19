@@ -20,7 +20,9 @@ namespace Hotels.Models
         public virtual DbSet<Hotel> Hotels { get; set; }
         public virtual DbSet<Reservation> Reservations { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
+        public virtual DbSet<Service> Services { get; set; }
         public virtual DbSet<User> Users { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,8 +60,6 @@ namespace Hotels.Models
 
                 entity.Property(e => e.Cost).HasPrecision(9,2);
 
-                entity.Property(e => e.Image).HasMaxLength(100);
-
                 entity.Property(e => e.Image)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -70,6 +70,18 @@ namespace Hotels.Models
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.HotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<Service>(entity =>
+            {
+                entity.Property(e => e.Name).HasMaxLength(20);
+
+                entity.Property(e => e.Cost).HasPrecision(9, 2);
+
+                entity.HasOne<Hotel>()
+                   .WithMany(p => p.Services)
+                   .HasForeignKey(d => d.HotelId)
+                   .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<User>(entity =>
