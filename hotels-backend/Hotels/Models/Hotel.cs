@@ -10,11 +10,9 @@ namespace Hotels.Models
         public string Country { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
-        public bool Parking { get; set; }
-        public bool Massage { get; set; }
-        public bool ExtraTowels { get; set; }
         public string Image { get; set; }
 
         public virtual ICollection<Room> Rooms { get; set; }
+        public virtual ICollection<Service> Services { get; set; }
     }
 }

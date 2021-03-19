@@ -12,7 +12,7 @@
 			<input type="text" placeholder="Number of residents" [(ngModel)]="params.numberOfResidents">
 			<br>
 			<br>
-			<button [disabled]="!checkParams()" (click)="filterHotels">Find hotels with selected parameters</button>
+			<button [disabled]="!checkParams()" (click)="filterHotels()">Find hotels with selected parameters</button>
 		</div>
 		<br>
 		<div *ngIf="hotels.length === 0">

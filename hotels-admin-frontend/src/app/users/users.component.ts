@@ -14,9 +14,10 @@ import { AuthGuard } from '../auth.guard';
 })
 export class UsersComponent implements OnInit {
 
-  users: User[];
-  user: User;
-  edit: boolean;
+  users: User[] = [];
+  user: User = new User;
+  edit: boolean = false;
+  editFormOn: boolean = false;
 
   constructor(
     private usersService: UsersService,
@@ -51,8 +52,18 @@ export class UsersComponent implements OnInit {
     this.user = new User();
   }
 
+  openEditForm(): void {
+    this.editFormOn = true;
+  }
+
+  closeEditForm(): void {
+    this.editFormOn = false;
+    this.user = new User();
+  }
+
   editMode(userId: number): void {
-    this.user = this.users.find(user => user.id === userId);
+    this.editFormOn = true;
+    this.user = this.users.find(user => user.id === userId)!;
     this.user.password = "";
     this.edit = true;
   }
@@ -69,6 +80,7 @@ export class UsersComponent implements OnInit {
   }
 
   cancelEdit(): void {
+    this.editFormOn = false;
     this.user = new User();
     this.edit = false;
   }

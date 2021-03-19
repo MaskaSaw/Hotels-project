@@ -36,22 +36,30 @@ namespace Hotels.Controllers
         {
             var hotels = _context.Hotels
                 .Include(hotel => hotel.Rooms)
+                .Include(hotel => hotel.Services)
                 .AsQueryable();
+
+            if (!string.IsNullOrEmpty(inputParams.Country))
+            {
+                hotels = hotels.Where(hotel => hotel.Country == inputParams.Country);
+            }
+
+            if (!string.IsNullOrEmpty(inputParams.City))
+            {
+                hotels = hotels.Where(hotel => hotel.City == inputParams.City);
+            }
+
+            if (inputParams.NumberOfResidents != null && inputParams.NumberOfResidents != 0)
+            {
+                hotels = hotels
+                    .Where(hotel => hotel.Rooms
+                        .Any(room => room.VacantBeds >= inputParams.NumberOfResidents)
+                    );
+            }
 
             int returnedNumberOfItems = (MaxItemsPerPage < itemsPerPage) ? MaxItemsPerPage : itemsPerPage;
             if (inputParams.CheckIn != null & inputParams.CheckOut != null)
             {
-
-                if (!string.IsNullOrEmpty(inputParams.Country))
-                {
-                    hotels = hotels.Where(hotel => hotel.Country == inputParams.Country);
-                }
-
-                if (!string.IsNullOrEmpty(inputParams.City))
-                {
-                    hotels = hotels.Where(hotel => hotel.City == inputParams.City);
-                }
-
                 hotels = hotels
                     .Where(hotel => hotel.Rooms
                         .Any(room => room.Reservations.Count == 0 || !room.Reservations
@@ -62,15 +70,6 @@ namespace Hotels.Controllers
                             )
                         )
                     );
-
-                if (inputParams.NumberOfResidents != null && inputParams.NumberOfResidents != 0)
-                {
-                    hotels = hotels
-                        .Where(hotel => hotel.Rooms
-                            .Any(room => room.VacantBeds >= inputParams.NumberOfResidents)
-                        );
-                }
-
             }
             return await hotels
                 .Skip((page - 1) * returnedNumberOfItems)

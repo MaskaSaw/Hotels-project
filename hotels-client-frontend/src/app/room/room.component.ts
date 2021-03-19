@@ -14,10 +14,10 @@ import { ReservationsService } from '../reservation/reservations.service';
 })
 export class RoomComponent implements OnInit {
 
-  room: Room = new Room;
+  room: Room = new Room();
   id : number = 0;
   reserving: boolean = false;
-  reservation: Reservation = new Reservation;
+  reservation: Reservation = new Reservation();
 
   constructor(
     private roomsService: RoomsService,
@@ -28,8 +28,8 @@ export class RoomComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getRoom();
     this.id = +this.route.snapshot.paramMap.get('id')!;
+    this.getRoom();
   }
 
   getRoom(): void {

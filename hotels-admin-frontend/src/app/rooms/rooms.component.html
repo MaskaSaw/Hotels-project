@@ -1,4 +1,4 @@
-<div class="add-form">
+<div class="add-form" *ngIf="editFormOn">
     <ul>
         <li>
             <h2>Add new room</h2>
@@ -71,10 +71,6 @@
             </div>
         </li>
         <li> 
-            <label>Reserved</label>
-            <input type="checkbox" [(ngModel)]="room.reserved"/>    
-        </li> 
-        <li> 
             <label>Available</label>
             <input type="checkbox" [(ngModel)]="room.available"/>    
         </li>
@@ -88,6 +84,7 @@
                 (click)="addRoom()">
                 Add Room
             </button>
+            <button (click)="closeEditForm()">Cancel</button>
         </li>
         <li *ngIf="edit">
             <button [disabled]="number.invalid || beds.invalid || cost.invalid"
@@ -98,6 +95,7 @@
         </li>
     </ul>   
 </div>
+<button class="open-button open-form-button" (click)="openEditForm()" *ngIf="!editFormOn">Add new room</button>
 <div class="page-header">
     <h1>Rooms list</h1>
 </div>
@@ -111,7 +109,6 @@
                 <th>Room Type</th>
                 <th>Vacant Beds</th>
                 <th>Cost</th>
-                <th>Reserved</th>
                 <th>Available</th>
                 <th>Reservations</th>
                 <th></th>
@@ -126,7 +123,6 @@
                 <td>{{room.roomType}}</td>
                 <td>{{room.vacantBeds}}</td>
                 <td>{{room.cost}}</td>
-                <td><input type="checkbox" [(ngModel)]="room.reserved" disabled/></td>
                 <td><input type="checkbox" [(ngModel)]="room.available" disabled/></td>
                 <td><button class="open-button" (click)="openReservations(room.id)">Reservations</button></td>
                 <td><button class="open-button" (click)="editMode(room.id)">Edit</button></td>

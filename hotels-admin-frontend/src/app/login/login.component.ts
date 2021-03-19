@@ -10,8 +10,8 @@ import { User } from '../user';
 })
 export class LoginComponent implements OnInit {
 
-  login: string;
-  password: string;
+  login: string = '';
+  password: string = '';
 
   constructor(
     private authService: AuthService

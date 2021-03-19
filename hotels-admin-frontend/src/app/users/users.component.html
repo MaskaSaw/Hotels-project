@@ -1,4 +1,4 @@
-<div class="add-form">
+<div class="add-form" *ngIf="editFormOn">
     <ul>
         <li>
             <h2>Add new User</h2>
@@ -49,6 +49,7 @@
                 (click)="addUser()">
                 Add user
             </button>
+            <button (click)="closeEditForm()">Cancel</button>
         </li>
         <li *ngIf="edit">
             <button [disabled]="login.invalid || password.invalid" 
@@ -59,6 +60,7 @@
         </li>
     </ul>   
 </div>
+<button class="open-button open-form-button" (click)="openEditForm()" *ngIf="!editFormOn">Add new user</button>
 <div class="page-header">
     <h1>Users list</h1>
 </div>

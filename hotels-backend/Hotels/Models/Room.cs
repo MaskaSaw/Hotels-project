@@ -11,7 +11,6 @@ namespace Hotels.Models
         public int VacantBeds { get; set; }
         public decimal Cost { get; set; }
         public bool Available { get; set; }
-        public bool Reserved { get; set; }
         public string Image { get; set; }
         public int HotelId { get; set; }
 

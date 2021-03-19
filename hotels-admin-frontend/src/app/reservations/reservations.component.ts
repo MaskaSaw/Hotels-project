@@ -16,11 +16,12 @@ import { AuthGuard } from '../auth.guard';
 })
 export class ReservationsComponent implements OnInit {
 
-  reservations: Reservation[];
+  reservations: Reservation[] = [];
   reservation: Reservation;
-  routePart: string;
-  id: number;
-  edit: boolean;
+  routePart: string = '';
+  id: number = 0;
+  edit: boolean = false;
+  editFormOn: boolean = false;
 
   private routeSubscription: Subscription;
   constructor(
@@ -49,7 +50,6 @@ export class ReservationsComponent implements OnInit {
       );
     }
 
-    this.dateIsValid = true;
     this.edit = false;
   }
 
@@ -64,9 +64,19 @@ export class ReservationsComponent implements OnInit {
     this.reservation = new Reservation();
   }
 
+  openEditForm(): void {
+    this.editFormOn = true;
+  }
+
+  closeEditForm(): void {
+    this.editFormOn = false;
+    this.reservation = new Reservation();
+  }
+
   editMode(reservationId: number): void {
-    this.reservation = this.reservations.find(reservation => reservation.id === reservationId);
+    this.reservation = this.reservations.find(reservation => reservation.id === reservationId)!;
     this.edit = true;
+    this.editFormOn = true;
   }
 
   updateReservation(): void {
@@ -81,11 +91,12 @@ export class ReservationsComponent implements OnInit {
   }
 
   cancelEdit(): void {
+    this.editFormOn = false;
     this.reservation = new Reservation();
     this.edit = false;
   }
 
-  parseDate(dateString: string): Date{
+  parseDate(dateString: string): Date | null{
     if (dateString) {
       return new Date(dateString);
     }

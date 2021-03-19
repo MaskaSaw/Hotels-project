@@ -9,7 +9,7 @@ import { Directive, forwardRef, Input } from '@angular/core';
 })
 export class DigitValidatorDirective implements Validator {
 
-  @Input("int") int: string;
+  @Input("int") int: string = '';
 
   validate(control: FormControl) {
     
