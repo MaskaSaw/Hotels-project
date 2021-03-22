@@ -75,6 +75,20 @@
                     Address length should be greater then 0 and lesser than {{address.errors.maxLength}}
                 </div>
             </div>   
+        </li>
+        <li>
+            <label>Services:</label>
+            <ul *ngFor="let service of hotel.services, let i = index">
+                <li>
+                    <label>Service name:</label>
+                    <input class="service-input" [(ngModel)]="service.name">
+                    <br>
+                    <label>Service cost per day, $: </label>
+                    <input class="service-input" [(ngModel)]="service.cost">
+                    <button class="del-button" (click)="removeService(i)">Remove</button>
+                </li>             
+            </ul>
+            <button (click)="addService()">Add service</button>
         </li> 
         <li> 
             <label>Image</label>
@@ -105,8 +119,8 @@
     <input type="text" placeholder="Country" [(ngModel)]="params.country">
     <label>City</label>
     <input type="text" placeholder="City" [(ngModel)]="params.city">
-    <button (click)="filterHotels()">Find hotels with selected parameters</button>
-    <button (click)='clearFilters()'>Clear</button>
+    <button class="open-button" (click)="filterHotels()">Find hotels with selected parameters</button>
+    <button class="open-button" (click)='clearFilters()'>Clear</button>
 </div>
 <div class="page-header">
     <h1>Hotels list</h1>

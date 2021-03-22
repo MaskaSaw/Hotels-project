@@ -98,6 +98,7 @@ export class RoomsComponent implements OnInit {
     this.imageToShow = this.room.image;
     this.edit = true;
     this.editFormOn = true;
+    window.scroll(0,0);
   }
 
   updateRoom(): void {

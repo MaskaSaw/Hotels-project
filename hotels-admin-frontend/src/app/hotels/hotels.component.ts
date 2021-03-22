@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Hotel } from '../hotel';
 import { AuthService } from '../login/auth.service';
 import { Params } from '../params';
+import { Service } from '../service';
 import { HotelsService } from './hotels.service';
 
 @Component({
@@ -83,9 +84,14 @@ export class HotelsComponent implements OnInit {
   editMode(hotelId: number): void {
     this.editFormOn = true;
     this.hotel = this.hotels.find(hotel => hotel.id === hotelId)!;
+    this.services = []
+    for (let service of this.hotel.services) {
+      this.services.push({value: service})
+    }
     this.imageToShow = this.hotel.image;
     this.edit = true;
     this.imageUploader.nativeElement.value = null;
+    window.scroll(0,0);
   }
 
   cancelEdit(): void {
@@ -121,7 +127,7 @@ export class HotelsComponent implements OnInit {
 
   filterHotels(): void {
     this.hotelsService.getHotels(this.params)
-      .subscribe( hotels => this.hotels = hotels);
+      .subscribe(hotels => this.hotels = hotels);
   }
 
   clearFilters(): void {
@@ -131,6 +137,14 @@ export class HotelsComponent implements OnInit {
 
   openRooms(hotelId: number): void {
     this.router.navigate([`hotels/${hotelId}/rooms`]);
+  }
+
+  addService() {
+    this.hotel.services.push(new Service());
+  }
+
+  removeService(index: number) {
+    this.hotel.services.splice(index, 1);
   }
 
   onSelectFile(event: any) { 

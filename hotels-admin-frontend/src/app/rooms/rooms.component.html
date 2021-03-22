@@ -108,7 +108,7 @@
                 <th>Number</th>
                 <th>Room Type</th>
                 <th>Vacant Beds</th>
-                <th>Cost</th>
+                <th>Cost per day</th>
                 <th>Available</th>
                 <th>Reservations</th>
                 <th></th>
@@ -122,7 +122,7 @@
                 <td>{{room.roomNumber}}</td>
                 <td>{{room.roomType}}</td>
                 <td>{{room.vacantBeds}}</td>
-                <td>{{room.cost}}</td>
+                <td>{{room.cost}} $</td>
                 <td><input type="checkbox" [(ngModel)]="room.available" disabled/></td>
                 <td><button class="open-button" (click)="openReservations(room.id)">Reservations</button></td>
                 <td><button class="open-button" (click)="editMode(room.id)">Edit</button></td>

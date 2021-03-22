@@ -111,6 +111,32 @@ namespace Hotels.Controllers
                 return BadRequest();
             }
 
+            var existingServices = await _context.Services
+                .Where(service => service.HotelId == id)
+                .ToListAsync();
+
+            foreach (var service in hotel.Services)
+            {
+                var existingService = await _context.Services.FindAsync(service.Id);
+
+                if (existingService != null)
+                {
+                    _context.Entry(existingService).CurrentValues.SetValues(service);
+                }
+                else
+                {
+                    _context.Services.Add(service);
+                }
+            }
+
+            foreach (var existingService in existingServices)
+            {
+                if (!hotel.Services.Any(service => service.Id == existingService.Id))
+                {
+                    _context.Services.Remove(existingService);
+                }
+            }
+
             _context.Entry(hotel).State = EntityState.Modified;
 
             try

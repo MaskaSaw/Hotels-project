@@ -32,7 +32,7 @@ export class AuthService {
       catchError(this.handleError<any>('login'))
     )
     .subscribe((resp: any) => {
-      if (jwt_decode(resp.tokenString).role === 'Admin') {
+      if (jwt_decode<any>(resp.tokenString).role === 'Admin') {
         localStorage.setItem('auth_token', resp.tokenString);
         this.router.navigate(['/hotels']);
       }

@@ -62,6 +62,7 @@ export class UsersComponent implements OnInit {
   }
 
   editMode(userId: number): void {
+    window.scroll(0,0);
     this.editFormOn = true;
     this.user = this.users.find(user => user.id === userId)!;
     this.user.password = "";
