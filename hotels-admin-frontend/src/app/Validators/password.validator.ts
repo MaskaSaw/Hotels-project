@@ -9,8 +9,6 @@ import { Directive, forwardRef, Input } from '@angular/core';
   ]
 })
 export class PasswordValidatorDirective implements Validator {
-
-  @Input("len") len: number = 0;
  
   validate(control: FormControl) {
     
@@ -18,7 +16,7 @@ export class PasswordValidatorDirective implements Validator {
     
     if (value !== null) {
       if (value.length < 4 || value.length > 10) {
-        return { 'length': true}
+        return { 'length': true };
       }
     
       return null;

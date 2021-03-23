@@ -13,11 +13,11 @@
                 nameValidator
                 required 
                 len="20"/>
-            <div *ngIf="!login.valid && (login.dirty || login.touched)">
-                <div *ngIf="login.errors.length">
+            <div *ngIf="login && !login.valid && (login.dirty || login.touched)">
+                <div *ngIf="login.errors?.length">
                     Login length should be greater then zero
                 </div>
-                <div *ngIf="login.errors.format">
+                <div *ngIf="login.errors?.format">
                     Special characters are not allowed
                 </div>
             </div>  
@@ -31,8 +31,8 @@
                 #password="ngModel" 
                 passwordValidator
                 required/>
-            <div *ngIf="!password.valid && (password.dirty || password.touched)">
-                <div *ngIf="password.errors.length">
+            <div *ngIf="password && !password.valid && (password.dirty || password.touched)">
+                <div *ngIf="password.errors?.length">
                     Password length should be between 4 and 10 characters length
                 </div>
             </div>

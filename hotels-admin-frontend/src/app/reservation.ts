@@ -3,8 +3,8 @@ export class Reservation {
     id: number;
     userId: number;
     roomId: number;
-    startDate: Date;
-    endDate: Date;
+    startDate: Date | null;
+    endDate: Date | null;
     arrivalTime: string;
     departureTime: string;
     parking: boolean;

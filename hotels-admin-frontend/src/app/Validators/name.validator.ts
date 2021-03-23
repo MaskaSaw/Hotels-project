@@ -9,7 +9,7 @@ import { Directive, forwardRef, Input } from '@angular/core';
 })
 export class NameValidatorDirective implements Validator {
 
-  @Input("len") len: number = 0;
+  @Input("len") len: string = '';
  
   validate(control: FormControl) {
     
@@ -17,7 +17,7 @@ export class NameValidatorDirective implements Validator {
     const format = /[^\w\-/,. *S]/;
     
     if (value !== null) {
-      if (value.length === 0 || value.length > this.len) {
+      if (value.length === 0 || value.length > +this.len) {
         return { 'length': true, 'maxLength': this.len }
       }
   

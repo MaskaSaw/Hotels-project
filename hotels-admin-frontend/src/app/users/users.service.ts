@@ -23,24 +23,22 @@ export class UsersService {
       headers: new HttpHeaders({ 
         'Content-Type': 'application/json',
         'Authorization': this.authService.getToken 
-      })
+      }),
+      params: {
+        page: '1',
+        itemsPerPage: this.itemsPerPage.toString()
+      }
     };
   }
 
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private authService: AuthService
+    public authService: AuthService
   ) { }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.usersUrl, {
-      headers: this.httpOptions.headers,
-      params: {
-        page: '1',
-        itemsPerPage: this.itemsPerPage.toString()
-      }
-    })
+    return this.http.get<User[]>(this.usersUrl, this.httpOptions)
       .pipe(
         catchError(this.handleError<User[]>('getUsers', [])
       )

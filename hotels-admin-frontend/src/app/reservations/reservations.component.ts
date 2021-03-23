@@ -27,7 +27,6 @@ export class ReservationsComponent implements OnInit {
   constructor(
       private reservationsService: ReservationsService,
       private route: ActivatedRoute,
-      private authService: AuthService
     ) { 
       this.routeSubscription = route.params.subscribe(params=>this.id=params['id']);
       this.reservation = new Reservation(); 

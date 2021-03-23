@@ -13,11 +13,11 @@
                 required 
                 nameValidator 
                 len="50"/>
-            <div *ngIf="!name.valid && (name.dirty || name.touched)">
-                <div *ngIf="name.errors.length">
-                    Name length should be greater then 0 and lesser than {{name.errors.maxLength}}
+            <div *ngIf="name && !name.valid && (name.dirty || name.touched)">
+                <div *ngIf="name.errors?.length">
+                    Name length should be greater then 0 and lesser than {{name.errors?.maxLength}}
                 </div>
-                <div *ngIf="name.errors.format">
+                <div *ngIf="name.errors?.format">
                     Special characters are not allowed
                 </div>
             </div>
@@ -32,11 +32,11 @@
                 required 
                 locationValidator 
                 len="20"/>
-            <div *ngIf="!country.valid && (country.dirty || country.touched)">
-                <div *ngIf="country.errors.length">
-                    Country name length should be greater then 0 and lesser than {{country.errors.maxLength}}
+            <div *ngIf="country && !country.valid && (country.dirty || country.touched)">
+                <div *ngIf="country.errors?.length">
+                    Country name length should be greater then 0 and lesser than {{country.errors?.maxLength}}
                 </div>
-                <div *ngIf="country.errors.format">
+                <div *ngIf="country.errors?.format">
                     Country name should only contain letters and dashes 
                 </div>
             </div>  
@@ -51,11 +51,11 @@
                 required 
                 locationValidator 
                 len="20"/>
-            <div *ngIf="!city.valid && (city.dirty || city.touched)">
-                <div *ngIf="city.errors.length">
-                    City name length should be greater then 0 and lesser than {{city.errors.maxLength}}
+            <div *ngIf="city && !city.valid && (city.dirty || city.touched)">
+                <div *ngIf="city.errors?.length">
+                    City name length should be greater then 0 and lesser than {{city.errors?.maxLength}}
                 </div>
-                <div *ngIf="city.errors.format">
+                <div *ngIf="city.errors?.format">
                     City name should only contain letters and dashes
                 </div>
             </div> 
@@ -70,9 +70,9 @@
                 required 
                 maxlength="50"
                 minlength="1"/>
-            <div *ngIf="!address.valid && (address.dirty || address.touched)">
+            <div *ngIf="address && !address.valid && (address.dirty || address.touched)">
                 <div *ngIf="address.invalid">
-                    Address length should be greater then 0 and lesser than {{address.errors.maxLength}}
+                    Address length should be greater then 0 and lesser than {{address.errors?.maxLength}}
                 </div>
             </div>   
         </li>

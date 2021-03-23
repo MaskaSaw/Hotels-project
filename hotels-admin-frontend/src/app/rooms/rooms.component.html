@@ -12,12 +12,12 @@
                 #number="ngModel" 
                 nameValidator
                 required 
-                len="20"/>
-            <div *ngIf="!number.valid && (number.dirty || number.touched)">
-                <div *ngIf="number.errors.length">
-                    Room number length should be greater then 0 and lesser than {{name.errors.maxLength}}
+                len=20/>
+            <div *ngIf="number && !number.valid && (number.dirty || number.touched)">
+                <div *ngIf="number.errors?.length">
+                    Room number length should be greater then 0 and lesser than {{number.errors?.maxLength}}
                 </div>
-                <div *ngIf="number.errors.format">
+                <div *ngIf="number.errors?.format">
                     Special characters are not allowed
                 </div>
             </div>
@@ -42,11 +42,11 @@
                 digitValidator 
                 required 
                 int=true/>
-            <div *ngIf="!beds.valid && (beds.dirty || beds.touched)">
-                <div *ngIf="beds.errors.range">
+            <div *ngIf="beds && !beds.valid && (beds.dirty || beds.touched)">
+                <div *ngIf="beds.errors?.range">
                     Number of beds should be greater then zero
                 </div>
-                <div *ngIf="beds.errors.nonDigitCharacters">
+                <div *ngIf="beds.errors?.nonDigitCharacters">
                     Number should be correct
                 </div>
             </div>
@@ -61,11 +61,11 @@
                 digitValidator 
                 required 
                 int=false/>
-            <div *ngIf="!cost.valid && (cost.dirty || cost.touched)">
-                <div *ngIf="cost.errors.range">
+            <div *ngIf="cost && !cost.valid && (cost.dirty || cost.touched)">
+                <div *ngIf="cost.errors?.range">
                     Cost should be greater then zero
                 </div>
-                <div *ngIf="cost.errors.nonDigitCharacters">
+                <div *ngIf="cost.errors?.nonDigitCharacters">
                     Cost value should be correct
                 </div>
             </div>

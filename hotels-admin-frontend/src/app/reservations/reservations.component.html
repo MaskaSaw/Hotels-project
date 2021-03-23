@@ -13,11 +13,11 @@
                 digitValidator 
                 required 
                 int="true"/>
-            <div *ngIf="!userId.valid && (userId.dirty || userId.touched)">
-                <div *ngIf="userId.errors.range">
+            <div *ngIf="userId && !userId.valid && (userId.dirty || userId.touched)">
+                <div *ngIf="userId.errors?.range">
                     User Id should be greater then 0
                 </div>
-                <div *ngIf="userId.errors.nonDigitCharacters">
+                <div *ngIf="userId.errors?.nonDigitCharacters">
                     User Id should be valid
                 </div>
             </div>  
@@ -32,11 +32,11 @@
                 digitValidator 
                 required 
                 int="true"/>
-            <div *ngIf="!roomId.valid && (roomId.dirty || roomId.touched)">
-                <div *ngIf="roomId.errors.range">
+            <div *ngIf="roomId && !roomId.valid && (roomId.dirty || roomId.touched)">
+                <div *ngIf="roomId.errors?.range">
                     Room Id should be greater then 0
                 </div>
-                <div *ngIf="roomId.errors.nonDigitCharacters">
+                <div *ngIf="roomId.errors?.nonDigitCharacters">
                     Room Id should be valid
                 </div>
             </div>
@@ -51,8 +51,8 @@
                 dateValidator 
                 [secondDate]="reservation.endDate" 
                 dateType="startDate"/>
-            <div *ngIf="!startDate.valid && (startDate.dirty || startDate.touched)">
-                <div *ngIf="startDate.errors.wrongDate">
+            <div *ngIf="startDate && !startDate.valid && (startDate.dirty || startDate.touched)">
+                <div *ngIf="startDate.errors?.wrongDate">
                     Start Date should be lesser then End Date
                 </div>
             </div>
@@ -66,8 +66,8 @@
                 dateValidator 
                 [secondDate]="reservation.startDate" 
                 dateType="endDate"/>
-            <div *ngIf="!endDate.valid && (endDate.dirty || endDate.touched)">
-                <div *ngIf="endDate.errors.wrongDate">
+            <div *ngIf="endDate && !endDate.valid && (endDate.dirty || endDate.touched)">
+                <div *ngIf="endDate.errors?.wrongDate">
                     End Date should be greater then Start Date
                 </div>
             </div>
