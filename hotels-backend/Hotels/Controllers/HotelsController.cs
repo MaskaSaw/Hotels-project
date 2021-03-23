@@ -111,6 +111,34 @@ namespace Hotels.Controllers
                 return BadRequest();
             }
 
+            var existingServices = await _context.Services
+                .Where(service => service.HotelId == id)
+                .ToListAsync();
+
+            foreach (var service in hotel.Services)
+            {
+                var existingService = existingServices.Find(existingService => existingService.Id == service.Id);
+
+                if (existingService != null)
+                {
+                    _context.Entry(existingService).CurrentValues.SetValues(service);
+                }
+                else
+                {
+                    _context.Services.Add(service);
+                }
+            }
+
+            foreach (var existingService in existingServices)
+            {
+                if (!hotel.Services.Any(service => service.Id == existingService.Id))
+                {
+                    _context.Services.Remove(existingService);
+                }
+            }
+
+
+
             _context.Entry(hotel).State = EntityState.Modified;
 
             try
@@ -148,19 +176,25 @@ namespace Hotels.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {
-            var hotel = await _context.Hotels.FindAsync(id);
 
-            if (hotel == null)
+            if (!HotelExists(id))
             {
                 return NotFound();
             }
 
+            var hotel = await _context.Hotels
+                .Include(hotel => hotel.Services)
+                .Where(hotel => hotel.Id == id)
+                .FirstOrDefaultAsync();
+
             _context.Hotels.Remove(hotel);
-            if (string.IsNullOrEmpty(hotel.Image))
+
+            await _context.SaveChangesAsync();
+
+            if (!string.IsNullOrEmpty(hotel.Image))
             {
                 _imageService.DeleteImage(hotel.Image);
             }
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }

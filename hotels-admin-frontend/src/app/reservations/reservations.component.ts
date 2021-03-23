@@ -77,6 +77,7 @@ export class ReservationsComponent implements OnInit {
     this.reservation = this.reservations.find(reservation => reservation.id === reservationId)!;
     this.edit = true;
     this.editFormOn = true;
+    window.scroll(0,0);
   }
 
   updateReservation(): void {
