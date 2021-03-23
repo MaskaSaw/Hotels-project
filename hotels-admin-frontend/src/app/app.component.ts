@@ -11,7 +11,7 @@ export class AppComponent {
   title = 'hotels-admin-frontend';
 
   constructor(
-    private authService: AuthService
+    public authService: AuthService
   ) {}
 
   logout(): void {

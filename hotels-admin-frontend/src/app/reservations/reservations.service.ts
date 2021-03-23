@@ -15,7 +15,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ReservationsService {
 
-  reservations: Reservation[];
+  reservations: Reservation[] | undefined;
 
   private roomsUrl = environment.baseUrl + ApiPaths.Rooms;
   private usersUrl = environment.baseUrl + ApiPaths.Users;
@@ -33,8 +33,10 @@ export class ReservationsService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private authService: AuthService
-  ) { }
+    public authService: AuthService
+  ) {
+    this.reservations = undefined;
+   }
 
   storeRoomReservations(reservations: Reservation[]): void {
     this.reservations = reservations;
@@ -80,7 +82,7 @@ export class ReservationsService {
   }
 
   takeReservations(): Reservation[] {
-    return this.reservations
+    return this.reservations as Reservation[];
   }
 
   setUrl(id: number, type: string): string {

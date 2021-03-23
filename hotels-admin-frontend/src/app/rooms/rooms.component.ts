@@ -24,7 +24,7 @@ export class RoomsComponent implements OnInit {
   editFormOn: boolean = false;
   imageToShow: string = '';
 
-  @ViewChild('imageUploader') imageUploader:ElementRef;
+  @ViewChild('imageUploader') imageUploader!:ElementRef;
 
   constructor(
     private roomsService: RoomsService,

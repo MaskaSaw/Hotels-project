@@ -10,7 +10,7 @@ import { Directive, forwardRef, Input } from '@angular/core';
 })
 export class LocationValidatorDirective implements Validator {
 
-  @Input("len") len: number = 0;
+  @Input("len") len: string = '';
  
   validate(control: FormControl) {
     
@@ -18,7 +18,7 @@ export class LocationValidatorDirective implements Validator {
     const format = /[^a-zA-Z\-']/;
     
     if (value !== null) {
-      if (value.length === 0 || value.length > this.len) {
+      if (value.length === 0 || value.length > +this.len) {
         return { 'length': true, 'maxLength': this.len}
       }
   

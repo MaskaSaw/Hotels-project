@@ -10,7 +10,7 @@ import { Directive, forwardRef, Input } from '@angular/core';
 })
 export class DateValidatorDirective implements Validator {
 
-  @Input("secondDate") secondDate: Date = new Date();
+  @Input("secondDate") secondDate: Date | null = new Date();
   @Input("dateType") dateType: string = '';
  
   validate(control: FormControl) {
@@ -19,14 +19,14 @@ export class DateValidatorDirective implements Validator {
     
     if (value !== null) {
       if (this.dateType === 'startDate') {
-        if (value > this.secondDate) {
+        if (value > this.secondDate!) {
           return { 'wrongDate': true };
         }
   
         return null;
       } 
       else if (this.dateType === 'endDate') {
-        if (value < this.secondDate) {
+        if (value < this.secondDate!) {
           return { 'wrongDate': true };
         }
 

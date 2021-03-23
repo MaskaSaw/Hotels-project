@@ -32,7 +32,7 @@ export class HotelsService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private authService: AuthService
+    public authService: AuthService
   ) { }
 
   getHotels(inputParams?: Params): Observable<Hotel[]> {

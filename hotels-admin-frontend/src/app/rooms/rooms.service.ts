@@ -31,7 +31,7 @@ export class RoomsService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private authService: AuthService
+    public authService: AuthService
   ) { }
 
   getRooms(id: number): Observable<Room[]> {

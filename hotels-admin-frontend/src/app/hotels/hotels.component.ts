@@ -21,7 +21,7 @@ export class HotelsComponent implements OnInit {
   editFormOn: boolean = false;
   imageToShow: string = '';
 
-  @ViewChild('imageUploader') imageUploader:ElementRef;
+  @ViewChild('imageUploader') imageUploader!: ElementRef;
 
   constructor(
     private router: Router,
@@ -52,6 +52,7 @@ export class HotelsComponent implements OnInit {
               }
               this.hotel = new Hotel();
               this.imageUploader.nativeElement.value = null;  
+              this.imageToShow = '';
             }
           );
         }
@@ -64,10 +65,13 @@ export class HotelsComponent implements OnInit {
             this.hotels.push(hotel);
           }
           this.hotel = new Hotel();
-          this.imageUploader.nativeElement.value = null;  
+          this.imageUploader.nativeElement.value = null;
+          this.imageToShow = '';  
         }
       );
-    } 
+    }
+    
+    this.editFormOn = false;
   }
 
   openEditForm(): void {
