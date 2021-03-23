@@ -84,10 +84,6 @@ export class HotelsComponent implements OnInit {
   editMode(hotelId: number): void {
     this.editFormOn = true;
     this.hotel = this.hotels.find(hotel => hotel.id === hotelId)!;
-    this.services = []
-    for (let service of this.hotel.services) {
-      this.services.push({value: service})
-    }
     this.imageToShow = this.hotel.image;
     this.edit = true;
     this.imageUploader.nativeElement.value = null;
@@ -145,6 +141,10 @@ export class HotelsComponent implements OnInit {
 
   removeService(index: number) {
     this.hotel.services.splice(index, 1);
+  }
+
+  hotelsEmpty(): boolean {
+    return this.hotels == [];
   }
 
   onSelectFile(event: any) { 

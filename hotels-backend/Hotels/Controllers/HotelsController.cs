@@ -117,7 +117,7 @@ namespace Hotels.Controllers
 
             foreach (var service in hotel.Services)
             {
-                var existingService = await _context.Services.FindAsync(service.Id);
+                var existingService = existingServices.Find(existingService => existingService.Id == service.Id);
 
                 if (existingService != null)
                 {
@@ -136,6 +136,8 @@ namespace Hotels.Controllers
                     _context.Services.Remove(existingService);
                 }
             }
+
+
 
             _context.Entry(hotel).State = EntityState.Modified;
 
@@ -174,19 +176,25 @@ namespace Hotels.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {
-            var hotel = await _context.Hotels.FindAsync(id);
 
-            if (hotel == null)
+            if (!HotelExists(id))
             {
                 return NotFound();
             }
 
+            var hotel = await _context.Hotels
+                .Include(hotel => hotel.Services)
+                .Where(hotel => hotel.Id == id)
+                .FirstOrDefaultAsync();
+
             _context.Hotels.Remove(hotel);
-            if (string.IsNullOrEmpty(hotel.Image))
+
+            await _context.SaveChangesAsync();
+
+            if (!string.IsNullOrEmpty(hotel.Image))
             {
                 _imageService.DeleteImage(hotel.Image);
             }
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
