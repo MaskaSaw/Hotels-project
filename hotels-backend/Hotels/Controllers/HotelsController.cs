@@ -105,10 +105,9 @@ namespace Hotels.Controllers
         [HttpGet("Countries")]
         public async Task<ActionResult<IEnumerable<string>>> GetCountries()
         {
-            var countries = await _context.Hotels
+            return await _context.Hotels
                 .Select(hotel => hotel.Country)
                 .ToListAsync();
-            return countries;
         }
 
         //GET: api/Hotels/Cities

@@ -36,9 +36,9 @@ export class HotelsComponent implements OnInit {
 
   getSearchData(): void {
     this.hotelsService.getCountries()
-      .subscribe(countries => this.countries = countries);
+      .subscribe(countries => this.countries = this.filterSearchData(countries));
     this.hotelsService.getCities()
-      .subscribe(cities => this.cities = cities);
+      .subscribe(cities => this.cities = this.filterSearchData(cities));
   }
 
   clearFilter(): void {
@@ -69,6 +69,11 @@ export class HotelsComponent implements OnInit {
   filterHotels(): void {
     this.hotelsService.getHotels(this.params)
       .subscribe( hotels => this.hotels = hotels);
+  }
+
+  filterSearchData(array: string[]): string[] {
+    array = array.sort();
+    return array.filter((item, index) => array.indexOf(item) === index); 
   }
 
 }
