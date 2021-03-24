@@ -107,15 +107,18 @@ namespace Hotels.Controllers
         {
             return await _context.Hotels
                 .Select(hotel => hotel.Country)
+                .Distinct()
                 .ToListAsync();
         }
 
         //GET: api/Hotels/Cities
         [HttpGet("Cities")]
-        public async Task<ActionResult<IEnumerable<string>>> GetCities()
+        public async Task<ActionResult<IEnumerable<string>>> GetCities([FromQuery] string country)
         {
             return await _context.Hotels
+                .Where(hotel => hotel.Country == country)
                 .Select(hotel => hotel.City)
+                .Distinct()
                 .ToListAsync();
         }
 

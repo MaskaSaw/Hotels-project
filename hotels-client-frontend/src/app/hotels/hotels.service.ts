@@ -75,9 +75,12 @@ export class HotelsService {
     );
   }
 
-  getCities(): Observable<string[]> {
+  getCities(country: string): Observable<string[]> {
     const url = `${this.hotelsUrl}/cities`;
-    return this.http.get<string[]>(url)
+    let params = {
+      country: country
+    }
+    return this.http.get<string[]>(url, { params })
       .pipe(
         catchError(this.handleError<string[]>('getCountries')
       )

@@ -25,20 +25,23 @@ export class HotelsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getHotels();
-    this.getSearchData();
+    this.getCountriesData();
     this.params = new Params;
   }
 
   getHotels(): void {
     this.hotelsService.getHotels()
-      .subscribe(hotels =>  this.hotels = this.shuffle(hotels));
+      .subscribe(hotels =>  this.hotels = hotels);
   }
 
-  getSearchData(): void {
+  getCountriesData(): void {
     this.hotelsService.getCountries()
-      .subscribe(countries => this.countries = this.filterSearchData(countries));
-    this.hotelsService.getCities()
-      .subscribe(cities => this.cities = this.filterSearchData(cities));
+      .subscribe(countries => this.countries = countries);  
+  }
+
+  getCitiesData(): void {
+    this.hotelsService.getCities(this.params.country)
+      .subscribe(cities => this.cities = cities);
   }
 
   clearFilter(): void {
@@ -59,21 +62,16 @@ export class HotelsComponent implements OnInit {
       return false
     }
 
-    return true;
-  }
+    if (this.params.country === '') {
+      return false;
+    }
 
-  shuffle(array: Hotel[]): Hotel[] {
-    return array.sort(() => Math.random() -0.5);
+    return true;
   }
 
   filterHotels(): void {
     this.hotelsService.getHotels(this.params)
       .subscribe( hotels => this.hotels = hotels);
-  }
-
-  filterSearchData(array: string[]): string[] {
-    array = array.sort();
-    return array.filter((item, index) => array.indexOf(item) === index); 
   }
 
 }

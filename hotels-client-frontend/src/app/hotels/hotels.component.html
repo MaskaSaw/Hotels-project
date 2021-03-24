@@ -14,11 +14,13 @@
 				[typeaheadScrollable]="true" 
 				[typeaheadOptionsInScrollableView]="10">
 			<input type="text" 
-				placeholder="City" 
+				placeholder="City (optional)" 
 				[(ngModel)]="params.city"
 				[typeahead]="cities"
 				[typeaheadScrollable]="true"
-				[typeaheadOptionsInScrollableView]="10">
+				[typeaheadOptionsInScrollableView]="10"
+				(focus)="getCitiesData()"
+				*ngIf="checkParams()">
 			<input type="text" placeholder="Number of residents" [(ngModel)]="params.numberOfResidents">
 			<button (click)="clearFilter()">Clear</button>
 			<br>
