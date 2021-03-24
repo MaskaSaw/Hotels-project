@@ -30,7 +30,6 @@ export class HotelsService {
   ) { }
 
   getHotels(inputParams?: Params): Observable<Hotel[]> {
-
     let params = {};
 
     if (inputParams) {
@@ -63,6 +62,24 @@ export class HotelsService {
     return this.http.get<Hotel>(url)
       .pipe(
         catchError(this.handleError<Hotel>('getHotel')
+      )
+    );
+  }
+
+  getCountries(): Observable<string[]> {
+    const url = `${this.hotelsUrl}/countries`;
+    return this.http.get<string[]>(url)
+      .pipe(
+        catchError(this.handleError<string[]>('getCountries')
+      )
+    );
+  }
+
+  getCities(): Observable<string[]> {
+    const url = `${this.hotelsUrl}/cities`;
+    return this.http.get<string[]>(url)
+      .pipe(
+        catchError(this.handleError<string[]>('getCountries')
       )
     );
   }

@@ -101,6 +101,25 @@ namespace Hotels.Controllers
                 .ToListAsync();
         }
 
+        //GET: api/Hotels/Countries
+        [HttpGet("Countries")]
+        public async Task<ActionResult<IEnumerable<string>>> GetCountries()
+        {
+            var countries = await _context.Hotels
+                .Select(hotel => hotel.Country)
+                .ToListAsync();
+            return countries;
+        }
+
+        //GET: api/Hotels/Cities
+        [HttpGet("Cities")]
+        public async Task<ActionResult<IEnumerable<string>>> GetCities()
+        {
+            return await _context.Hotels
+                .Select(hotel => hotel.City)
+                .ToListAsync();
+        }
+
         // PUT: api/Hotels/5
         [Authorize (Roles ="Admin")]
         [HttpPut("{id}")]

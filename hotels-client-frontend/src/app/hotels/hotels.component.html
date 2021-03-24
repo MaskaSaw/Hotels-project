@@ -7,9 +7,20 @@
 		<br>
 		<br>
 		<div>
-			<input type="text" placeholder="Country" [(ngModel)]="params.country">
-			<input type="text" placeholder="City" [(ngModel)]="params.city">
+			<input type="text" 
+				placeholder="Country" 
+				[(ngModel)]="params.country" 
+				[typeahead]="countries" 
+				[typeaheadScrollable]="true" 
+				[typeaheadOptionsInScrollableView]="10">
+			<input type="text" 
+				placeholder="City" 
+				[(ngModel)]="params.city"
+				[typeahead]="cities"
+				[typeaheadScrollable]="true"
+				[typeaheadOptionsInScrollableView]="10">
 			<input type="text" placeholder="Number of residents" [(ngModel)]="params.numberOfResidents">
+			<button (click)="clearFilter()">Clear</button>
 			<br>
 			<br>
 			<button [disabled]="!checkParams()" (click)="filterHotels()">Find hotels with selected parameters</button>
