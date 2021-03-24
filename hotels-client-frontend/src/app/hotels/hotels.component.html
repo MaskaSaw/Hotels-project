@@ -5,11 +5,24 @@
 		<input type="text" placeholder="Check-in" [(ngModel)]="params.checkIn" bsDatepicker [minDate]="minDate">
 		<input type="text" placeholder="Check-out" [(ngModel)]="params.checkOut" bsDatepicker [minDate]="minDate">
 		<br>
-		<br>
+		<h3>Select your destination point: </h3>
 		<div>
-			<input type="text" placeholder="Country" [(ngModel)]="params.country">
-			<input type="text" placeholder="City" [(ngModel)]="params.city">
+			<input type="text" 
+				placeholder="Country" 
+				[(ngModel)]="params.country" 
+				[typeahead]="countries" 
+				[typeaheadScrollable]="true" 
+				[typeaheadOptionsInScrollableView]="10">
+			<input type="text" 
+				placeholder="City (optional)" 
+				[(ngModel)]="params.city"
+				[typeahead]="cities"
+				[typeaheadScrollable]="true"
+				[typeaheadOptionsInScrollableView]="10"
+				(input)="getCitiesData($event)"
+				*ngIf="checkParams()">
 			<input type="text" placeholder="Number of residents" [(ngModel)]="params.numberOfResidents">
+			<button (click)="clearFilter()">Clear</button>
 			<br>
 			<br>
 			<button [disabled]="!checkParams()" (click)="filterHotels()">Find hotels with selected parameters</button>

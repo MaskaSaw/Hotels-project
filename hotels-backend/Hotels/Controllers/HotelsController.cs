@@ -101,6 +101,28 @@ namespace Hotels.Controllers
                 .ToListAsync();
         }
 
+        //GET: api/Hotels/Countries
+        [HttpGet("Countries")]
+        public async Task<ActionResult<IEnumerable<string>>> GetCountries()
+        {
+            return await _context.Hotels
+                .Select(hotel => hotel.Country)
+                .Distinct()
+                .ToListAsync();
+        }
+
+        //GET: api/Hotels/Cities
+        [HttpGet("Cities")]
+        public async Task<ActionResult<IEnumerable<string>>> GetCities([FromQuery] string country, string city)
+        {
+            return await _context.Hotels
+                .Where(hotel => hotel.Country == country)
+                .Where(hotel => hotel.City.Contains(city))
+                .Select(hotel => hotel.City)
+                .Distinct()
+                .ToListAsync();
+        }
+
         // PUT: api/Hotels/5
         [Authorize (Roles ="Admin")]
         [HttpPut("{id}")]
