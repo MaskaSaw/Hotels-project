@@ -19,7 +19,7 @@
 				[typeahead]="cities"
 				[typeaheadScrollable]="true"
 				[typeaheadOptionsInScrollableView]="10"
-				(focus)="getCitiesData()"
+				(input)="getCitiesData($event)"
 				*ngIf="checkParams()">
 			<input type="text" placeholder="Number of residents" [(ngModel)]="params.numberOfResidents">
 			<button (click)="clearFilter()">Clear</button>

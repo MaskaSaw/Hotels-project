@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
 import { Hotel } from '../hotel';
 import { Params } from '../params';
 import { HotelsService } from './hotels.service';
@@ -17,6 +20,7 @@ export class HotelsComponent implements OnInit {
   minDate = new Date();
   countries: string[] = [];
   cities: string[] = [];
+  searchTermChanged: Subject<string> = new Subject<string>();
 
   constructor(
     private hotelsService: HotelsService,
@@ -39,9 +43,15 @@ export class HotelsComponent implements OnInit {
       .subscribe(countries => this.countries = countries);  
   }
 
-  getCitiesData(): void {
-    this.hotelsService.getCities(this.params.country)
-      .subscribe(cities => this.cities = cities);
+  getCitiesData(event: any): void {
+    if (this.searchTermChanged.observers.length === 0) {
+      this.searchTermChanged.pipe(debounceTime(1000), distinctUntilChanged())
+        .subscribe(() => {
+          this.hotelsService.getCities(this.params.country, this.params.city)
+            .subscribe(cities => this.cities = cities);
+        })
+    }
+    this.searchTermChanged.next(event) 
   }
 
   clearFilter(): void {
