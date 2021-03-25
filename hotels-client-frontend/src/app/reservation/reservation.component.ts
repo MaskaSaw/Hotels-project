@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Reservation } from '../reservation';
 import { ReservationsService } from './reservations.service';
+import { Location } from '@angular/common';
 import * as moment from 'moment';
+import { RoomsService } from '../room/rooms.service';
+import { Room } from '../room';
 
 @Component({
   selector: 'app-reservation',
@@ -11,19 +14,22 @@ import * as moment from 'moment';
 export class ReservationComponent implements OnInit {
 
   reservation: Reservation = new Reservation;
-  roomCost: number = 0;
+  room: Room = new Room();
   
   constructor(
     private reservationsService: ReservationsService,
+    private roomsService: RoomsService,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
     this.reservation = this.reservationsService.takeReservation();
-    this.roomCost = this.reservationsService.getRoomCost();
+    this.roomsService.getRoom(this.reservation.roomId)
+      .subscribe(room => this.room = room)
   }
 
   getSummary(): number {
-    let summary = this.roomCost * this.getDatesDiff();
+    let summary = this.room.cost * this.getDatesDiff();
     this.reservation.reservationServices.forEach (service => summary += service.cost);
     return summary;
   }
@@ -34,8 +40,8 @@ export class ReservationComponent implements OnInit {
     return a.diff(b, 'days');
   }
 
-  test(): void {
-    console.log("test");
+  goBack(): void {
+    this.location.back();
   }
 
 }

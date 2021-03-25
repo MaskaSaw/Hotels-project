@@ -115,7 +115,7 @@ namespace Hotels.Controllers
         [HttpGet("Cities")]
         public async Task<ActionResult<IEnumerable<string>>> GetCities([FromQuery] string country, string city)
         {
-             return await _context.Hotels
+            return await _context.Hotels
                 .Where(hotel => hotel.Country == country)
                 .Where(hotel => hotel.City.Contains(city))
                 .Select(hotel => hotel.City)

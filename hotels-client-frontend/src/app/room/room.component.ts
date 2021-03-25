@@ -54,8 +54,8 @@ export class RoomComponent implements OnInit {
     this.reservation = new Reservation();
     this.reservation.roomId = this.id;
     this.reservation.userId = this.authService.getId;
-    let dates = JSON.parse(localStorage.getItem('dates')!);
-    this.reservation.startDate = JSON.parse(localStorage.getItem('dates')!).startDate;
+    const dates = JSON.parse(localStorage.getItem('dates')!);
+    this.reservation.startDate = dates.startDate;
     this.reservation.endDate = dates.endDate;
     for (let i = 0; i < this.services.length; i++) {
       this.includedServices.push(false);
@@ -64,7 +64,6 @@ export class RoomComponent implements OnInit {
 
   confirmReservation() {
     this.includeServices();
-    this.reservationsService.saveRoomCost(this.room.cost);
     this.reservationsService.saveReservation(this.reservation);
     this.router.navigate([`/reservation/confirm`]);
   }
@@ -73,7 +72,7 @@ export class RoomComponent implements OnInit {
     this.reservation.reservationServices = [];
     this.services.forEach((service, i) => {
       if (this.includedServices[i]) {
-        let newService = new ReservationService();
+        const newService = new ReservationService();
         newService.name = service.name;
         newService.cost = service.cost;
         this.reservation.reservationServices.push(newService);

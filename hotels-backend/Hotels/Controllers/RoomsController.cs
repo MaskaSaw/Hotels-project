@@ -51,7 +51,7 @@ namespace Hotels.Controllers
         }
 
     //GET: api/Rooms/5/Reservations
-    [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}/Reservations")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
         {

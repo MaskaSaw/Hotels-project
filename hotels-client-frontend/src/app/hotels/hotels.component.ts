@@ -17,7 +17,8 @@ import { HotelsService } from './hotels.service';
 export class HotelsComponent implements OnInit {
   hotels: Hotel[] = [];
   params: Params = new Params;
-  minDate = new Date();
+  startMinDate = new Date();
+  endMinDate = new Date();
   countries: string[] = [];
   cities: string[] = [];
   searchTermChanged: Subject<string> = new Subject<string>();
@@ -31,6 +32,7 @@ export class HotelsComponent implements OnInit {
     this.getHotels();
     this.getCountriesData();
     this.params = new Params;
+    this.endMinDate.setDate(this.startMinDate.getDate() + 1);
   }
 
   getHotels(): void {

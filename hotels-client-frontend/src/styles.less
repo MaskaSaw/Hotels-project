@@ -114,35 +114,39 @@ body {
                 outline-width: 0;
             }
         }
+    }
+}
 
-        button {
-            background: white;
-            border: 2px solid @customDarkBlue;
-            color: @customDarkBlue;
-            border-radius: 5px;
-            height: 26px;
-            font-weight: bold;
-            font-size: 17px;
-            cursor: pointer;
+button {
+    background: white;
+    border: 2px solid @customDarkBlue;
+    color: @customDarkBlue;
+    border-radius: 5px;
+    height: 26px;
+    font-weight: bold;
+    font-size: 17px;
+    cursor: pointer;
 
-            &:hover {
-                color: white;
-                background-color: @customDarkBlue;
-            }
+    &:hover {
+        color: white;
+        background-color: @customDarkBlue;
+    }
 
-            &:disabled {
-                color: @customLightBlue;
-                border-color: @customLightBlue;
-                cursor: default;
+    &:disabled {
+        color: @customLightBlue;
+        border-color: @customLightBlue;
+        cursor: default;
 
-                &:hover {
-                    color: @customLightBlue;
-                    border-color: @customLightBlue;
-                    background-color: white;
-                }
-            }
+        &:hover {
+            color: @customLightBlue;
+            border-color: @customLightBlue;
+            background-color: white;
         }
     }
+}
+
+ul {
+    list-style-type:none;
 }
 
 .hotel-detailed-container {

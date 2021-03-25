@@ -2,8 +2,8 @@
 	<h1>Welcome to the NeBooking.com! Here are the hotels you might be interested in:</h1>
 	<h3>Select date range:</h3>
 	<div class="hotels-input">
-		<input type="text" placeholder="Check-in" [(ngModel)]="params.checkIn" bsDatepicker [minDate]="minDate">
-		<input type="text" placeholder="Check-out" [(ngModel)]="params.checkOut" bsDatepicker [minDate]="minDate">
+		<input type="text" placeholder="Check-in" [(ngModel)]="params.checkIn" bsDatepicker [minDate]="startMinDate">
+		<input type="text" placeholder="Check-out" [(ngModel)]="params.checkOut" bsDatepicker [minDate]="endMinDate">
 		<br>
 		<h3>Select your destination point: </h3>
 		<div>
