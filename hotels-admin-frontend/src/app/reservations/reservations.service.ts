@@ -38,14 +38,6 @@ export class ReservationsService {
     this.reservations = undefined;
    }
 
-  storeRoomReservations(reservations: Reservation[]): void {
-    this.reservations = reservations;
-  }
-
-  storeUserReservations(reservations: Reservation[]): void {
-    this.reservations = reservations;
-  }
-
   getReservations(id: number, type: string) : Observable<Reservation[]>{
     const url = this.setUrl(id, type);
     return this.http.get<Reservation[]>(url, this.httpOptions)
@@ -79,10 +71,6 @@ export class ReservationsService {
         catchError(this.handleError<Reservation>('deleteRoom')
       )
     );
-  }
-
-  takeReservations(): Reservation[] {
-    return this.reservations as Reservation[];
   }
 
   setUrl(id: number, type: string): string {

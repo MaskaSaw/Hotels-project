@@ -24,18 +24,13 @@
 			</li>
 			<li>
 				<h2>Want to order additional services?</h2>
+				<ul *ngFor="let service of services, let i = index">
+					<li>
+						<label>{{service.name}} : {{service.cost}}$</label><input type="checkbox" [(ngModel)]="includedServices[i]">
+					</li>
+				</ul>
 			</li>
-			<li> 
-				<label>Parking</label>
-				<input class="date-pick" type="checkbox" [(ngModel)]="reservation.parking"/>    
-			</li> 
-			<li> 
-				<label>Massage</label>
-				<input type="checkbox" [(ngModel)]="reservation.massage"/>     
-			</li>  
-			<li> 
-				<label>Extra Towels</label>
-				<input type="checkbox" [(ngModel)]="reservation.extraTowels"/>     
+			<li>	
 			</li>
 		</ul>
 		<button (click)="confirmReservation()">Create reservation</button>

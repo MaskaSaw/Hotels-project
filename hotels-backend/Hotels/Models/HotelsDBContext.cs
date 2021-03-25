@@ -21,6 +21,7 @@ namespace Hotels.Models
         public virtual DbSet<Reservation> Reservations { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<Service> Services { get; set; }
+        public virtual DbSet<ReservationService> ReservationServices { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
 
@@ -81,6 +82,18 @@ namespace Hotels.Models
                 entity.HasOne<Hotel>()
                    .WithMany(p => p.Services)
                    .HasForeignKey(d => d.HotelId)
+                   .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<ReservationService>(entity =>
+            {
+                entity.Property(e => e.Name).HasMaxLength(20);
+
+                entity.Property(e => e.Cost).HasPrecision(9, 2);
+
+                entity.HasOne<Reservation>()
+                   .WithMany(p => p.ReservationServices)
+                   .HasForeignKey(d => d.ReservationId)
                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 

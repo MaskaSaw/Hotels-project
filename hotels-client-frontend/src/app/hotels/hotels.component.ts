@@ -60,6 +60,7 @@ export class HotelsComponent implements OnInit {
   }
 
   openDetailed(hotelId: number): void {
+    this.hotelsService.saveDates(this.params.checkIn, this.params.checkOut);
     this.router.navigate([`/detailed/hotel/${hotelId}`]);
   }
 

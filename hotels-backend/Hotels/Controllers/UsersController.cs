@@ -77,6 +77,7 @@ namespace Hotels.Controllers
             if (identity.GetAuthorizedUserId() == id || identity.GetAuthorizedUserRole() == "Admin")
             {
                 return await _context.Reservations
+                    .Include(reservation => reservation.ReservationServices)
                     .Where(reservation => reservation.UserId == id)
                     .ToListAsync();
             }

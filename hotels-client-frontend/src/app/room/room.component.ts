@@ -6,6 +6,9 @@ import { Room } from '../room';
 import { RoomsService } from './rooms.service';
 import { Reservation } from '../reservation';
 import { ReservationsService } from '../reservation/reservations.service';
+import { Service } from '../service';
+import { AuthService } from '../authentication/auth.service';
+import { ReservationService } from '../reservationService';
 
 @Component({
   selector: 'app-room',
@@ -18,9 +21,12 @@ export class RoomComponent implements OnInit {
   id : number = 0;
   reserving: boolean = false;
   reservation: Reservation = new Reservation();
+  services: Service[] = [];
+  includedServices: boolean[] = [];
 
   constructor(
     private roomsService: RoomsService,
+    private authService: AuthService,
     private reservationsService: ReservationsService,
     private route: ActivatedRoute,
     private router: Router,
@@ -30,6 +36,8 @@ export class RoomComponent implements OnInit {
   ngOnInit(): void {
     this.id = +this.route.snapshot.paramMap.get('id')!;
     this.getRoom();
+    this.roomsService.getServices(this.id)
+      .subscribe(services => this.services = services);
   }
 
   getRoom(): void {
@@ -45,12 +53,32 @@ export class RoomComponent implements OnInit {
     this.reserving = true;
     this.reservation = new Reservation();
     this.reservation.roomId = this.id;
-    this.reservation.userId = 16;
+    this.reservation.userId = this.authService.getId;
+    let dates = JSON.parse(localStorage.getItem('dates')!);
+    this.reservation.startDate = JSON.parse(localStorage.getItem('dates')!).startDate;
+    this.reservation.endDate = dates.endDate;
+    for (let i = 0; i < this.services.length; i++) {
+      this.includedServices.push(false);
+    }
   }
 
   confirmReservation() {
+    this.includeServices();
+    this.reservationsService.saveRoomCost(this.room.cost);
     this.reservationsService.saveReservation(this.reservation);
     this.router.navigate([`/reservation/confirm`]);
+  }
+
+  includeServices(): void {
+    this.reservation.reservationServices = [];
+    this.services.forEach((service, i) => {
+      if (this.includedServices[i]) {
+        let newService = new ReservationService();
+        newService.name = service.name;
+        newService.cost = service.cost;
+        this.reservation.reservationServices.push(newService);
+      }
+    })
   }
 
 }

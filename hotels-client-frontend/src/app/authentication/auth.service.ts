@@ -67,6 +67,10 @@ export class AuthService {
     return jwt_decode<any>(localStorage.getItem('user_auth_token')!).unique_name;   
   }
 
+  public get getId(): number {
+    return +jwt_decode<any>(localStorage.getItem('user_auth_token')!).nameid;
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);

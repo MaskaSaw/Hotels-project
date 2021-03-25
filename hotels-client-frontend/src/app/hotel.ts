@@ -1,4 +1,5 @@
 import { Room } from "./room";
+import { Service } from "./service";
 
 export class Hotel {
 
@@ -7,11 +8,9 @@ export class Hotel {
     country: string;
     city: string;
     address: string;
-    parking: boolean;
-    massage: boolean;
-    extraTowels: boolean;
     image: string;
     rooms: Room[];
+    services: Service[];
 
     constructor() {
         this.id = 0;
@@ -19,11 +18,9 @@ export class Hotel {
         this.country = '';
         this.city = '';
         this.address = '';
-        this.parking = false;
-        this.massage = false;
-        this.extraTowels = false;
         this.image = '';
         this.rooms = [];
+        this.services = [];
     }
 
 }
