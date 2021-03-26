@@ -1,40 +1,38 @@
 <div class="room-container">
-	<h1>Room number {{room.roomNumber}}</h1>
-	<img [src]="room.image" height="300px">
-	<div>
-		<p>Type: {{room.roomType}}</p>
-		<p>Vacant beds: {{room.vacantBeds}}</p>
-		<p>Cost: {{room.cost}}$ per day</p>
-		<p>Available for reservation: {{room.available}}</p>
-	</div>
-	<button (click)="goBack()"> <-- Back to hotel</button>
-	<button (click)="initReservation()">Make reservation</button>
-	<div *ngIf="reserving" class="reservation-form">
-		<ul>
-			<li>
-				<h2>Please, select your reservation parameters:</h2>
-			</li>
-			<li>
-				<label>Arrival time:</label>
-				<input type="time" [(ngModel)]="reservation.arrivalTime"/>
-			</li>
-			<li>
-				<label>Departure time:</label>
-				<input type="time" [(ngModel)]="reservation.departureTime"/>
-			</li>
-			<li>
-				<h2>Want to order additional services?</h2>
-				<ul *ngFor="let service of services, let i = index">
-					<li>
-						<label>{{service.name}} : {{service.cost}}$</label><input type="checkbox" [(ngModel)]="includedServices[i]">
-					</li>
-				</ul>
-			</li>
-			<li>	
-			</li>
-		</ul>
-		<button (click)="confirmReservation()">Create reservation</button>
-	</div>
+    <h1>Room number {{room.roomNumber}}</h1>
+    <img [src]="room.image" height="300px">
+    <div>
+        <p>Type: {{room.roomType}}</p>
+        <p>Vacant beds: {{room.vacantBeds}}</p>
+        <p>Cost: {{room.cost}}$ per day</p>
+        <p>Available for reservation: {{room.available}}</p>
+    </div>
+    <button (click)="goBack()"> <-- Back to hotel</button>
+    <button (click)="initReservation()">Make reservation</button>
+    <div *ngIf="reserving" class="reservation-form">
+    <ul>
+        <li>
+            <h2>Please, select your reservation parameters:</h2>
+        </li>
+        <li>
+            <label>Arrival time:</label>
+            <input type="time" [(ngModel)]="reservation.arrivalTime"/>
+        </li>
+        <li>
+            <label>Departure time:</label>
+            <input type="time" [(ngModel)]="reservation.departureTime"/>
+        </li>
+        <li>
+            <h2>Want to order additional services?</h2>
+            <ul *ngFor="let service of services, let i = index">
+                <li>
+                    <label>{{service.name}} : {{service.cost}}$</label><input type="checkbox" [(ngModel)]="includedServices[i]">
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <button (click)="confirmReservation()">Create reservation</button>
+    </div>
 </div>
 
 

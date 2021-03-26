@@ -73,17 +73,9 @@ export class ReservationsService {
     localStorage.setItem('reservation', JSON.stringify(reservation));
   }
 
-  saveRoomCost(roomCost: number) {
-    localStorage.setItem('roomCost', roomCost.toString());
-  }
-
   takeReservation(): Reservation {
     this.reservation = JSON.parse(localStorage.getItem('reservation')!) as Reservation;
     return this.reservation;
-  }
-
-  getRoomCost(): number {
-    return +JSON.parse(localStorage.getItem('roomCost')!);
   }
 
   setUrl(id: number, type: string): string {
