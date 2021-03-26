@@ -7,6 +7,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Room } from '../room';
 import { ApiPaths } from '../api-paths';
 import { environment } from 'src/environments/environment';
+import { Service } from '../service';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,15 @@ export class RoomsService {
     return this.http.get<Room>(url)
       .pipe(
         catchError(this.handleError<Room>('getRoom')
+      )
+    );
+  }
+
+  getServices(id: number) {
+    const url = `${this.roomsUrl}/${id}/services`;
+    return this.http.get<Service[]>(url)
+      .pipe(
+        catchError(this.handleError<Service[]>('getServices', [])
       )
     );
   }

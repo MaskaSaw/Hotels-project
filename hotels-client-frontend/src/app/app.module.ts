@@ -34,7 +34,7 @@ import { AuthGuard } from './auth.guard';
     BrowserAnimationsModule,
     BsDatepickerModule.forRoot(),
     DatepickerModule.forRoot(),
-    TypeaheadModule
+    TypeaheadModule.forRoot()
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

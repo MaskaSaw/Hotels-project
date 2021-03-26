@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace Hotels.Controllers
 {
-    [Route("api/[controller]") ]
+    [Route("api/[controller]")]
     [ApiController]
     public class RoomsController : ControllerBase
     {
@@ -39,12 +39,24 @@ namespace Hotels.Controllers
             return room;
         }
 
-        //GET: api/Rooms/5/Reservations
+        // GET: api/Rooms/5/Services
+        [HttpGet("{id}/Services")]
+        public async Task<ActionResult<IEnumerable<Service>>> GetServices(int id)
+        {
+            var room = await _context.Rooms.FindAsync(id);
+
+            return await _context.Services
+                .Where(service => service.HotelId == room.HotelId)
+                .ToListAsync();
+        }
+
+    //GET: api/Rooms/5/Reservations
         [Authorize(Roles = "Admin")]
         [HttpGet("{id}/Reservations")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
         {
             return await _context.Reservations
+                .Include(reservation => reservation.ReservationServices)
                 .Where(reservation => reservation.RoomId == id)
                 .ToListAsync();
         }

@@ -25,12 +25,12 @@ namespace Hotels.Controllers
         }
 
         // GET: api/Reservations
-        [Authorize (Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations([FromQuery] int page)
         {
             return await _context.Reservations
-                .Skip((page - 1)* _itemsCount)
+                .Skip((page - 1) * _itemsCount)
                 .Take(_itemsCount)
                 .ToListAsync();
         }
@@ -60,22 +60,49 @@ namespace Hotels.Controllers
         // PUT: api/Reservations/5
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReservation(int id, Reservation modifiedReservation)
+        public async Task<IActionResult> PutReservation(int id, Reservation reservation)
         {
-            if (id != modifiedReservation.Id)
+            if (id != reservation.Id)
             {
                 return BadRequest();
             }
 
-            var reservation = await _context.Reservations.FindAsync(id);
+            var existingServices = await _context.ReservationServices
+                .Where(service => service.ReservationId == id)
+                .ToListAsync();
+
             var identity = HttpContext.User.Identity as ClaimsIdentity;
 
             if (identity.GetAuthorizedUserId() == reservation.UserId || identity.GetAuthorizedUserRole() == "Admin")
             {
-                _context.Entry(modifiedReservation).State = EntityState.Modified;
+
+                foreach (var service in reservation.ReservationServices)
+                {
+                    var existingService = existingServices.Find(existingService => existingService.Id == service.Id);
+
+                    if (existingService != null)
+                    {
+                        _context.Entry(existingService).CurrentValues.SetValues(service);
+                    }
+                    else
+                    {
+                        _context.ReservationServices.Add(service);
+                    }
+                }
+
+                foreach (var existingService in existingServices)
+                {
+                    if (!reservation.ReservationServices.Any(service => service.Id == existingService.Id))
+                    {
+                        _context.ReservationServices.Remove(existingService);
+                    }
+                }
+
+                _context.Entry(reservation).State = EntityState.Modified;
 
                 try
                 {
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

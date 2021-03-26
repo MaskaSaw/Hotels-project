@@ -22,7 +22,7 @@ namespace Hotels.JsonConverters
                 value,
                 "h\\:mm",
                 CultureInfo.InvariantCulture,
-                TimeSpanStyles.AssumeNegative,
+                TimeSpanStyles.None,
                 out var interval)
             )
             {

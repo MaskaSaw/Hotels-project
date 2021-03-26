@@ -1,11 +1,18 @@
 <div class="reservation-container">
-  <h1>Your reservation:</h1>
-  <p>Reservation start date: {{reservation.startDate | date}}</p>
-  <p>Reservation end date: {{reservation.endDate | date}}</p>
-  <p>Arrival time: {{reservation.arrivalTime}}</p>
-  <p>Departure time: {{reservation.departureTime}}</p>
-  <p>Massage: {{reservation.massage}}</p>
-  <p>Parking: {{reservation.parking}}</p>
-  <p>Extra towels: {{reservation.extraTowels}}</p>
-  <button>Confirm reservation</button>
+	<h1>Your reservation:</h1>
+	<p>Reservation start date: {{reservation.startDate | date}}</p>
+	<p>Reservation end date: {{reservation.endDate | date}}</p>
+	<p>Arrival time: {{reservation.arrivalTime}}</p>
+	<p>Departure time: {{reservation.departureTime}}</p>
+	<h3>Additional services:</h3>
+	<ul *ngFor="let service of reservation.reservationServices">
+		<li>
+			<label>{{service.name}} : {{service.cost}}$</label>
+		</li>
+	</ul>
+	<h2>Summary: {{getSummary()}}$</h2>
+	<button>Confirm reservation</button>
+	<br>
+	<br>
+	<button (click)="goBack()">Cancel</button>
 </div>

@@ -9,6 +9,7 @@ import { ApiPaths } from '../api-paths';
 import { MessageService } from '../messages/message.service';
 import { AuthService } from '../login/auth.service';
 import { environment } from 'src/environments/environment';
+import { Service } from '../service';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,15 @@ export class RoomsService {
     return this.http.get<Room[]>(url)
       .pipe(
         catchError(this.handleError<Room[]>('getRooms', [])
+      )
+    );
+  }
+
+  getServices(id: number) {
+    const url = `${this.roomsUrl}/${id}/services`;
+    return this.http.get<Service[]>(url)
+      .pipe(
+        catchError(this.handleError<Service[]>('getServices', [])
       )
     );
   }

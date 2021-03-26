@@ -159,8 +159,6 @@ namespace Hotels.Controllers
                 }
             }
 
-
-
             _context.Entry(hotel).State = EntityState.Modified;
 
             try

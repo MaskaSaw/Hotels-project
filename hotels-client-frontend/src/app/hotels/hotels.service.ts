@@ -88,6 +88,13 @@ export class HotelsService {
     );
   }
 
+  saveDates(startDate: Date, endDate: Date): void {
+    localStorage.setItem('dates', JSON.stringify({
+      startDate: startDate,
+      endDate: endDate
+    }));
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);

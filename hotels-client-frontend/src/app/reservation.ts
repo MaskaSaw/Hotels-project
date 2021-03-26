@@ -1,3 +1,4 @@
+import { ReservationService } from "./reservationService";
 
 export class Reservation {
     id: number;
@@ -7,9 +8,8 @@ export class Reservation {
     endDate: Date;
     arrivalTime: string;
     departureTime: string;
-    parking: boolean;
-    massage: boolean;
-    extraTowels: boolean;
+    reservationServices: ReservationService[];
+
 
     constructor() {
         this.id = 0;
@@ -19,8 +19,6 @@ export class Reservation {
         this.endDate = new Date();
         this.arrivalTime = '00:00';
         this.departureTime = '00:00';
-        this.parking = false;
-        this.massage = false;
-        this.extraTowels = false;
+        this.reservationServices = [];
     }
 }
