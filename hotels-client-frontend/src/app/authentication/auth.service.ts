@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment';
 import { ApiPaths } from '../api-paths';
 
 @Injectable({ providedIn: 'root'})
+
 export class AuthService {
 
   private loginUrl = environment.baseUrl + ApiPaths.Auth + '/login';

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -8,11 +8,15 @@ import { Reservation } from '../reservation';
 import { ApiPaths } from '../api-paths';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../authentication/auth.service';
+import { UserReservation } from '../user-reservation';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservationsService {
+  static getUserReservations(getId: any) {
+    throw new Error('Method not implemented.');
+  }
 
   reservation: Reservation = new Reservation;
 
@@ -34,11 +38,29 @@ export class ReservationsService {
     private authService: AuthService
   ) { }
 
-  getReservation(id: number, type: string) : Observable<Reservation[]>{
+  getReservation(id: number, type: string) : Observable<Reservation[]> {
     const url = this.setUrl(id, type);
     return this.http.get<Reservation[]>(url, this.httpOptions)
       .pipe(
         catchError(this.handleError<Reservation[]>('getReservations', [])
+      )
+    );
+  }
+
+  getUserReservations(id: number, all: boolean): Observable<UserReservation[]> {
+    const url = `${this.usersUrl}/${id}/reservations/detailed`;
+    const httpOptions: object = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': this.authService.getToken 
+      }),
+      params: {
+        all: all
+      }
+    };
+    return this.http.get<UserReservation[]>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError<UserReservation[]>('getUserReservations', [])
       )
     );
   }

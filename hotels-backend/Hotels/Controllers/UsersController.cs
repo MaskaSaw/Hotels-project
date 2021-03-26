@@ -85,6 +85,64 @@ namespace Hotels.Controllers
             return Forbid();
         }
 
+        [Authorize]
+        [HttpGet("{id}/Reservations/Detailed")]
+        public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetReservationsDetailed(int id, [FromQuery] bool all)
+        {
+            var hotels = await _context.Hotels
+                .Include(hotel => hotel.Rooms)
+                .Where(hotel => hotel.Rooms
+                        .Any(room => room.Reservations
+                            .Any(reservation => reservation.UserId == id)
+                        )
+                    )
+                .ToListAsync();
+
+            List<ReservationDTO> reservations = new List<ReservationDTO>();
+
+            foreach (var hotel in hotels)
+            {
+                foreach (var room in hotel.Rooms)
+                {
+                    var filteredReservations = _context.Reservations
+                        .Include(reservation => reservation.ReservationServices)
+                        .Where(reservation => reservation.RoomId == room.Id && reservation.UserId == id)
+                        .AsQueryable();
+
+                    if (!all)
+                    {
+                        filteredReservations = filteredReservations
+                            .Where(reservation => reservation.StartDate > DateTime.Today);
+                    }
+
+                    room.Reservations = await filteredReservations.ToListAsync();
+
+                    foreach (var reservation in room.Reservations)
+                    {
+                        if (reservation.UserId == id)
+                        {
+                            reservations.Add( new ReservationDTO {
+                                Id = reservation.Id,
+                                RoomId = reservation.RoomId,
+                                ArrivalTime = reservation.ArrivalTime,
+                                DepartureTime = reservation.DepartureTime,
+                                StartDate = reservation.StartDate,
+                                EndDate = reservation.EndDate,
+                                ReservationServices = reservation.ReservationServices,
+                                RoomNumber = room.RoomNumber,
+                                HotelName = hotel.Name,
+                                Country = hotel.Country,
+                                City = hotel.City
+                            });
+                        }
+                    }
+                }
+            }
+
+            return reservations;
+
+        }
+
         // PUT: api/Users/5
         [Authorize]
         [HttpPut("{id}")]

@@ -15,6 +15,7 @@ import { RoomComponent } from './room/room.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { AuthGuard } from './auth.guard';
+import { UserReservationsComponent } from './user-reservations/user-reservations.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { AuthGuard } from './auth.guard';
     HotelDetailedComponent,
     RoomComponent,
     ReservationComponent,
-    AuthenticationComponent
+    AuthenticationComponent,
+    UserReservationsComponent
   ],
   imports: [
     BrowserModule,

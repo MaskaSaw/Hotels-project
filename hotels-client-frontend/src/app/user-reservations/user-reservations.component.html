@@ -1,0 +1,43 @@
+<div class="user-reservations-container">
+    <br>
+    <h1>Your reservations: </h1>
+    <br>
+    <button (click)="showFullReservations()" *ngIf="currentReservations">Show outdated reservations</button>
+    <button (click)="showCurrentReservations()" *ngIf="!currentReservations">Show current reservations</button>
+    <br>
+    <br>
+    <table class="table table-striped" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Hotel</th>
+                <th>Room</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Arrival date</th>
+                <th>Departure date</th>
+                <th>Services</th>
+                <th>Change arrival time</th>
+            </tr>
+        </thead>
+        <br>
+        <br>
+        <tbody>
+            <tr *ngFor="let reservation of reservations">
+                <td>{{reservation.hotelName}}</td>
+                <td>{{reservation.roomNumber}}</td>
+                <td>{{reservation.arrivalTime}}</td>
+                <td>{{reservation.departureTime}}</td>
+                <td>{{reservation.startDate | date}}</td>
+                <td>{{reservation.endDate | date}}</td>
+                <td>
+                    <ul>
+                        <li *ngFor="let service of reservation.reservationServices">{{service.name}}</li>
+                    </ul>
+                </td>
+                <td>
+                    <button *ngIf="!checkDates(reservation.endDate)">Change arrival time</button>
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+</div>
