@@ -89,58 +89,44 @@ namespace Hotels.Controllers
         [HttpGet("{id}/Reservations/Detailed")]
         public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetReservationsDetailed(int id, [FromQuery] bool all)
         {
-            var hotels = await _context.Hotels
-                .Include(hotel => hotel.Rooms)
-                .Where(hotel => hotel.Rooms
-                        .Any(room => room.Reservations
-                            .Any(reservation => reservation.UserId == id)
-                        )
-                    )
-                .ToListAsync();
+            var reservations = _context.Reservations
+                .Include(reservation => reservation.ReservationServices)
+                .Where(reservation => reservation.UserId == id)
+                .AsQueryable();
 
-            List<ReservationDTO> reservations = new List<ReservationDTO>();
-
-            foreach (var hotel in hotels)
+            if (!all)
             {
-                foreach (var room in hotel.Rooms)
-                {
-                    var filteredReservations = _context.Reservations
-                        .Include(reservation => reservation.ReservationServices)
-                        .Where(reservation => reservation.RoomId == room.Id && reservation.UserId == id)
-                        .AsQueryable();
+                reservations = reservations
+                    .Where(reservation => reservation.StartDate > DateTime.Today);
+            };
 
-                    if (!all)
+            return await reservations
+                .Join(_context.Rooms,
+                    reservation => reservation.RoomId,
+                    room => room.Id,
+                    (reservation, room) => new
                     {
-                        filteredReservations = filteredReservations
-                            .Where(reservation => reservation.StartDate > DateTime.Today);
-                    }
-
-                    room.Reservations = await filteredReservations.ToListAsync();
-
-                    foreach (var reservation in room.Reservations)
+                        reservation = reservation,
+                        room = room
+                    })
+                .Join(_context.Hotels,
+                    temp => temp.room.HotelId,
+                    hotel => hotel.Id,
+                    (temp, hotel) => new ReservationDTO
                     {
-                        if (reservation.UserId == id)
-                        {
-                            reservations.Add( new ReservationDTO {
-                                Id = reservation.Id,
-                                RoomId = reservation.RoomId,
-                                ArrivalTime = reservation.ArrivalTime,
-                                DepartureTime = reservation.DepartureTime,
-                                StartDate = reservation.StartDate,
-                                EndDate = reservation.EndDate,
-                                ReservationServices = reservation.ReservationServices,
-                                RoomNumber = room.RoomNumber,
-                                HotelName = hotel.Name,
-                                Country = hotel.Country,
-                                City = hotel.City
-                            });
-                        }
-                    }
-                }
-            }
-
-            return reservations;
-
+                        Id = temp.reservation.Id,
+                        RoomId = temp.room.Id,
+                        ArrivalTime = temp.reservation.ArrivalTime,
+                        DepartureTime = temp.reservation.DepartureTime,
+                        StartDate = temp.reservation.StartDate,
+                        EndDate = temp.reservation.EndDate,
+                        ReservationServices = temp.reservation.ReservationServices,
+                        RoomNumber = temp.room.RoomNumber,
+                        HotelName = hotel.Name,
+                        Country = hotel.Country,
+                        City = hotel.City
+                    })
+                .ToListAsync();
         }
 
         // PUT: api/Users/5
