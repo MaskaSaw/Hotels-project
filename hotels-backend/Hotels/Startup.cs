@@ -35,7 +35,9 @@ namespace Hotels
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<HotelsDBContext>(opt => opt.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotels", Version = "v1" });

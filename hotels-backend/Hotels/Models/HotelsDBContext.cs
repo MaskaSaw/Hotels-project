@@ -46,7 +46,7 @@ namespace Hotels.Models
 
                 entity.Property(e => e.StartDate).HasColumnType("date");
 
-                entity.HasOne<Room>()
+                entity.HasOne<Room>(r => r.Room)
                     .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.RoomId);
 
@@ -67,7 +67,7 @@ namespace Hotels.Models
 
                 entity.Property(e => e.RoomType).HasMaxLength(50);
 
-                entity.HasOne<Hotel>()
+                entity.HasOne<Hotel>(r => r.Hotel)
                     .WithMany(p => p.Rooms)
                     .HasForeignKey(d => d.HotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull);

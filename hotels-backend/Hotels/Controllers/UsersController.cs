@@ -101,30 +101,19 @@ namespace Hotels.Controllers
             };
 
             return await reservations
-                .Join(_context.Rooms,
-                    reservation => reservation.RoomId,
-                    room => room.Id,
-                    (reservation, room) => new
+                .Select(reservation => new ReservationDTO
                     {
-                        reservation = reservation,
-                        room = room
-                    })
-                .Join(_context.Hotels,
-                    temp => temp.room.HotelId,
-                    hotel => hotel.Id,
-                    (temp, hotel) => new ReservationDTO
-                    {
-                        Id = temp.reservation.Id,
-                        RoomId = temp.room.Id,
-                        ArrivalTime = temp.reservation.ArrivalTime,
-                        DepartureTime = temp.reservation.DepartureTime,
-                        StartDate = temp.reservation.StartDate,
-                        EndDate = temp.reservation.EndDate,
-                        ReservationServices = temp.reservation.ReservationServices,
-                        RoomNumber = temp.room.RoomNumber,
-                        HotelName = hotel.Name,
-                        Country = hotel.Country,
-                        City = hotel.City
+                        Id = reservation.Id,
+                        RoomId = reservation.Id,
+                        ArrivalTime = reservation.ArrivalTime,
+                        DepartureTime = reservation.DepartureTime,
+                        StartDate = reservation.StartDate,
+                        EndDate = reservation.EndDate,
+                        ReservationServices = reservation.ReservationServices,
+                        RoomNumber = reservation.Room.RoomNumber,
+                        HotelName = reservation.Room.Hotel.Name,
+                        Country = reservation.Room.Hotel.Country,
+                        City = reservation.Room.Hotel.City
                     })
                 .ToListAsync();
         }
