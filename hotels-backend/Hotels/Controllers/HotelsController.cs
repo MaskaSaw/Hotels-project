@@ -42,12 +42,12 @@ namespace Hotels.Controllers
 
             if (!string.IsNullOrEmpty(inputParams.Country))
             {
-                hotels = hotels.Where(hotel => hotel.Country == inputParams.Country);
+                hotels = hotels.Where(hotel => hotel.Country.Contains(inputParams.Country));
             }
 
             if (!string.IsNullOrEmpty(inputParams.City))
             {
-                hotels = hotels.Where(hotel => hotel.City == inputParams.City);
+                hotels = hotels.Where(hotel => hotel.City.Contains(inputParams.City));
             }
 
             if (inputParams.NumberOfResidents != null && inputParams.NumberOfResidents != 0)
@@ -76,7 +76,8 @@ namespace Hotels.Controllers
             return await hotels
                 .Skip((page - 1) * returnedNumberOfItems)
                 .Take(returnedNumberOfItems)
-                .Select(hotel => new HotelDTO
+                .Select(hotel =>
+                    new HotelDTO
                     {
                         Id = hotel.Id,
                         Name = hotel.Name,
@@ -86,7 +87,8 @@ namespace Hotels.Controllers
                         Image = hotel.Image,
                         Services = hotel.Services,
                         RoomCount = hotel.Rooms.Count
-                    })
+                    }
+                )
                 .ToListAsync();
         }
 
@@ -124,7 +126,8 @@ namespace Hotels.Controllers
             return await _context.Rooms
                 .Include(room => room.Reservations)
                 .Where(room => room.HotelId == id)
-                .Select(room => new RoomDTO
+                .Select(room =>
+                    new RoomDTO
                     {
                         Id = room.Id,
                         RoomNumber = room.RoomNumber,
@@ -133,7 +136,8 @@ namespace Hotels.Controllers
                         VacantBeds = room.VacantBeds,
                         Image = room.Image,
                         HotelId = room.HotelId
-                    })
+                    }
+                )
                 .ToListAsync();
         }
 

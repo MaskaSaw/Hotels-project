@@ -101,7 +101,8 @@ namespace Hotels.Controllers
             };
 
             return await reservations
-                .Select(reservation => new ReservationDTO
+                .Select(reservation =>
+                    new ReservationDTO
                     {
                         Id = reservation.Id,
                         RoomId = reservation.Id,
@@ -114,7 +115,8 @@ namespace Hotels.Controllers
                         HotelName = reservation.Room.Hotel.Name,
                         Country = reservation.Room.Hotel.Country,
                         City = reservation.Room.Hotel.City
-                    })
+                    }
+                )
                 .ToListAsync();
         }
 
