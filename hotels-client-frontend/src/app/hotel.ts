@@ -9,7 +9,7 @@ export class Hotel {
     city: string;
     address: string;
     image: string;
-    rooms: Room[];
+    roomCount: number;
     services: Service[];
 
     constructor() {
@@ -19,7 +19,7 @@ export class Hotel {
         this.city = '';
         this.address = '';
         this.image = '';
-        this.rooms = [];
+        this.roomCount = 0;
         this.services = [];
     }
 

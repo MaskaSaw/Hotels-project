@@ -85,6 +85,41 @@ namespace Hotels.Controllers
             return Forbid();
         }
 
+        [Authorize]
+        [HttpGet("{id}/Reservations/Detailed")]
+        public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetReservationsDetailed(int id, [FromQuery] bool all)
+        {
+            var reservations = _context.Reservations
+                .Include(reservation => reservation.ReservationServices)
+                .Where(reservation => reservation.UserId == id)
+                .AsQueryable();
+
+            if (!all)
+            {
+                reservations = reservations
+                    .Where(reservation => reservation.StartDate > DateTime.Today);
+            };
+
+            return await reservations
+                .Select(reservation =>
+                    new ReservationDTO
+                    {
+                        Id = reservation.Id,
+                        RoomId = reservation.Id,
+                        ArrivalTime = reservation.ArrivalTime,
+                        DepartureTime = reservation.DepartureTime,
+                        StartDate = reservation.StartDate,
+                        EndDate = reservation.EndDate,
+                        ReservationServices = reservation.ReservationServices,
+                        RoomNumber = reservation.Room.RoomNumber,
+                        HotelName = reservation.Room.Hotel.Name,
+                        Country = reservation.Room.Hotel.Country,
+                        City = reservation.Room.Hotel.City
+                    }
+                )
+                .ToListAsync();
+        }
+
         // PUT: api/Users/5
         [Authorize]
         [HttpPut("{id}")]

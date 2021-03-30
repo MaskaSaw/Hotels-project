@@ -71,10 +71,6 @@
             </div>
         </li>
         <li> 
-            <label>Available</label>
-            <input type="checkbox" [(ngModel)]="room.available"/>    
-        </li>
-        <li> 
             <label>Image</label>
             <input type="file" accept="image/x-png,image/jpeg" (change)="onSelectFile($event)" #imageUploader/>
             <img [ngClass]="imageToShow ? 'opened-image' : 'closed-image'" [src]="imageToShow">      
@@ -109,7 +105,6 @@
                 <th>Room Type</th>
                 <th>Vacant Beds</th>
                 <th>Cost per day</th>
-                <th>Available</th>
                 <th>Reservations</th>
                 <th></th>
                 <th></th>
@@ -123,7 +118,6 @@
                 <td>{{room.roomType}}</td>
                 <td>{{room.vacantBeds}}</td>
                 <td>{{room.cost}} $</td>
-                <td><input type="checkbox" [(ngModel)]="room.available" disabled/></td>
                 <td><button class="open-button" (click)="openReservations(room.id)">Reservations</button></td>
                 <td><button class="open-button" (click)="editMode(room.id)">Edit</button></td>
                 <td><button class="del-button" (click)="deleteRoom(room.id)">Delete</button></td>
