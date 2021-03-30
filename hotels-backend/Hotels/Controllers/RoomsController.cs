@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Hotels.Models;
 using Hotels.ImageProcessing;
 using Newtonsoft.Json;
+using Hotels.DTOs;
 
 namespace Hotels.Controllers
 {
@@ -27,7 +28,7 @@ namespace Hotels.Controllers
 
         // GET: api/Rooms/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Room>> GetRoom(int id)
+        public async Task<ActionResult<RoomDTO>> GetRoom(int id)
         {
             var room = await _context.Rooms.FindAsync(id);
 
@@ -36,7 +37,16 @@ namespace Hotels.Controllers
                 return NotFound();
             }
 
-            return room;
+            return new RoomDTO
+            {
+                Id = room.Id,
+                RoomNumber = room.RoomNumber,
+                RoomType = room.RoomType,
+                Cost = room.Cost,
+                VacantBeds = room.VacantBeds,
+                Image = room.Image,
+                HotelId = room.HotelId
+            };
         }
 
         // GET: api/Rooms/5/Services
@@ -50,7 +60,7 @@ namespace Hotels.Controllers
                 .ToListAsync();
         }
 
-    //GET: api/Rooms/5/Reservations
+        //GET: api/Rooms/5/Reservations
         [Authorize(Roles = "Admin")]
         [HttpGet("{id}/Reservations")]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)

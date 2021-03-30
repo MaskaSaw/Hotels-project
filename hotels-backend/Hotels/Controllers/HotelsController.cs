@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Hotels.ImageProcessing;
 using Hotels.Models;
 using Newtonsoft.Json;
+using Hotels.DTOs;
 
 namespace Hotels.Controllers
 {
@@ -28,7 +29,7 @@ namespace Hotels.Controllers
 
         // GET: api/Hotels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels(
+        public async Task<ActionResult<IEnumerable<HotelDTO>>> GetHotels(
             [FromQuery] int page,
             int itemsPerPage,
             [FromQuery] HotelsParams inputParams
@@ -71,15 +72,27 @@ namespace Hotels.Controllers
                         )
                     );
             }
+
             return await hotels
                 .Skip((page - 1) * returnedNumberOfItems)
                 .Take(returnedNumberOfItems)
+                .Select(hotel => new HotelDTO
+                    {
+                        Id = hotel.Id,
+                        Name = hotel.Name,
+                        Country = hotel.Country,
+                        City = hotel.City,
+                        Address = hotel.Address,
+                        Image = hotel.Image,
+                        Services = hotel.Services,
+                        RoomCount = hotel.Rooms.Count
+                    })
                 .ToListAsync();
         }
 
         // GET: api/Hotels/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Hotel>> GetHotel(int id)
+        public async Task<ActionResult<HotelDTO>> GetHotel(int id)
         {
             var hotel = await _context.Hotels.FindAsync(id);
 
@@ -88,16 +101,39 @@ namespace Hotels.Controllers
                 return NotFound();
             }
 
-            return hotel;
+            hotel.Services = await _context.Services
+                .Where(service => service.HotelId == hotel.Id)
+                .ToListAsync();
+
+            return new HotelDTO
+            {
+                Id = hotel.Id,
+                Name = hotel.Name,
+                Country = hotel.Country,
+                City = hotel.City,
+                Address = hotel.Address,
+                Image = hotel.Image,
+                Services = hotel.Services
+            };
         }
 
         //GET: api/Hotels/5/Rooms
         [HttpGet("{id}/Rooms")]
-        public async Task<ActionResult<IEnumerable<Room>>> GetRooms(int id)
+        public async Task<ActionResult<IEnumerable<RoomDTO>>> GetRooms(int id)
         {
             return await _context.Rooms
                 .Include(room => room.Reservations)
                 .Where(room => room.HotelId == id)
+                .Select(room => new RoomDTO
+                    {
+                        Id = room.Id,
+                        RoomNumber = room.RoomNumber,
+                        RoomType = room.RoomType,
+                        Cost = room.Cost,
+                        VacantBeds = room.VacantBeds,
+                        Image = room.Image,
+                        HotelId = room.HotelId
+                    })
                 .ToListAsync();
         }
 

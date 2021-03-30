@@ -14,9 +14,6 @@ import { UserReservation } from '../user-reservation';
   providedIn: 'root'
 })
 export class ReservationsService {
-  static getUserReservations(getId: any) {
-    throw new Error('Method not implemented.');
-  }
 
   reservation: Reservation = new Reservation;
 
