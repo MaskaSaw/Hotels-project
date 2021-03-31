@@ -67,18 +67,69 @@ namespace Hotels.Controllers
             return user;
         }
 
+        //GET: api/Users/Names
+        [Authorize]
+        [HttpGet("Names")]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsersByName([FromQuery]string namePart)
+        {
+            return await _context.Users
+                .Where(user => user.Login.Contains(namePart))
+                .Select(user => new UserDTO
+                {
+                    Id = user.Id,
+                    Login = user.Login,
+                    Password = "",
+                    Role = user.Role
+                })
+                .ToListAsync();
+        }
+
         // GET: api/Users/5/Reservations
         [Authorize]
         [HttpGet("{id}/Reservations")]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
+        public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetReservations(
+            int id,
+            [FromQuery] ReservationsParams inputParams
+        )
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
 
             if (identity.GetAuthorizedUserId() == id || identity.GetAuthorizedUserRole() == "Admin")
             {
-                return await _context.Reservations
+                var reservations = _context.Reservations
                     .Include(reservation => reservation.ReservationServices)
                     .Where(reservation => reservation.UserId == id)
+                    .AsQueryable();
+
+                if (!string.IsNullOrEmpty(inputParams.HotelName))
+                {
+                    reservations = reservations.Where(reservation => reservation.Room.Hotel.Name.Contains(inputParams.HotelName));
+                }
+
+                if (!string.IsNullOrEmpty(inputParams.RoomNumber))
+                {
+                    reservations = reservations.Where(reservation => reservation.Room.RoomNumber.Contains(inputParams.RoomNumber));
+                }
+
+                return await reservations
+                    .Select(reservation =>
+                        new ReservationDTO
+                        {
+                            Id = reservation.Id,
+                            RoomId = reservation.RoomId,
+                            UserId = reservation.UserId,
+                            UserName = reservation.User.Login,
+                            ArrivalTime = reservation.ArrivalTime,
+                            DepartureTime = reservation.DepartureTime,
+                            StartDate = reservation.StartDate,
+                            EndDate = reservation.EndDate,
+                            ReservationServices = reservation.ReservationServices,
+                            RoomNumber = reservation.Room.RoomNumber,
+                            HotelName = reservation.Room.Hotel.Name,
+                            Country = reservation.Room.Hotel.Country,
+                            City = reservation.Room.Hotel.City
+                        }
+                    )
                     .ToListAsync();
             }
 

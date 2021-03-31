@@ -9,6 +9,7 @@ using Hotels.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Hotels.Extensions;
+using Hotels.DTOs;
 
 namespace Hotels.Controllers
 {
@@ -126,7 +127,7 @@ namespace Hotels.Controllers
         // POST: api/Reservations
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
+        public async Task<ActionResult<ReservationDTO>> PostReservation(Reservation reservation)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
 
@@ -135,7 +136,29 @@ namespace Hotels.Controllers
                 _context.Reservations.Add(reservation);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetReservation", new { id = reservation.Id }, reservation);
+                var createdReservation = await _context.Reservations
+                    .Include(createdReservation => createdReservation.ReservationServices)
+                    .FirstOrDefaultAsync(createdReservation => reservation.Id == createdReservation.Id);
+
+                return CreatedAtAction("GetReservation",
+                    new { id = reservation.Id },
+                    new ReservationDTO
+                    {
+                        Id = reservation.Id,
+                        RoomId = reservation.RoomId,
+                        UserId = reservation.UserId,
+                        UserName = reservation.User.Login,
+                        ArrivalTime = reservation.ArrivalTime,
+                        DepartureTime = reservation.DepartureTime,
+                        StartDate = reservation.StartDate,
+                        EndDate = reservation.EndDate,
+                        ReservationServices = reservation.ReservationServices,
+                        RoomNumber = reservation.Room.RoomNumber,
+                        HotelName = reservation.Room.Hotel.Name,
+                        Country = reservation.Room.Hotel.Country,
+                        City = reservation.Room.Hotel.City
+                    }
+                );
             }
 
             return Forbid();
@@ -146,7 +169,9 @@ namespace Hotels.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReservation(int id)
         {
-            var reservation = await _context.Reservations.FindAsync(id);
+            var reservation = await _context.Reservations
+                .Include(reservation => reservation.ReservationServices)
+                .FirstOrDefaultAsync(reservation => reservation.Id == id);
 
             if (reservation == null)
             {

@@ -9,6 +9,8 @@ import { Reservation } from '../reservation';
 import { ApiPaths } from '../api-paths';
 import { MessageService } from '../messages/message.service';
 import { environment } from 'src/environments/environment';
+import { ReservationParams } from '../reservationsParams';
+import { ReservationDTO } from '../reservation-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +22,7 @@ export class ReservationsService {
   private roomsUrl = environment.baseUrl + ApiPaths.Rooms;
   private usersUrl = environment.baseUrl + ApiPaths.Users;
   private reservationsUrl = environment.baseUrl + ApiPaths.Reservations;
+  private itemsPerPage = 100;
 
   private get httpOptions(): object {
     return {
@@ -38,19 +41,44 @@ export class ReservationsService {
     this.reservations = undefined;
    }
 
-  getReservations(id: number, type: string) : Observable<Reservation[]>{
+  getReservations(id: number, type: string, inputParams?: ReservationParams) : Observable<ReservationDTO[]>{
     const url = this.setUrl(id, type);
-    return this.http.get<Reservation[]>(url, this.httpOptions)
+    let httpOptions = {};
+
+    if (type === 'room') {
+      httpOptions = {
+        headers: new HttpHeaders({ 
+          'Content-Type': 'application/json',
+          'Authorization': this.authService.getToken 
+        }),
+        params: {
+          userName: inputParams ? inputParams.userName : null 
+        }
+      }
+    }
+    else {
+      httpOptions = {
+        headers: new HttpHeaders({ 
+          'Content-Type': 'application/json',
+          'Authorization': this.authService.getToken 
+        }),
+        params: {
+          hotelName: inputParams ? inputParams.hotelName : null ,
+          roomNumber: inputParams ? inputParams.roomNumber : null
+        }
+      };
+    }
+    return this.http.get<ReservationDTO[]>(url, httpOptions)
       .pipe(
-        catchError(this.handleError<Reservation[]>('getReservations', [])
+        catchError(this.handleError<ReservationDTO[]>('getReservations', [])
       )
     );
   }
 
-  addReservation(reservation: Reservation): Observable<Reservation> {
-    return this.http.post<Reservation>(this.reservationsUrl, reservation, this.httpOptions)
+  addReservation(reservation: Reservation): Observable<ReservationDTO> {
+    return this.http.post<ReservationDTO>(this.reservationsUrl, reservation, this.httpOptions)
       .pipe(
-        catchError(this.handleError<Reservation>('addReservation')
+        catchError(this.handleError<ReservationDTO>('addReservation')
       )
     );
   }

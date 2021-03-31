@@ -15,7 +15,7 @@ export class LocationValidatorDirective implements Validator {
   validate(control: FormControl) {
     
     const value: string = control.value;
-    const format = /[^a-zA-Z\-']/;
+    const format = /[^a-zA-Z\- ']/;
     
     if (value !== null) {
       if (value.length === 0 || value.length > +this.len) {

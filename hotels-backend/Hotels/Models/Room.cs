@@ -10,7 +10,6 @@ namespace Hotels.Models
         public string RoomType { get; set; }
         public int VacantBeds { get; set; }
         public decimal Cost { get; set; }
-        public bool Available { get; set; }
         public string Image { get; set; }
         public int HotelId { get; set; }
         public virtual Hotel Hotel { get; set; }

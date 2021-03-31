@@ -63,11 +63,63 @@ namespace Hotels.Controllers
         //GET: api/Rooms/5/Reservations
         [Authorize(Roles = "Admin")]
         [HttpGet("{id}/Reservations")]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(int id)
+        public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetReservations(int id, [FromQuery] string userName)
         {
-            return await _context.Reservations
-                .Include(reservation => reservation.ReservationServices)
-                .Where(reservation => reservation.RoomId == id)
+            var reservations = _context.Reservations
+                   .Include(reservation => reservation.ReservationServices)
+                   .Where(reservation => reservation.RoomId == id)
+                   .AsQueryable();
+
+            if (!string.IsNullOrEmpty(userName))
+            {
+                reservations = reservations.Where(reservation => reservation.User.Login == userName);
+            }
+
+            return await reservations
+                .Select(reservation =>
+                        new ReservationDTO
+                        {
+                            Id = reservation.Id,
+                            RoomId = reservation.RoomId,
+                            UserId = reservation.UserId,
+                            UserName = reservation.User.Login,
+                            ArrivalTime = reservation.ArrivalTime,
+                            DepartureTime = reservation.DepartureTime,
+                            StartDate = reservation.StartDate,
+                            EndDate = reservation.EndDate,
+                            ReservationServices = reservation.ReservationServices,
+                            RoomNumber = reservation.Room.RoomNumber,
+                            HotelName = reservation.Room.Hotel.Name,
+                            Country = reservation.Room.Hotel.Country,
+                            City = reservation.Room.Hotel.City
+                        }
+                    )
+                    .ToListAsync();
+        }
+
+        //GET: api/Hotels/Names
+        [Authorize]
+        [HttpGet("Numbers")]
+        public async Task<ActionResult<IEnumerable<RoomSearchDTO>>> GetHotelsByName([FromQuery] string roomNumber, string hotelName)
+        {
+            var hotel = _context.Hotels
+                    .Where(hotel => hotel.Name == hotelName)
+                    .FirstOrDefault();
+
+            if (hotel == null)
+            {
+                return new List<RoomSearchDTO>();
+            }
+            return await _context.Rooms
+                .Where(room => room.Hotel.Name.Contains(hotelName))
+                .Where(room => room.RoomNumber.Contains(roomNumber))
+                .Select(room =>
+                    new RoomSearchDTO
+                    {
+                        Id = room.Id,
+                        RoomNumber = room.RoomNumber
+                    }
+                )
                 .ToListAsync();
         }
 
