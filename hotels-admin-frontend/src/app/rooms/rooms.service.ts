@@ -10,6 +10,7 @@ import { MessageService } from '../messages/message.service';
 import { AuthService } from '../login/auth.service';
 import { environment } from 'src/environments/environment';
 import { Service } from '../service';
+import { RoomSearch } from '../room-search';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,26 @@ export class RoomsService {
     return this.http.get<Service[]>(url)
       .pipe(
         catchError(this.handleError<Service[]>('getServices', [])
+      )
+    );
+  }
+
+  getRoomNumbers(roomNumber: string, hotelName: string): Observable<RoomSearch[]> {
+    const url = `${this.roomsUrl}/numbers`;
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': this.authService.getToken 
+      }),
+      params: {
+        roomNumber: roomNumber,
+        hotelName: hotelName
+      }
+    };
+
+    return this.http.get<RoomSearch[]>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError<RoomSearch[]>('getServices', [])
       )
     );
   }

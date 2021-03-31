@@ -61,6 +61,24 @@ export class HotelsService {
     );
   }
 
+  getHotelNames(namePart: string): Observable<string[]> {
+    const url = `${this.hotelsUrl}/names`;
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': this.authService.getToken 
+      }),
+      params: {
+        namePart: namePart
+      }
+    };
+    return this.http.get<string[]>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError<string[]>('getHotelsNames', [])
+      )
+    );
+  }
+
   addHotel(hotel: Hotel): Observable<Hotel> {
     return this.http.post<Hotel>(this.hotelsUrl, hotel, this.httpOptions)
       .pipe(

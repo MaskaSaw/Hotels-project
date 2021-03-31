@@ -50,7 +50,7 @@ namespace Hotels.Models
                     .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.RoomId);
 
-                entity.HasOne<User>()
+                entity.HasOne<User>(r => r.User)
                     .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.UserId);
             });
@@ -94,7 +94,7 @@ namespace Hotels.Models
                 entity.HasOne<Reservation>()
                    .WithMany(p => p.ReservationServices)
                    .HasForeignKey(d => d.ReservationId)
-                   .OnDelete(DeleteBehavior.ClientSetNull);
+                   .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<User>(entity =>

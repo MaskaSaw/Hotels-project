@@ -45,6 +45,24 @@ export class UsersService {
     );
   }
 
+  getUserNames(namePart: string): Observable<User[]> {
+    const url = `${this.usersUrl}/names`;
+    const httpOptions = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': this.authService.getToken 
+      }),
+      params: {
+        namePart: namePart
+      }
+    };
+    return this.http.get<User[]>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError<User[]>('getUserNames', [])
+      )
+    );
+  }
+
   addUser(user: User): Observable<User> {
     return this.http.post<User>(this.usersUrl, user, this.httpOptions)
       .pipe(

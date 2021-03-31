@@ -163,6 +163,17 @@ namespace Hotels.Controllers
                 .ToListAsync();
         }
 
+        //GET: api/Hotels/Names
+        [Authorize]
+        [HttpGet("Names")]
+        public async Task<ActionResult<IEnumerable<string>>> GetHotelsByName([FromQuery] string namePart)
+        {
+            return await _context.Hotels
+                .Where(hotel => hotel.Name.Contains(namePart))
+                .Select(hotel => hotel.Name)
+                .ToListAsync();
+        }
+
         // PUT: api/Hotels/5
         [Authorize (Roles ="Admin")]
         [HttpPut("{id}")]

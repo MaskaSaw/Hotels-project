@@ -24,8 +24,11 @@ namespace Hotels.DTOs
         public string Country { get; set; }
         public string City { get; set; }
         public string RoomNumber { get; set; }
+        public string UserName { get; set; }
 
         public int RoomId { get; set; }
+
+        public int UserId { get; set; }
 
         public virtual ICollection<ReservationService> ReservationServices { get; set; }
     }

@@ -20,6 +20,7 @@ namespace Hotels.Models
         public int UserId { get; set; }
         public int RoomId { get; set; }
         public virtual Room Room { get; set; }
+        public virtual User User { get; set; }
 
         public virtual ICollection<ReservationService> ReservationServices { get; set; }
     }

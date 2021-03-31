@@ -3,44 +3,29 @@
         <li>
             <h2>Add new reservation</h2>
         </li>
-        <li> 
-            <label>User id*:</label>   
-            <input class="add-input" 
-                name="userId" 
-                type="text" 
-                [(ngModel)]="reservation.userId" 
-                #userId="ngModel"
-                digitValidator 
-                required 
-                int="true"/>
-            <div *ngIf="userId && !userId.valid && (userId.dirty || userId.touched)">
-                <div *ngIf="userId.errors?.range">
-                    User Id should be greater then 0
-                </div>
-                <div *ngIf="userId.errors?.nonDigitCharacters">
-                    User Id should be valid
-                </div>
-            </div>  
+        <li *ngIf="this.isRoom()">
+            <label>User: </label>
+            <input type="text" placeholder="User name" [typeahead]="users" [typeaheadScrollable]="true"
+            typeaheadOptionField="login"
+            [typeaheadOptionsInScrollableView]="10"
+            (input)="getUsersData($event)"
+            [(ngModel)]="userName">
         </li>
-        <li> 
-            <label>Room id*:</label> 
-            <input class="add-input" 
-                name="roomId" 
-                type="text" 
-                [(ngModel)]="reservation.roomId" 
-                #roomId="ngModel" 
-                digitValidator 
-                required 
-                int="true"/>
-            <div *ngIf="roomId && !roomId.valid && (roomId.dirty || roomId.touched)">
-                <div *ngIf="roomId.errors?.range">
-                    Room Id should be greater then 0
-                </div>
-                <div *ngIf="roomId.errors?.nonDigitCharacters">
-                    Room Id should be valid
-                </div>
-            </div>
+        <li *ngIf="!this.isRoom()"> 
+            <label>Hotel</label>
+            <input type="text" placeholder="Hotel name" [typeahead]="hotels" [typeaheadScrollable]="true"
+            [typeaheadOptionsInScrollableView]="10"
+            (input)="getHotelsData($event)"
+            [(ngModel)]="hotelName">
         </li>
+        <li *ngIf="!this.isRoom()"> 
+            <label>Room</label>
+            <input type="text" placeholder="Room number" [typeahead]="rooms" [typeaheadScrollable]="true"
+            typeaheadOptionField="roomNumber"
+            [typeaheadOptionsInScrollableView]="10"
+            (input)="getRoomsData($event)"
+            [(ngModel)]="roomNumber">
+         </li>
         <li> 
             <label>Start date*:</label>   
             <input type="date" 
@@ -88,14 +73,14 @@
             </ul>
         </li>  
         <li *ngIf="!edit">
-            <button [disabled]="userId.invalid || roomId.invalid || startDate.invalid || endDate.invalid" 
+            <button [disabled]="startDate.invalid || endDate.invalid" 
                 (click)="addReservation()">
                 Add reservation
             </button>
             <button (click)="closeEditForm()">Cancel</button>
         </li>
         <li *ngIf="edit">
-            <button [disabled]="userId.invalid || roomId.invalid || startDate.invalid || endDate.invalid" 
+            <button [disabled]="startDate.invalid || endDate.invalid" 
                 (click)="updateReservation()">
                 Save Reservation {{reservation.id}}
             </button>
@@ -104,6 +89,15 @@
     </ul>   
 </div>
 <button class="open-button open-form-button" (click)="openEditForm()" *ngIf="!editFormOn">Add new reservation</button>
+<br>
+<div class="filter-input">
+    <h3>Filter reservations by:</h3>
+    <input type="text" placeholder="Hotel" *ngIf="!isRoom()" [(ngModel)]="params.hotelName">
+    <input type="text" placeholder="Room number" *ngIf="!isRoom()" [(ngModel)]="params.roomNumber">
+    <input type="text" placeholder="User name" *ngIf="isRoom()" [(ngModel)]="params.userName">
+    <button class="open-button" (click)="filterReservations()">Find reservations with selected parameters</button>
+    <button class="open-button" (click)='clearFilters()'>Clear</button>
+</div>
 <div class="page-header">
     <h1>Reservations list</h1>
 </div>
@@ -111,9 +105,9 @@
     <table class="table table-striped">
         <thead>
             <tr> 
-                <th>Id</th>
-                <th>User Id</th>
-                <th>Room Id</th>
+                <th>Hotel name</th>
+                <th>Room number</th>
+                <th>User Name</th>       
                 <th>Start date</th>
                 <th>End date</th>
                 <th>Arrival time</th>
@@ -125,9 +119,9 @@
         </thead>
         <tbody>
             <tr *ngFor="let reservation of reservations">
-                <td>{{reservation.id}}</td>
-                <td>{{reservation.userId}}</td>
-                <td>{{reservation.roomId}}</td>
+                <td>{{reservation.hotelName}}</td>
+                <td>{{reservation.roomNumber}}</td>
+                <td>{{reservation.userName}}</td>
                 <td>{{reservation.startDate | date}}</td>
                 <td>{{reservation.endDate | date}}</td>
                 <td>{{reservation.arrivalTime | timeFormatPipe}}</td>

@@ -1,15 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
-import { AuthService } from '../login/auth.service';
 import { AuthGuard } from '../auth.guard';
 import { RoomsService } from '../rooms/rooms.service';
 import { Service } from '../service';
 import { ReservationService } from '../reservationService';
+import { ReservationParams } from '../reservationsParams';
+import { ReservationDTO } from '../reservation-dto';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { UsersService } from '../users/users.service';
+import { User } from '../user';
+import { HotelsService } from '../hotels/hotels.service';
+import { RoomSearch } from '../room-search';
 
 @Component({
   selector: 'app-reservations',
@@ -19,19 +25,31 @@ import { ReservationService } from '../reservationService';
 })
 export class ReservationsComponent implements OnInit {
 
-  reservations: Reservation[] = [];
+  reservations: ReservationDTO[] = [];
   services: Service[] = [];
   includedServices: boolean[] = [];
   reservation: Reservation;
   routePart: string = '';
+  params: ReservationParams = new ReservationParams();
   id: number = 0;
   edit: boolean = false;
   editFormOn: boolean = false;
+  users: User[] = [];
+  userName: string = '';
+  hotels: string[] = [];
+  hotelName: string = '';
+  rooms: RoomSearch[] = [];
+  roomNumber: string = '';
+  userSearchTermChanged: Subject<string> = new Subject<string>();
+  hotelSearchTermChanged: Subject<string> = new Subject<string>();
+  roomSearchTermChanged: Subject<string> = new Subject<string>();
 
   private routeSubscription: Subscription;
   constructor(
       private reservationsService: ReservationsService,
       private roomsService: RoomsService,
+      private usersService: UsersService,
+      private hotelsService: HotelsService,
       private route: ActivatedRoute,
     ) { 
       this.routeSubscription = route.params.subscribe(params=>this.id=params['id']);
@@ -39,6 +57,60 @@ export class ReservationsComponent implements OnInit {
     }
   
   ngOnInit(): void { 
+    this.getReservations();
+    this.edit = false;
+  }
+
+  openEditForm(): void {
+    this.editFormOn = true;
+    for (let i = 0; i < this.services.length; i++) {
+      this.includedServices.push(false);
+    }
+    if (this.isRoom()) {
+      this.reservation.roomId = this.id;
+    }
+    else {
+      this.reservation.userId = this.id;
+    }
+  }
+
+  closeEditForm(): void {
+    this.editFormOn = false;
+    this.reservation = new Reservation();
+    this.includedServices = [];
+  }
+
+  filterReservations(): void {
+    this.getReservations();
+  }
+
+  clearFilters(): void {
+    this.params = new ReservationParams();
+    this.getReservations();
+  }
+
+  editMode(reservationId: number): void {
+    this.reservation = this.transformReservation(reservationId);
+    this.roomsService.getServices(this.reservation.roomId)
+        .subscribe(services => { 
+          this.services = services;
+          for (let i = 0; i < this.services.length; i++) {
+            if (this.reservation.reservationServices.find(service => service.name == this.services[i].name)) {
+              this.includedServices.push(true);
+            }
+            else {
+              this.includedServices.push(false);
+            }
+          } 
+        }
+      );
+    this.edit = true;
+    
+    this.editFormOn = true;
+    window.scroll(0,0);
+  }
+
+  getReservations(): void {
     if (this.isRoom()) {
       this.routePart = 'room';
       this.roomsService.getServices(this.id)
@@ -47,15 +119,19 @@ export class ReservationsComponent implements OnInit {
     else if (this.isUser()) {
       this.routePart = 'user';
     }
-      this.reservationsService.getReservations(this.id, this.routePart)
+      this.reservationsService.getReservations(this.id, this.routePart, this.params)
         .subscribe(reservations => this.reservations = reservations
       );
-
-    this.edit = false;
   }
 
   addReservation(): void {
     this.includeServices();
+    if (this.isRoom()) {
+      this.reservation.userId = this.users.find(user => user.login === this.userName)!.id;
+    }
+    else {
+      this.reservation.roomId = this.rooms.find(room => room.roomNumber === this.roomNumber)!.id
+    }
     this.reservationsService.addReservation(this.reservation)
       .subscribe(reservation => {
         if (reservation !== undefined) {
@@ -68,36 +144,11 @@ export class ReservationsComponent implements OnInit {
     this.closeEditForm()
   }
 
-  openEditForm(): void {
-    this.editFormOn = true;
-    for (let i = 0; i < this.services.length; i++) {
-      this.includedServices.push(false);
-    }
-  }
-
-  closeEditForm(): void {
-    this.editFormOn = false;
-    this.reservation = new Reservation();
-    this.includedServices = [];
-  }
-
-  editMode(reservationId: number): void {
-    this.reservation = this.reservations.find(reservation => reservation.id === reservationId)!;
-    this.edit = true;
-    for (let i = 0; i < this.services.length; i++) {
-      if (this.reservation.reservationServices.find(service => service.name == this.services[i].name)) {
-        this.includedServices.push(true);
-      }
-      else {
-        this.includedServices.push(false);
-      }
-    }
-    this.editFormOn = true;
-    window.scroll(0,0);
-  }
-
   updateReservation(): void {
     this.includeServices();
+    if (this.isRoom()) {
+      this.reservation.userId = this.users.find( user => user.login === this.userName)!.id;
+    }
     this.reservationsService.updateReservation(this.reservation)
       .subscribe();
     this.cancelEdit();
@@ -124,7 +175,72 @@ export class ReservationsComponent implements OnInit {
     this.editFormOn = false;
     this.reservation = new Reservation();
     this.includedServices = [];
+    this.services = [];
     this.edit = false;
+  }
+
+  transformReservation(id: number): Reservation {
+    var reservationDTO = this.reservations.find(reservation => reservation.id === id)!
+    this.userName = reservationDTO.userName;
+    return {
+      id: reservationDTO.id,
+      userId: reservationDTO.userId,
+      roomId: reservationDTO.roomId,
+      startDate: reservationDTO.startDate,
+      endDate: reservationDTO.endDate,
+      arrivalTime: reservationDTO.arrivalTime,
+      departureTime: reservationDTO.departureTime,
+      reservationServices: reservationDTO.reservationServices
+    } as Reservation;
+  }
+
+  getUsersData(event: any): void {
+    if (this.userSearchTermChanged.observers.length === 0) {
+      this.userSearchTermChanged.pipe(debounceTime(1000), distinctUntilChanged())
+        .subscribe(() => {
+          this.usersService.getUserNames(this.userName)
+            .subscribe(users => this.users = users);
+        })
+    }
+    this.userSearchTermChanged.next(event) 
+  }
+
+  getHotelsData(event: any): void {
+    if (this.hotelSearchTermChanged.observers.length === 0) {
+      this.hotelSearchTermChanged.pipe(debounceTime(1000), distinctUntilChanged())
+        .subscribe(() => {
+          this.hotelsService.getHotelNames(this.hotelName)
+            .subscribe(hotels => this.hotels = hotels);
+        })
+    }
+    this.hotelSearchTermChanged.next(event) 
+  }
+
+  getRoomsData(event: any): void {
+    if (this.roomSearchTermChanged.observers.length === 0) {
+      this.roomSearchTermChanged.pipe(debounceTime(1000), distinctUntilChanged())
+        .subscribe(() => {
+          this.roomsService.getRoomNumbers(this.roomNumber, this.hotelName)
+            .subscribe(rooms => this.rooms = rooms);
+          const roomId = this.rooms.find(room => room.roomNumber === this.roomNumber)
+          if (roomId) {
+            this.roomsService.getServices(roomId!.id)
+              .subscribe(services => {
+                this.services = services;
+                for (let i = 0; i < this.services.length; i++) {
+                  if (this.reservation.reservationServices.find(service => service.name == this.services[i].name)) {
+                    this.includedServices.push(true);
+                  }
+                  else {
+                    this.includedServices.push(false);
+                  }
+                }
+              }
+            );
+          }
+        })
+    }
+    this.roomSearchTermChanged.next(event) 
   }
 
   parseDate(dateString: string): Date | null{
