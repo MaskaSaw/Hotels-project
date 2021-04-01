@@ -8,7 +8,6 @@ import { Room } from '../room';
 import { Reservation } from '../reservation';
 import { ReservationsService } from './reservations.service';
 import { UserReservation } from '../user-reservation';
-import { User } from '../user';
 
 @Component({
   selector: 'app-reservation',
@@ -49,7 +48,7 @@ export class ReservationComponent implements OnInit {
   addReservation(): void {
     this.reservationsService.addReservation(this.reservation)
       .subscribe(reservation => this.createdReservation = reservation);
-   // this.router.navigate(['/hotels']);
+    this.router.navigate(['/hotels']);
   }
 
   goBack(): void {

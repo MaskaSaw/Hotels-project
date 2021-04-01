@@ -142,7 +142,7 @@ namespace Hotels.Controllers
                             )
                         );
             }
-              return await rooms
+            return await rooms
                 .Select(room =>
                     new RoomDTO
                     {

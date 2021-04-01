@@ -48,11 +48,11 @@ export class AuthenticationComponent implements OnInit {
 
   checkAllFields(): boolean {
     if (
-      this.registerLogin === '' ||
-      this.registerName === '' ||
-      this.registerSurname === '' ||
-      this.registerPassword === '' ||
-      this.registerPasswordRepeat === ''
+      this.registerLogin === ''
+      || this.registerName === '' 
+      || this.registerSurname === '' 
+      || this.registerPassword === '' 
+      || this.registerPasswordRepeat === ''
     ) {
       return false;
     }

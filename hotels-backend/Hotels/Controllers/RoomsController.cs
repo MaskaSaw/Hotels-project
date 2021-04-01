@@ -73,7 +73,7 @@ namespace Hotels.Controllers
             if (!string.IsNullOrEmpty(userName))
             {
                 reservations = reservations.Where(reservation =>
-                    (reservation.User.Name + " " + reservation.User.Surname).Contains(userName)
+                    ($"{reservation.User.Name} {reservation.User.Surname}").Contains(userName)
                 );
             }
 
@@ -84,7 +84,7 @@ namespace Hotels.Controllers
                             Id = reservation.Id,
                             RoomId = reservation.RoomId,
                             UserId = reservation.UserId,
-                            UserName = reservation.User.Name + " " + reservation.User.Surname,
+                            UserName = $"{reservation.User.Name} {reservation.User.Surname}",
                             ArrivalTime = reservation.ArrivalTime,
                             DepartureTime = reservation.DepartureTime,
                             StartDate = reservation.StartDate,

@@ -48,7 +48,7 @@ namespace Hotels.Controllers
                     Login = user.Login,
                     Name = user.Name,
                     Surname = user.Surname,
-                    Password = "",
+                    Password = string.Empty,
                     Role = user.Role
                 })
                 .ToList();
@@ -82,7 +82,7 @@ namespace Hotels.Controllers
                     Login = user.Login,
                     Name = user.Name,
                     Surname = user.Surname,
-                    Password = "",
+                    Password = string.Empty,
                     Role = user.Role
                 })
                 .ToListAsync();
@@ -122,7 +122,7 @@ namespace Hotels.Controllers
                             Id = reservation.Id,
                             RoomId = reservation.RoomId,
                             UserId = reservation.UserId,
-                            UserName = reservation.User.Name + " " + reservation.User.Surname,
+                            UserName = $"{reservation.User.Name} {reservation.User.Surname}",
                             ArrivalTime = reservation.ArrivalTime,
                             DepartureTime = reservation.DepartureTime,
                             StartDate = reservation.StartDate,
