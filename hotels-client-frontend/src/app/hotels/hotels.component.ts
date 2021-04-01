@@ -33,6 +33,7 @@ export class HotelsComponent implements OnInit {
     this.getCountriesData();
     this.params = new Params;
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
+    this.params.checkOut = this.endMinDate;
   }
 
   getHotels(): void {

@@ -1,12 +1,22 @@
 <div class="user-reservations-container">
     <br>
-    <h1>Your reservations: </h1>
+    <h1>Your Bookings: </h1>
     <br>
-    <button (click)="showFullReservations()" *ngIf="currentReservations">Show outdated reservations</button>
-    <button (click)="showCurrentReservations()" *ngIf="!currentReservations">Show current reservations</button>
+    <button (click)="showFullReservations()" *ngIf="currentReservations">Show current and outdated</button>
+    <button (click)="showCurrentReservations()" *ngIf="!currentReservations">Show only current</button>
     <br>
     <br>
-    <table class="table table-striped" cellspacing="0">
+    <div *ngIf="onEditArrivalTime">
+        <input type="time" [(ngModel)]="reservation.arrivalTime">
+        <br>
+        <br>
+        <button (click)="updateReservation()">Save</button>
+        <button (click)="closeEdit()">Cancel</button>
+        <br>
+        <br>
+    </div>
+    <h2 *ngIf="checkReservations()"> No bookings were found!</h2>
+    <table *ngIf="!checkReservations()" class="table table-striped" cellspacing="0">
         <thead>
             <tr>
                 <th>Hotel</th>
@@ -35,7 +45,8 @@
                     </ul>
                 </td>
                 <td>
-                    <button *ngIf="!checkDates(reservation.endDate)">Change arrival time</button>
+                    <button *ngIf="!checkDates(reservation.startDate)" (click)="openEdit(reservation)">Change arrival time</button>
+                    <p *ngIf="checkDates(reservation.startDate)">Booking has already ended</p>
                 </td>
             </tr>
         </tbody>

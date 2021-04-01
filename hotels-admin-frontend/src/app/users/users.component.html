@@ -10,8 +10,7 @@
                 type="text" 
                 [(ngModel)]="user.login" 
                 #login="ngModel" 
-                nameValidator
-                required 
+                nameValidator 
                 len="20"/>
             <div *ngIf="login && !login.valid && (login.dirty || login.touched)">
                 <div *ngIf="login.errors?.length">
@@ -29,8 +28,7 @@
                 type="text" 
                 [(ngModel)]="user.password" 
                 #password="ngModel" 
-                passwordValidator
-                required/>
+                passwordValidator/>
             <div *ngIf="password && !password.valid && (password.dirty || password.touched)">
                 <div *ngIf="password.errors?.length">
                     Password length should be between 4 and 10 characters length
@@ -43,6 +41,42 @@
                 <option value="Admin">Admin</option>
                 <option value="User">User</option>
             </select> 
+        </li>
+        <li> 
+            <label>Name</label> 
+            <input class="add-input" 
+                name="name" 
+                type="text" 
+                [(ngModel)]="user.name" 
+                #name="ngModel" 
+                nameValidator
+                len="20"/>
+            <div *ngIf="name && !name.valid && (name.dirty || name.touched)">
+                <div *ngIf="name.errors?.length">
+                    Name length should be greater then zero
+                </div>
+                <div *ngIf="name.errors?.format">
+                    Special characters are not allowed
+                </div>
+            </div>
+        </li>
+        <li> 
+            <label>Surname</label> 
+            <input class="add-input" 
+                name="surname" 
+                type="text" 
+                [(ngModel)]="user.surname" 
+                #surname="ngModel" 
+                nameValidator
+                len="20"/>
+            <div *ngIf="surname && !surname.valid && (surname.dirty || surname.touched)">
+                <div *ngIf="surname.errors?.length">
+                    Surname length should be greater then zero
+                </div>
+                <div *ngIf="surname.errors?.format">
+                    Special characters are not allowed
+                </div>
+            </div>
         </li>
         <li *ngIf="!edit">
             <button [disabled]="login.invalid || password.invalid" 

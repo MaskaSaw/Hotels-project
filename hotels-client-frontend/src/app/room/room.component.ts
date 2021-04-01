@@ -8,7 +8,8 @@ import { Reservation } from '../reservation';
 import { ReservationsService } from '../reservation/reservations.service';
 import { Service } from '../service';
 import { AuthService } from '../authentication/auth.service';
-import { ReservationService } from '../reservationService';
+import { ReservationService } from '../reservation-service';
+import { RoomBlock } from '../room-block';
 
 @Component({
   selector: 'app-room',
@@ -65,7 +66,18 @@ export class RoomComponent implements OnInit {
   confirmReservation() {
     this.includeServices();
     this.reservationsService.saveReservation(this.reservation);
+    this.createBlock();
     this.router.navigate([`/reservation/confirm`]);
+  }
+
+  createBlock() {
+    const block = new RoomBlock();
+    block.roomId = this.room.id;
+    block.end.setTime(new Date().getTime() + 20*60*1000);
+    block.checkIn = this.reservation.startDate;
+    block.checkOut = this.reservation.endDate;
+    this.roomsService.addBlock(block)
+      .subscribe();
   }
 
   includeServices(): void {

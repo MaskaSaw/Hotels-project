@@ -15,5 +15,6 @@ namespace Hotels.Models
         public virtual Hotel Hotel { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }
+        public virtual ICollection<RoomBlock> RoomBlocks { get; set; }
     }
 }

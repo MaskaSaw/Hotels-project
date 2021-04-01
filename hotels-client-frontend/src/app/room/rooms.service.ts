@@ -8,6 +8,8 @@ import { Room } from '../room';
 import { ApiPaths } from '../api-paths';
 import { environment } from 'src/environments/environment';
 import { Service } from '../service';
+import { RoomBlock } from '../room-block';
+import { AuthService } from '../authentication/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,17 +24,29 @@ export class RoomsService {
     return {
       headers: new HttpHeaders({ 
         'Content-Type': 'application/json',
+        'Authorization': this.authService.getToken 
       })
     };
   }
 
   constructor(
     private http: HttpClient,
+    private authService: AuthService
   ) { }
 
-  getRooms(id: number): Observable<Room[]> {
+  getRooms(id: number, checkIn?: Date, checkOut?: Date): Observable<Room[]> {
     const url = `${this.hotelsUrl}/${id}/rooms`;
-    return this.http.get<Room[]>(url)
+    const httpOptions: object = {
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': this.authService.getToken 
+      }),
+      params: {
+        checkIn: checkIn ? checkIn : null,
+        checkOut: checkOut ? checkOut : null,
+      }
+    }
+    return this.http.get<Room[]>(url, httpOptions)
       .pipe(
         catchError(this.handleError<Room[]>('getRooms', [])
       )
@@ -62,6 +76,15 @@ export class RoomsService {
     return this.http.put<Room>(url, room, this.httpOptions)
       .pipe(
         catchError(this.handleError<any>('updateRoom')
+      )
+    );
+  }
+
+  addBlock(block: RoomBlock): Observable<RoomBlock> {
+    const url = `${this.roomsUrl}/blocks`;
+    return this.http.post<RoomBlock>(url, block, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<RoomBlock>('addBlock')
       )
     );
   }

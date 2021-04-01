@@ -16,6 +16,7 @@ import { ReservationComponent } from './reservation/reservation.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { AuthGuard } from './auth.guard';
 import { UserReservationsComponent } from './user-reservations/user-reservations.component';
+import { PasswordValidatorDirective} from './validators/password.validator';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { UserReservationsComponent } from './user-reservations/user-reservations
     RoomComponent,
     ReservationComponent,
     AuthenticationComponent,
-    UserReservationsComponent
+    UserReservationsComponent,
+    PasswordValidatorDirective
   ],
   imports: [
     BrowserModule,

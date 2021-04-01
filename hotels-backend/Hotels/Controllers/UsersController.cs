@@ -46,6 +46,8 @@ namespace Hotels.Controllers
                 {
                     Id = user.Id,
                     Login = user.Login,
+                    Name = user.Name,
+                    Surname = user.Surname,
                     Password = "",
                     Role = user.Role
                 })
@@ -78,6 +80,8 @@ namespace Hotels.Controllers
                 {
                     Id = user.Id,
                     Login = user.Login,
+                    Name = user.Name,
+                    Surname = user.Surname,
                     Password = "",
                     Role = user.Role
                 })
@@ -118,7 +122,7 @@ namespace Hotels.Controllers
                             Id = reservation.Id,
                             RoomId = reservation.RoomId,
                             UserId = reservation.UserId,
-                            UserName = reservation.User.Login,
+                            UserName = reservation.User.Name + " " + reservation.User.Surname,
                             ArrivalTime = reservation.ArrivalTime,
                             DepartureTime = reservation.DepartureTime,
                             StartDate = reservation.StartDate,
@@ -148,7 +152,7 @@ namespace Hotels.Controllers
             if (!all)
             {
                 reservations = reservations
-                    .Where(reservation => reservation.StartDate > DateTime.Today);
+                    .Where(reservation => reservation.StartDate >= DateTime.Today);
             };
 
             return await reservations
@@ -156,7 +160,9 @@ namespace Hotels.Controllers
                     new ReservationDTO
                     {
                         Id = reservation.Id,
-                        RoomId = reservation.Id,
+                        RoomId = reservation.RoomId,
+                        UserId = reservation.UserId,
+                        UserName = reservation.User.Name + " " + reservation.User.Surname,
                         ArrivalTime = reservation.ArrivalTime,
                         DepartureTime = reservation.DepartureTime,
                         StartDate = reservation.StartDate,
@@ -190,6 +196,8 @@ namespace Hotels.Controllers
                 {
                     Id = userDTO.Id,
                     Login = userDTO.Login,
+                    Name = userDTO.Name,
+                    Surname = userDTO.Surname,
                     PasswordHash = hash.passwordHash,
                     PasswordSalt = hash.passwordSalt,
                     Role = userDTO.Role

@@ -24,15 +24,29 @@
 			</div>
 			<div class="spacer">
 				<label for="password">Password</label>
-				<input type="password" placeholder="Password" [(ngModel)]="registerPassword" class="form-control"/>
+				<input type="password" placeholder="Password" name="pass" #pass="ngModel" [(ngModel)]="registerPassword" class="form-control" required passwordValidator/>
+				<div *ngIf="pass && !pass.valid && (pass.dirty || pass.touched)">
+					<div *ngIf="pass.errors?.length">
+							Password length should be between 4 and 10 characters length
+					</div>
+					<br>
+			</div>
 			</div>
 			<div class="spacer">
-				<label for="password">Repeat Password</label>
+				<label for="repeatPassword">Repeat Password</label>
 				<input type="password" placeholder="Repeat password" [(ngModel)]="registerPasswordRepeat" class="form-control"/>
+			</div>
+			<div class="spacer">
+				<label for="Name">Name</label>
+				<input type="text" placeholder="Name" [(ngModel)]="registerName" class="form-control">
+			</div>
+			<div class="spacer">
+				<label for="Surname">Surname</label>
+				<input type="text" placeholder="Surname" [(ngModel)]="registerSurname" class="form-control">
 			</div>
 			<br>
 			<div class="spacer">
-				<button type="submit" class="open-button" (click)="registerUser()">Register</button>
+				<button type="submit" *ngIf="checkAllFields()" class="open-button" (click)="registerUser()">Register</button>
 			</div>
 		</div>
 	</div>

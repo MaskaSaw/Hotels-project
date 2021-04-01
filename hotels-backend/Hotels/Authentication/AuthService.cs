@@ -51,6 +51,8 @@ namespace Hotels.Authentication
             User user = new User
             {
                 Login = userDTO.Login,
+                Name = userDTO.Name,
+                Surname = userDTO.Surname,
                 PasswordHash = hash.passwordHash,
                 PasswordSalt = hash.passwordSalt,
                 Role = userDTO.Role

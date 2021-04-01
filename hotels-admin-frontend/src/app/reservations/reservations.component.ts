@@ -147,7 +147,7 @@ export class ReservationsComponent implements OnInit {
   updateReservation(): void {
     this.includeServices();
     if (this.isRoom()) {
-      this.reservation.userId = this.users.find( user => user.login === this.userName)!.id;
+      this.reservation.userId = this.users.find( user => (user.name + '' + user.surname) === this.userName)!.id;
     }
     this.reservationsService.updateReservation(this.reservation)
       .subscribe();
@@ -196,7 +196,7 @@ export class ReservationsComponent implements OnInit {
 
   getUsersData(event: any): void {
     if (this.userSearchTermChanged.observers.length === 0) {
-      this.userSearchTermChanged.pipe(debounceTime(1000), distinctUntilChanged())
+      this.userSearchTermChanged.pipe(debounceTime(500), distinctUntilChanged())
         .subscribe(() => {
           this.usersService.getUserNames(this.userName)
             .subscribe(users => this.users = users);
@@ -207,7 +207,7 @@ export class ReservationsComponent implements OnInit {
 
   getHotelsData(event: any): void {
     if (this.hotelSearchTermChanged.observers.length === 0) {
-      this.hotelSearchTermChanged.pipe(debounceTime(1000), distinctUntilChanged())
+      this.hotelSearchTermChanged.pipe(debounceTime(500), distinctUntilChanged())
         .subscribe(() => {
           this.hotelsService.getHotelNames(this.hotelName)
             .subscribe(hotels => this.hotels = hotels);
@@ -218,7 +218,7 @@ export class ReservationsComponent implements OnInit {
 
   getRoomsData(event: any): void {
     if (this.roomSearchTermChanged.observers.length === 0) {
-      this.roomSearchTermChanged.pipe(debounceTime(1000), distinctUntilChanged())
+      this.roomSearchTermChanged.pipe(debounceTime(500), distinctUntilChanged())
         .subscribe(() => {
           this.roomsService.getRoomNumbers(this.roomNumber, this.hotelName)
             .subscribe(rooms => this.rooms = rooms);

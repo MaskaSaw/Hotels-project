@@ -1,4 +1,4 @@
-import { ReservationService } from "./reservationService";
+import { ReservationService } from "./reservation-service";
 
 export class Reservation {
     id: number;

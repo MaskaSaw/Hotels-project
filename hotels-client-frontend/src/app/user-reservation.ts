@@ -1,8 +1,9 @@
-import { ReservationService } from "./reservationService";
+import { ReservationService } from "./reservation-service";
 
 export class UserReservation {
     id: number;
     roomId: number;
+    userId: number;
     startDate: Date;
     endDate: Date;
     arrivalTime: string;
@@ -17,6 +18,7 @@ export class UserReservation {
     constructor() {
         this.id = 0;
         this.roomId = 0;
+        this.userId = 0;
         this.startDate = new Date();
         this.endDate = new Date();
         this.arrivalTime = '00:00';

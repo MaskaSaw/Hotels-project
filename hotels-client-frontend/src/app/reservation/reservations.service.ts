@@ -62,10 +62,10 @@ export class ReservationsService {
     );
   }
 
-  addReservation(reservation: Reservation): Observable<Reservation> {
-    return this.http.post<Reservation>(this.reservationsUrl, reservation, this.httpOptions)
+  addReservation(reservation: Reservation): Observable<UserReservation> {
+    return this.http.post<UserReservation>(this.reservationsUrl, reservation, this.httpOptions)
       .pipe(
-        catchError(this.handleError<Reservation>('addReservation')
+        catchError(this.handleError<UserReservation>('addReservation')
       )
     );
   }
