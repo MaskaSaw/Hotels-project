@@ -10,6 +10,7 @@ using Hotels.ImageProcessing;
 using Hotels.Models;
 using Newtonsoft.Json;
 using Hotels.DTOs;
+using Hotels.Models.Params;
 
 namespace Hotels.Controllers
 {
@@ -121,11 +122,27 @@ namespace Hotels.Controllers
 
         //GET: api/Hotels/5/Rooms
         [HttpGet("{id}/Rooms")]
-        public async Task<ActionResult<IEnumerable<RoomDTO>>> GetRooms(int id)
+        public async Task<ActionResult<IEnumerable<RoomDTO>>> GetRooms(int id, [FromQuery] RoomsParams inputParams)
         {
-            return await _context.Rooms
+            var rooms = _context.Rooms
                 .Include(room => room.Reservations)
+                .Include(room => room.RoomBlocks)
                 .Where(room => room.HotelId == id)
+                .AsQueryable();
+
+            if (inputParams.CheckIn != null && inputParams.CheckOut != null)
+            {
+                rooms = rooms
+                    .Where(room => !room.RoomBlocks
+                        .Any(block =>
+                                (block.CheckOut > inputParams.CheckIn && block.CheckOut < inputParams.CheckOut) ||
+                                (block.CheckIn > inputParams.CheckIn && block.CheckIn < inputParams.CheckIn) ||
+                                (block.CheckIn < inputParams.CheckIn && block.CheckOut > inputParams.CheckOut) &&
+                                block.End > new DateTime()
+                            )
+                        );
+            }
+            return await rooms
                 .Select(room =>
                     new RoomDTO
                     {

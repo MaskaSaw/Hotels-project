@@ -6,7 +6,7 @@
         <li *ngIf="this.isRoom()">
             <label>User: </label>
             <input type="text" placeholder="User name" [typeahead]="users" [typeaheadScrollable]="true"
-            typeaheadOptionField="login"
+            typeaheadOptionField="name"
             [typeaheadOptionsInScrollableView]="10"
             (input)="getUsersData($event)"
             [(ngModel)]="userName">

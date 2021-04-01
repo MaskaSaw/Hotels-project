@@ -68,6 +68,7 @@
     <Build Include="dbo\Tables\Hotels.sql" />
     <Build Include="dbo\Tables\Services.sql" />
     <Build Include="dbo\Tables\ReservationServices.sql" />
+    <Build Include="dbo\Tables\RoomBlocks.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="HotelsDB.refactorlog" />

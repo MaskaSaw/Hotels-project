@@ -9,8 +9,7 @@
                 name="name" 
                 type="text" 
                 [(ngModel)]="hotel.name" 
-                #name="ngModel" 
-                required 
+                #name="ngModel"  
                 nameValidator 
                 len="50"/>
             <div *ngIf="name && !name.valid && (name.dirty || name.touched)">
@@ -28,8 +27,7 @@
                 name="country" 
                 type="text" 
                 [(ngModel)]="hotel.country" 
-                #country="ngModel" 
-                required 
+                #country="ngModel"  
                 locationValidator 
                 len="20"/>
             <div *ngIf="country && !country.valid && (country.dirty || country.touched)">
@@ -47,8 +45,7 @@
                 name="city" 
                 type="text" 
                 [(ngModel)]="hotel.city" 
-                #city="ngModel" 
-                required 
+                #city="ngModel"  
                 locationValidator 
                 len="20"/>
             <div *ngIf="city && !city.valid && (city.dirty || city.touched)">
@@ -66,8 +63,7 @@
                 name="address" 
                 type="text" 
                 [(ngModel)]="hotel.address" 
-                #address="ngModel" 
-                required 
+                #address="ngModel"  
                 maxlength="50"
                 minlength="1"/>
             <div *ngIf="address && !address.valid && (address.dirty || address.touched)">
@@ -83,7 +79,7 @@
                     <label>Service name:</label>
                     <input class="service-input" [(ngModel)]="service.name">
                     <br>
-                    <label>Service cost per day, $: </label>
+                    <label>Service cost, $: </label>
                     <input class="service-input" [(ngModel)]="service.cost">
                     <button class="del-button" (click)="removeService(i)">Remove</button>
                 </li>             

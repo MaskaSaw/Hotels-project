@@ -10,6 +10,8 @@ namespace Hotels.DTOs
 
         [Required]
         public string Login { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
 
         [Required]
         [StringLength(10, MinimumLength = 4, ErrorMessage = "You must specify a password between 4 and 10 characters.")]

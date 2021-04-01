@@ -39,7 +39,8 @@ export class HotelDetailedComponent implements OnInit {
   }
 
   getRooms(): void {
-    this.roomsService.getRooms(this.id)
+    const dates = JSON.parse(localStorage.getItem('dates')!);
+    this.roomsService.getRooms(this.id, dates.startDate, dates.endDate)
       .subscribe(rooms => this.rooms = rooms)
   }
 

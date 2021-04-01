@@ -47,6 +47,8 @@ namespace Hotels.Controllers
             {
                 Id = createdUser.Id,
                 Login = createdUser.Login,
+                Name = createdUser.Name,
+                Surname = createdUser.Surname,
                 Password = userForRegister.Password,
                 Role = createdUser.Role
             };
@@ -83,7 +85,8 @@ namespace Hotels.Controllers
                     {
                         new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                         new Claim(ClaimTypes.Name, user.Login),
-                        new Claim(ClaimTypes.Role, user.Role)
+                        new Claim(ClaimTypes.Role, user.Role),
+                        new Claim(ClaimTypes.GivenName, user.Name + " " + user.Surname)
                     }
                 ),
 

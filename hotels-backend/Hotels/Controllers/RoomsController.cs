@@ -72,7 +72,9 @@ namespace Hotels.Controllers
 
             if (!string.IsNullOrEmpty(userName))
             {
-                reservations = reservations.Where(reservation => reservation.User.Login == userName);
+                reservations = reservations.Where(reservation =>
+                    ($"{reservation.User.Name} {reservation.User.Surname}").Contains(userName)
+                );
             }
 
             return await reservations
@@ -82,7 +84,7 @@ namespace Hotels.Controllers
                             Id = reservation.Id,
                             RoomId = reservation.RoomId,
                             UserId = reservation.UserId,
-                            UserName = reservation.User.Login,
+                            UserName = $"{reservation.User.Name} {reservation.User.Surname}",
                             ArrivalTime = reservation.ArrivalTime,
                             DepartureTime = reservation.DepartureTime,
                             StartDate = reservation.StartDate,
@@ -163,6 +165,17 @@ namespace Hotels.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetRoom", new { id = room.Id }, room);
+        }
+
+        // POST: api/Rooms/Blocks
+        [Authorize]
+        [HttpPost("Blocks")]
+        public async Task<IActionResult> PostRoomBlock(RoomBlock block)
+        {
+            _context.RoomBlocks.Add(block);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         // DELETE: api/Rooms/5

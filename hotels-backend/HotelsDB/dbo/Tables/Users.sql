@@ -4,8 +4,12 @@
     [PasswordHash] VARBINARY (64)  NULL,
     [PasswordSalt] VARBINARY (128) NULL,
     [Role]         NVARCHAR (50)   NULL,
+    [Name]         NVARCHAR (20)   NULL,
+    [Surname]      NVARCHAR (20)   NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

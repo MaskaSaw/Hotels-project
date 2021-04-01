@@ -23,6 +23,7 @@ namespace Hotels.Models
         public virtual DbSet<Service> Services { get; set; }
         public virtual DbSet<ReservationService> ReservationServices { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<RoomBlock> RoomBlocks { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -53,6 +54,20 @@ namespace Hotels.Models
                 entity.HasOne<User>(r => r.User)
                     .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<RoomBlock>(entity =>
+            {
+                entity.Property(e => e.End).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.CheckIn).HasColumnType("date");
+
+                entity.Property(e => e.CheckOut).HasColumnType("date");
+
+                entity.HasOne<Room>(r => r.Room)
+                    .WithMany(p => p.RoomBlocks)
+                    .HasForeignKey(d => d.RoomId);
+
             });
 
             modelBuilder.Entity<Room>(entity =>
@@ -97,11 +112,16 @@ namespace Hotels.Models
                    .OnDelete(DeleteBehavior.Cascade);
             });
 
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.Login).HasMaxLength(50);
 
                 entity.Property(e => e.Role).HasMaxLength(50);
+
+                entity.Property(e => e.Name).HasMaxLength(20);
+
+                entity.Property(e => e.Surname).HasMaxLength(50);
             });
         }
     }
