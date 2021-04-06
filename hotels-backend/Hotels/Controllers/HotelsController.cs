@@ -143,7 +143,7 @@ namespace Hotels.Controllers
                                 ((block.CheckOut > inputParams.CheckIn && block.CheckOut < inputParams.CheckOut) ||
                                 (block.CheckIn > inputParams.CheckIn && block.CheckIn < inputParams.CheckIn) ||
                                 (block.CheckIn < inputParams.CheckIn && block.CheckOut > inputParams.CheckOut)) &&
-                                block.End > DateTime.Now
+                                block.End > DateTime.Now.ToUniversalTime()
                             )
                         );
             }

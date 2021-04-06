@@ -172,7 +172,6 @@ namespace Hotels.Controllers
         [HttpPost("Blocks")]
         public async Task<IActionResult> PostRoomBlock(RoomBlock block)
         {
-            block.End = block.End.ToLocalTime();
             _context.RoomBlocks.Add(block);
             await _context.SaveChangesAsync();
 
