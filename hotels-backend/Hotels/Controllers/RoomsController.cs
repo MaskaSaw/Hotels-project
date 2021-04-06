@@ -99,10 +99,10 @@ namespace Hotels.Controllers
                     .ToListAsync();
         }
 
-        //GET: api/Hotels/Names
+        //GET: api/Rooms/Numbers
         [Authorize]
         [HttpGet("Numbers")]
-        public async Task<ActionResult<IEnumerable<RoomSearchDTO>>> GetHotelsByName([FromQuery] string roomNumber, string hotelName)
+        public async Task<ActionResult<IEnumerable<RoomSearchDTO>>> GetRoomsByNumber([FromQuery] string roomNumber, string hotelName)
         {
             var hotel = _context.Hotels
                     .Where(hotel => hotel.Name == hotelName)
@@ -172,6 +172,7 @@ namespace Hotels.Controllers
         [HttpPost("Blocks")]
         public async Task<IActionResult> PostRoomBlock(RoomBlock block)
         {
+            block.End = block.End.ToLocalTime();
             _context.RoomBlocks.Add(block);
             await _context.SaveChangesAsync();
 

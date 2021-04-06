@@ -51,6 +51,11 @@ namespace Hotels.Controllers
                 hotels = hotels.Where(hotel => hotel.City.Contains(inputParams.City));
             }
 
+            if (!string.IsNullOrEmpty(inputParams.HotelName))
+            {
+                hotels = hotels.Where(hotel => hotel.Name.Contains(inputParams.HotelName));
+            }
+
             if (inputParams.NumberOfResidents != null && inputParams.NumberOfResidents != 0)
             {
                 hotels = hotels
@@ -135,10 +140,10 @@ namespace Hotels.Controllers
                 rooms = rooms
                     .Where(room => !room.RoomBlocks
                         .Any(block =>
-                                (block.CheckOut > inputParams.CheckIn && block.CheckOut < inputParams.CheckOut) ||
+                                ((block.CheckOut > inputParams.CheckIn && block.CheckOut < inputParams.CheckOut) ||
                                 (block.CheckIn > inputParams.CheckIn && block.CheckIn < inputParams.CheckIn) ||
-                                (block.CheckIn < inputParams.CheckIn && block.CheckOut > inputParams.CheckOut) &&
-                                block.End > new DateTime()
+                                (block.CheckIn < inputParams.CheckIn && block.CheckOut > inputParams.CheckOut)) &&
+                                block.End > DateTime.Now
                             )
                         );
             }
@@ -158,26 +163,52 @@ namespace Hotels.Controllers
                 .ToListAsync();
         }
 
-        //GET: api/Hotels/Countries
-        [HttpGet("Countries")]
-        public async Task<ActionResult<IEnumerable<string>>> GetCountries()
+        [HttpGet("Search")]
+        public async Task<ActionResult<IEnumerable<SearchResultDTO>>> GetSearchResult([FromQuery] string searchString)
         {
-            return await _context.Hotels
-                .Select(hotel => hotel.Country)
-                .Distinct()
+            var hotels = await _context.Hotels
+                .Where(hotel => hotel.Name.Contains(searchString))
+                .Select(hotel =>
+                    new SearchResultDTO
+                    {
+                        ViewField = hotel.Name,
+                        FilterData = hotel.Name,
+                        Type = "Hotel"
+                    }
+                )
                 .ToListAsync();
-        }
 
-        //GET: api/Hotels/Cities
-        [HttpGet("Cities")]
-        public async Task<ActionResult<IEnumerable<string>>> GetCities([FromQuery] string country, string city)
-        {
-            return await _context.Hotels
-                .Where(hotel => hotel.Country == country)
-                .Where(hotel => hotel.City.Contains(city))
-                .Select(hotel => hotel.City)
+            var cities = await _context.Hotels
+                .Where(hotel => hotel.City.Contains(searchString))
+                .Select(hotel =>
+                    new SearchResultDTO
+                    {
+                        ViewField = hotel.City,
+                        FilterData = hotel.City,
+                        AdditionalFilterData = hotel.Country,
+                        Type = "City"
+                    }
+                )
                 .Distinct()
                 .ToListAsync();
+
+
+            var countries = await _context.Hotels
+                .Where(hotel => hotel.Country.Contains(searchString))
+                .Select(hotel =>
+                    new SearchResultDTO
+                    {
+                        ViewField = $"{hotel.Country}",
+                        FilterData = hotel.Country,
+                        Type = "Country"
+                    }
+                )
+                .Distinct()
+                .ToListAsync();
+
+            var searchResult = hotels.Union(cities).Union(countries).ToList();
+
+            return searchResult;
         }
 
         //GET: api/Hotels/Names

@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
 
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { Hotel } from '../hotel';
 import { Params } from '../params';
+import { SearchResult } from '../searchParams';
 import { HotelsService } from './hotels.service';
 
 @Component({
@@ -19,8 +21,9 @@ export class HotelsComponent implements OnInit {
   params: Params = new Params;
   startMinDate = new Date();
   endMinDate = new Date();
-  countries: string[] = [];
-  cities: string[] = [];
+  searchString: string = '';
+  searchItem: SearchResult = new SearchResult();
+  searchResults: SearchResult[] = []; 
   searchTermChanged: Subject<string> = new Subject<string>();
 
   constructor(
@@ -30,7 +33,6 @@ export class HotelsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getHotels();
-    this.getCountriesData();
     this.params = new Params;
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.params.checkOut = this.endMinDate;
@@ -41,17 +43,12 @@ export class HotelsComponent implements OnInit {
       .subscribe(hotels =>  this.hotels = hotels);
   }
 
-  getCountriesData(): void {
-    this.hotelsService.getCountries()
-      .subscribe(countries => this.countries = countries);  
-  }
-
-  getCitiesData(event: any): void {
+  getSearchData(event?: any): void {
     if (this.searchTermChanged.observers.length === 0) {
-      this.searchTermChanged.pipe(debounceTime(1000), distinctUntilChanged())
+      this.searchTermChanged.pipe(debounceTime(300), distinctUntilChanged())
         .subscribe(() => {
-          this.hotelsService.getCities(this.params.country, this.params.city)
-            .subscribe(cities => this.cities = cities);
+          this.hotelsService.getSearch(this.searchString)
+            .subscribe(searchResults => this.searchResults = searchResults);
         })
     }
     this.searchTermChanged.next(event) 
@@ -59,6 +56,7 @@ export class HotelsComponent implements OnInit {
 
   clearFilter(): void {
     this.params = new Params();
+    this.searchItem = new SearchResult;
     this.getHotels();
   }
 
@@ -76,16 +74,45 @@ export class HotelsComponent implements OnInit {
       return false
     }
 
-    if (this.params.country === '') {
-      return false;
-    }
-
     return true;
   }
 
   filterHotels(): void {
+    this.chooseSearchParams();
     this.hotelsService.getHotels(this.params)
       .subscribe( hotels => this.hotels = hotels);
+  }
+
+  chooseSearchParams(): void {
+    switch(this.searchItem.type) {
+      case ('Empty'): {
+        this.params.hotelName = this.searchString;
+        this.params.city = this.searchString;
+        this.params.country = this.searchString;
+        break;
+      }
+      case ('Hotel'): {
+        this.params.hotelName = this.searchItem.filterData;
+        this.params.city = '';
+        this.params.country = '';
+        break;
+      }
+      case ('City'): {
+        this.params.hotelName = '';
+        this.params.city = this.searchItem.filterData;
+        this.params.country = this.searchItem.additionalFilterData;
+        break;
+      }
+      case ('Country'): {
+        this.params.hotelName = '';
+        this.params.city = '';
+        this.params.country = this.searchItem.additionalFilterData;
+      }
+    }
+  }
+
+  onSelect(event: TypeaheadMatch): void {
+    this.searchItem = event.item;
   }
 
 }
