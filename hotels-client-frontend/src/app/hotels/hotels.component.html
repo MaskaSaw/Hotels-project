@@ -2,26 +2,43 @@
 	<h1>Welcome to the NeBooking.com! Here are the hotels you might be interested in:</h1>
 	<h3>Select date range:</h3>
 	<div class="hotels-input">
-		<input type="text" placeholder="Check-in" [(ngModel)]="params.checkIn" bsDatepicker [minDate]="startMinDate">
-		<input type="text" placeholder="Check-out" [(ngModel)]="params.checkOut" bsDatepicker [minDate]="endMinDate">
+		<input class="hotels-input" type="text" placeholder="Check-in" [(ngModel)]="params.checkIn" bsDatepicker [minDate]="startMinDate">
+		<input class="hotels-input" type="text" placeholder="Check-out" [(ngModel)]="params.checkOut" bsDatepicker [minDate]="endMinDate">
 		<br>
-		<h3>Select your destination point: </h3>
+        <br>
+		<h3>Select your destination point: </h3>   
 		<div>
-			<input type="text" 
-				placeholder="Where u wanna go" 
-                [(ngModel)]="searchString"
-				[typeahead]="searchResults" 
-                typeaheadOptionField="viewField"
-                typeaheadGroupField="type"
-				[typeaheadScrollable]="true" 
-                (typeaheadOnSelect)="onSelect($event)"
-				[typeaheadOptionsInScrollableView]="10"
-                (input)="getSearchData($event)">
-			<input type="text" placeholder="Number of residents" [(ngModel)]="params.numberOfResidents">
+            <form class="example-form">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Select where u wanna go</mat-label>
+                    <input matInput
+                        aria-label="SearchResult"
+                        [(ngModel)]="searchString"
+                        [matAutocomplete]="auto"
+                        
+                        (input)="getSearchData($event)"
+                        [formControl]="searchCtrl">
+                    <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let result of filteredSearch | async" [value]="result.viewField" (click)="onSelect(result)">
+                        <span>{{result.viewField}}</span> |
+                        <small>:{{result.type}}</small>
+                    </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </form>
+            <mat-form-field class="example-full-width">
+                <mat-label>Number of guests</mat-label>
+			    <input matInput type="text" placeholder="Number of residents" [(ngModel)]="params.numberOfResidents">
+                <button mat-button *ngIf="params.numberOfResidents" matSuffix mat-icon-button aria-label="Clear" (click)="params.numberOfResidents=''">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+            <br>
+            <br>
+			<button [disabled]="!checkParams()" (click)="filterHotels()">Find!</button>
+            <br>
+            <br>
 			<button (click)="clearFilter()">Clear</button>
-			<br>
-			<br>
-			<button [disabled]="!checkParams()" (click)="filterHotels()">Find hotels with selected parameters</button>
 		</div>
 		<br>
 		<div *ngIf="hotels.length === 0">
