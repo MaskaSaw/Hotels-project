@@ -12,6 +12,8 @@ namespace Hotels.Models
         public DateTime? CheckIn { get; set; }
         [FromQuery(Name = "checkOut")]
         public DateTime? CheckOut { get; set; }
+        [FromQuery(Name = "hotelName")]
+        public string HotelName { get; set; }
         [FromQuery(Name = "city")]
         public string City { get; set; }
         [FromQuery(Name = "country")]

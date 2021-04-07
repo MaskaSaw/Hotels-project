@@ -5,9 +5,10 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Hotel } from '../hotel';
-import { Params } from '@angular/router';
+import { Params } from '../params';
 import { ApiPaths } from '../api-paths';
 import { environment } from 'src/environments/environment';
+import { SearchResult } from '../searchParams';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,7 @@ export class HotelsService {
         itemsPerPage: this.itemsPerPage.toString(),
         checkIn: inputParams.checkIn.toJSON(),
         checkOut: inputParams.checkOut.toJSON(),
+        hotelName: inputParams.hotelName,
         city: inputParams.city,
         country: inputParams.country,
         numberOfResidents: inputParams.numberOfResidents
@@ -66,24 +68,14 @@ export class HotelsService {
     );
   }
 
-  getCountries(): Observable<string[]> {
-    const url = `${this.hotelsUrl}/countries`;
-    return this.http.get<string[]>(url)
-      .pipe(
-        catchError(this.handleError<string[]>('getCountries')
-      )
-    );
-  }
-
-  getCities(country: string, city: string): Observable<string[]> {
-    const url = `${this.hotelsUrl}/cities`;
+  getSearch(searchString: string): Observable<SearchResult[]> {
+    const url = `${this.hotelsUrl}/search`;
     let params = {
-      country: country,
-      city: city
+      searchString: searchString,
     }
-    return this.http.get<string[]>(url, { params })
+    return this.http.get<SearchResult[]>(url, { params })
       .pipe(
-        catchError(this.handleError<string[]>('getCountries')
+        catchError(this.handleError<SearchResult[]>('getSearch')
       )
     );
   }

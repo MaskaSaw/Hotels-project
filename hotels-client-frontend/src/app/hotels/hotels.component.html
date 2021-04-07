@@ -8,19 +8,15 @@
 		<h3>Select your destination point: </h3>
 		<div>
 			<input type="text" 
-				placeholder="Country" 
-				[(ngModel)]="params.country" 
-				[typeahead]="countries" 
+				placeholder="Where u wanna go" 
+                [(ngModel)]="searchString"
+				[typeahead]="searchResults" 
+                typeaheadOptionField="viewField"
+                typeaheadGroupField="type"
 				[typeaheadScrollable]="true" 
-				[typeaheadOptionsInScrollableView]="10">
-			<input type="text" 
-				placeholder="City (optional)" 
-				[(ngModel)]="params.city"
-				[typeahead]="cities"
-				[typeaheadScrollable]="true"
+                (typeaheadOnSelect)="onSelect($event)"
 				[typeaheadOptionsInScrollableView]="10"
-				(input)="getCitiesData($event)"
-				*ngIf="checkParams()">
+                (input)="getSearchData($event)">
 			<input type="text" placeholder="Number of residents" [(ngModel)]="params.numberOfResidents">
 			<button (click)="clearFilter()">Clear</button>
 			<br>

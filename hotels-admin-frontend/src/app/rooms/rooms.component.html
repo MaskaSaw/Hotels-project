@@ -100,7 +100,6 @@
         <thead>
             <tr> 
                 <th>Image</th>
-                <th>Id</th>
                 <th>Number</th>
                 <th>Room Type</th>
                 <th>Vacant Beds</th>
@@ -113,7 +112,6 @@
         <tbody>
             <tr *ngFor="let room of rooms">
                 <td><img [src]="room.image" height="100"></td>
-                <td>{{room.id}}</td>
                 <td>{{room.roomNumber}}</td>
                 <td>{{room.roomType}}</td>
                 <td>{{room.vacantBeds}}</td>
