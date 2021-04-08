@@ -46,7 +46,7 @@ namespace Hotels.Controllers
                 hotels = hotels.Where(hotel =>
                    hotel.Country.Contains(inputParams.Country) ||
                    hotel.City.Contains(inputParams.City) ||
-                    hotel.Name.Contains(inputParams.HotelName)
+                   hotel.Name.Contains(inputParams.HotelName)
                 );
             }
             else
