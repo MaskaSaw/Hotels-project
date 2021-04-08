@@ -42,14 +42,14 @@
             <h3>Expected number of residents: </h3> 
             <mat-form-field class="example-full-width">
                 <mat-label>Number of residents</mat-label>
-			    <input matInput type="text" [(ngModel)]="params.numberOfResidents">
+                <input matInput type="text" [(ngModel)]="params.numberOfResidents">
                 <button mat-button *ngIf="params.numberOfResidents" matSuffix mat-icon-button aria-label="Clear" (click)="params.numberOfResidents=''">
                     <mat-icon>close</mat-icon>
                 </button>
             </mat-form-field>
             <br>
             <br>
-			<button [disabled]="!checkParams()" (click)="filterHotels()">Find!</button>
+            <button [disabled]="!checkParams()" (click)="filterHotels()">Find!</button>
             <br>
             <br>
 			<button (click)="clearFilter()">Clear</button>
