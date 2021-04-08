@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
 
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs/operators';
 
 import { Hotel } from '../hotel';
 import { Params } from '../params';
@@ -17,6 +18,9 @@ import { HotelsService } from './hotels.service';
   encapsulation: ViewEncapsulation.None
 })
 export class HotelsComponent implements OnInit {
+
+  searchCtrl = new FormControl();
+  filteredSearch:  Observable<SearchResult[]>;
   hotels: Hotel[] = [];
   params: Params = new Params;
   startMinDate = new Date();
@@ -29,7 +33,19 @@ export class HotelsComponent implements OnInit {
   constructor(
     private hotelsService: HotelsService,
     private router: Router,
-  ) { }
+  ) { 
+    this.filteredSearch = this.searchCtrl.valueChanges
+      .pipe(
+        startWith(''),
+        map(searchResult => searchResult ? this.filterSearch(searchResult) : this.searchResults.slice())
+      );
+  }
+
+  private filterSearch(value: string): SearchResult[] {
+    const filterValue = value.toLowerCase();
+
+    return this.searchResults.filter(searchResult => searchResult.filterData.toLowerCase().indexOf(filterValue) === 0);
+  }
 
   ngOnInit(): void {
     this.getHotels();
@@ -49,6 +65,7 @@ export class HotelsComponent implements OnInit {
         .subscribe(() => {
           this.hotelsService.getSearch(this.searchString)
             .subscribe(searchResults => this.searchResults = searchResults);
+          this.searchItem.type = 'Empty'
         })
     }
     this.searchTermChanged.next(event) 
@@ -57,6 +74,7 @@ export class HotelsComponent implements OnInit {
   clearFilter(): void {
     this.params = new Params();
     this.searchItem = new SearchResult;
+    this.searchString = '';
     this.getHotels();
   }
 
@@ -89,30 +107,34 @@ export class HotelsComponent implements OnInit {
         this.params.hotelName = this.searchString;
         this.params.city = this.searchString;
         this.params.country = this.searchString;
+        this.params.globalSearch = true;
         break;
       }
       case ('Hotel'): {
         this.params.hotelName = this.searchItem.filterData;
         this.params.city = '';
         this.params.country = '';
+        this.params.globalSearch = false;
         break;
       }
       case ('City'): {
         this.params.hotelName = '';
         this.params.city = this.searchItem.filterData;
         this.params.country = this.searchItem.additionalFilterData;
+        this.params.globalSearch = false;
         break;
       }
       case ('Country'): {
         this.params.hotelName = '';
         this.params.city = '';
-        this.params.country = this.searchItem.additionalFilterData;
+        this.params.country = this.searchItem.filterData;
+        this.params.globalSearch = false;
       }
     }
   }
 
-  onSelect(event: TypeaheadMatch): void {
-    this.searchItem = event.item;
+  onSelect(item: SearchResult): void {
+    this.searchItem = item;
   }
 
 }

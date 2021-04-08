@@ -41,19 +41,30 @@ namespace Hotels.Controllers
                 .Include(hotel => hotel.Services)
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(inputParams.Country))
+            if (inputParams.GlobalSearch)
             {
-                hotels = hotels.Where(hotel => hotel.Country.Contains(inputParams.Country));
+                hotels = hotels.Where(hotel =>
+                   hotel.Country.Contains(inputParams.Country) ||
+                   hotel.City.Contains(inputParams.City) ||
+                   hotel.Name.Contains(inputParams.HotelName)
+                );
             }
-
-            if (!string.IsNullOrEmpty(inputParams.City))
+            else
             {
-                hotels = hotels.Where(hotel => hotel.City.Contains(inputParams.City));
-            }
+                if (!string.IsNullOrEmpty(inputParams.Country))
+                {
+                    hotels = hotels.Where(hotel => hotel.Country.Contains(inputParams.Country));
+                }
 
-            if (!string.IsNullOrEmpty(inputParams.HotelName))
-            {
-                hotels = hotels.Where(hotel => hotel.Name.Contains(inputParams.HotelName));
+                if (!string.IsNullOrEmpty(inputParams.City))
+                {
+                    hotels = hotels.Where(hotel => hotel.City.Contains(inputParams.City));
+                }
+
+                if (!string.IsNullOrEmpty(inputParams.HotelName))
+                {
+                    hotels = hotels.Where(hotel => hotel.Name.Contains(inputParams.HotelName));
+                }
             }
 
             if (inputParams.NumberOfResidents != null && inputParams.NumberOfResidents != 0)

@@ -102,17 +102,21 @@ body {
     .hotels-input {
 
         input {
-            border: 1px solid @customDarkBlue;
-            border-radius: 4px;
-            box-shadow: inset 0 1px 1px @customDarkBlue;
-            font-size: 20px;
-            line-height: 1.42857143;
-            margin: 0 10px;
 
-            &:focus {
-                border-color: yellow;
-                outline-width: 0;
-            }
+            &.hotels-input {
+                border: 1px solid @customDarkBlue;
+                border-radius: 4px;
+                box-shadow: inset 0 1px 1px @customDarkBlue;
+                font-size: 20px;
+                width: 15%;
+                line-height: 1.42857143;
+                margin: 0 10px;
+    
+                &:focus {
+                    border-color: yellow;
+                    outline-width: 0;
+                }
+            }   
         }
     }
 }
@@ -287,3 +291,6 @@ input.form-control {
 
 
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

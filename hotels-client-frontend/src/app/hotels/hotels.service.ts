@@ -37,6 +37,7 @@ export class HotelsService {
       params = {
         page: '1',
         itemsPerPage: this.itemsPerPage.toString(),
+        globalSearch: inputParams.globalSearch,
         checkIn: inputParams.checkIn.toJSON(),
         checkOut: inputParams.checkOut.toJSON(),
         hotelName: inputParams.hotelName,
