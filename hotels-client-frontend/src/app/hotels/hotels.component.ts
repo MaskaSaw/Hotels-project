@@ -65,6 +65,7 @@ export class HotelsComponent implements OnInit {
         .subscribe(() => {
           this.hotelsService.getSearch(this.searchString)
             .subscribe(searchResults => this.searchResults = searchResults);
+          this.searchItem.type = 'Empty'
         })
     }
     this.searchTermChanged.next(event) 
@@ -106,24 +107,28 @@ export class HotelsComponent implements OnInit {
         this.params.hotelName = this.searchString;
         this.params.city = this.searchString;
         this.params.country = this.searchString;
+        this.params.globalSearch = true;
         break;
       }
       case ('Hotel'): {
         this.params.hotelName = this.searchItem.filterData;
         this.params.city = '';
         this.params.country = '';
+        this.params.globalSearch = false;
         break;
       }
       case ('City'): {
         this.params.hotelName = '';
         this.params.city = this.searchItem.filterData;
         this.params.country = this.searchItem.additionalFilterData;
+        this.params.globalSearch = false;
         break;
       }
       case ('Country'): {
         this.params.hotelName = '';
         this.params.city = '';
         this.params.country = this.searchItem.filterData;
+        this.params.globalSearch = false;
       }
     }
   }

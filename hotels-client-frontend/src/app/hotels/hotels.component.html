@@ -1,5 +1,5 @@
 <div class="hotels-container">
-	<h1>Welcome to the NeBooking.com! Here are the hotels you might be interested in:</h1>
+	<h1>Welcome to the NeBooking.com!</h1>
 	<h3>Select date range:</h3>
 	<div class="hotels-input">		
 		<div>
@@ -10,7 +10,6 @@
                     <mat-datepicker-toggle matSuffix [for]="firstpicker"></mat-datepicker-toggle>
                     <mat-datepicker #firstpicker></mat-datepicker>
                 </mat-form-field>
-                <br>
                 <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Choose end date</mat-label>
                     <input matInput [min]="endMinDate" [matDatepicker]="secondpicker" [(ngModel)]="params.checkOut" name="second">
@@ -21,24 +20,29 @@
                 <br>
                 <h3>Select your destination point: </h3>   
                 <mat-form-field class="example-full-width">
-                    <mat-label>Select where u wanna go</mat-label>
+                    <mat-label>Where are you going?</mat-label>
                     <input matInput
                         aria-label="SearchResult"
                         [(ngModel)]="searchString"
                         [matAutocomplete]="auto"
                         (input)="getSearchData($event)"
                         [formControl]="searchCtrl">
+                    <button mat-button *ngIf="searchString" matSuffix mat-icon-button aria-label="Clear" (click)="searchString=''">
+                        <mat-icon>close</mat-icon>
+                    </button>
                     <mat-autocomplete #auto="matAutocomplete">
                     <mat-option *ngFor="let result of filteredSearch | async" [value]="result.viewField" (click)="onSelect(result)">
                         <span>{{result.viewField}}</span> |
-                        <small>:{{result.type}}</small>
+                        <small>: {{result.type}}</small>
                     </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
             </form>
+            <br>
+            <h3>Expected number of residents: </h3> 
             <mat-form-field class="example-full-width">
-                <mat-label>Number of guests</mat-label>
-			    <input matInput type="text" placeholder="Number of residents" [(ngModel)]="params.numberOfResidents">
+                <mat-label>Number of residents</mat-label>
+			    <input matInput type="text" [(ngModel)]="params.numberOfResidents">
                 <button mat-button *ngIf="params.numberOfResidents" matSuffix mat-icon-button aria-label="Clear" (click)="params.numberOfResidents=''">
                     <mat-icon>close</mat-icon>
                 </button>

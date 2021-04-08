@@ -8,6 +8,8 @@ namespace Hotels.Models
 {
     public class HotelsParams
     {
+        [FromQuery(Name = "globalSearch")]
+        public bool GlobalSearch { get; set; }
         [FromQuery(Name = "checkIn")]
         public DateTime? CheckIn { get; set; }
         [FromQuery(Name = "checkOut")]
