@@ -4,5 +4,6 @@ export enum ApiPaths {
     Rooms = '/rooms',
     Users = '/users',
     Reservations = '/reservations',
-    Images = '/images'
+    Images = '/images',
+    Signal = '/signal'
  }

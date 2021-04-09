@@ -60,7 +60,7 @@
 		</div>
 	</div>	  
 	<div class="items-list">
-		<div class="item-container" *ngFor="let hotel of hotels">
+		<div class="item-container" *ngFor="let hotel of hotels, let i = index">
 			<div class='item' (click)="openDetailed(hotel.id)">
 				<div class="blur" [ngStyle]="{'background-image':'url(' + hotel.image + ')'}"></div>
 				<div class="header" >
@@ -72,6 +72,7 @@
 					<p>Has {{hotel.roomCount}} free rooms</p>
 				</div>	
 			</div>
+            <p *ngIf=reserved[i]>Someone just reserved room here!</p>
 		</div>		
 	</div>
 </div>
