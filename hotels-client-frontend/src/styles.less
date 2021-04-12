@@ -219,7 +219,7 @@ input.form-control {
     overflow: hidden;
 
     .item-container {
-        width: 23%;
+        width: 100%;
         float: left;
         margin: 1%;
 
@@ -289,7 +289,17 @@ input.form-control {
     }
 }
 
+@media screen and (min-width: 600px) {
+    .items-list .item-container {
+        width: 48%;
+    }
+}
 
+@media screen and (min-width: 1200px) {
+    .items-list .item-container {
+        width: 23%;
+    }
+}
 
 
 html, body { height: 100%; }
