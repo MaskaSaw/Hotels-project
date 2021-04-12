@@ -20,10 +20,10 @@ namespace Hotels.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly HotelsDBContext _context;
-        private IHubContext<SignalHub> _hub;
+        private IHubContext<ReservationDataHub> _hub;
         private readonly int _itemsCount = 100;
 
-        public ReservationsController(HotelsDBContext context, IHubContext<SignalHub> hub)
+        public ReservationsController(HotelsDBContext context, IHubContext<ReservationDataHub> hub)
         {
             _context = context;
             _hub = hub;

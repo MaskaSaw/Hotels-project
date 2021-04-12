@@ -62,7 +62,7 @@ namespace Hotels
             {
                 c.AddPolicy("AllowCorsForAngular",
                     options => options
-                        .WithOrigins("http://localhost:4200")
+                        .WithOrigins(Configuration.GetSection("AppSettings:AllowedOrigins").Value)
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()

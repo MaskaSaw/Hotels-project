@@ -5,5 +5,5 @@ export enum ApiPaths {
     Users = '/users',
     Reservations = '/reservations',
     Images = '/images',
-    Signal = '/signal'
+    Signal = '/reservationData'
  }

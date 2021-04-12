@@ -5,6 +5,8 @@ import * as signalR from "@aspnet/signalr";
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ReservationCreatedData } from './reservation-created-data';
+import { environment } from '../environments/environment';
+import { ApiPaths } from './api-paths';
 
 
 @Injectable({
@@ -13,24 +15,23 @@ import { ReservationCreatedData } from './reservation-created-data';
 export class ReservationDataSignalService {
 
   private hubConnection!: signalR.HubConnection;
-  private _dataObservable = new BehaviorSubject(new ReservationCreatedData());
+  private dataObservable = new BehaviorSubject(new ReservationCreatedData());
 
   setValue(value: ReservationCreatedData) {
-    this._dataObservable.next(value)
+    this.dataObservable.next(value)
   }
 
   getValue(): Observable<ReservationCreatedData> {
-    return this._dataObservable.asObservable();
+    return this.dataObservable.asObservable();
   }
 
   public startConnection(): void {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:44336/reservationData')
+      .withUrl(`${environment.resourceUrl}${ApiPaths.Signal}`)
       .build();
     
       this.hubConnection
         .start()
-        .then(() => console.log('connection started'))
         .catch(err => console.log('error with hub connection detected: ' + err))
   }
 
