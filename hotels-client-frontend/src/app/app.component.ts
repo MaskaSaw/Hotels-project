@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AuthService } from './authentication/auth.service';
-import { SignalRService } from './signal-r.service';
 
 @Component({
   selector: 'app-root',

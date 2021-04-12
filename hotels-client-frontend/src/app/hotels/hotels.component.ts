@@ -10,7 +10,7 @@ import { Hotel } from '../hotel';
 import { Params } from '../params';
 import { ReservationCreatedData } from '../reservation-created-data';
 import { SearchResult } from '../searchParams';
-import { SignalRService } from '../signal-r.service';
+import { ReservationDataSignalService } from '../reservation-data-signal.service';
 import { HotelsService } from './hotels.service';
 
 @Component({
@@ -35,7 +35,7 @@ export class HotelsComponent implements OnInit {
 
   constructor(
     private hotelsService: HotelsService,
-    private signalRService: SignalRService,
+    private reservationDataSignalService: ReservationDataSignalService,
     private router: Router,
   ) { 
     this.filteredSearch = this.searchCtrl.valueChanges
@@ -52,9 +52,9 @@ export class HotelsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.signalRService.startConnection();
-    this.signalRService.addTransferCreatedReservationDataListener();
-    this.signalRService.getValue().subscribe( value => {
+    this.reservationDataSignalService.startConnection();
+    this.reservationDataSignalService.addTransferCreatedReservationDataListener();
+    this.reservationDataSignalService.getValue().subscribe( value => {
       this.pointHotel(value.hotelId);
     })
     this.getHotels();
@@ -158,8 +158,7 @@ export class HotelsComponent implements OnInit {
   }
 
   pointHotel(id: number): void {
-    console.log('point hotel');
-    let index = this.hotels.findIndex(hotel => hotel.id === id);
+    const index = this.hotels.findIndex(hotel => hotel.id === id);
     if (index !== -1) {
       this.reserved[index] = true;
       setTimeout(() => {

@@ -93,7 +93,7 @@ namespace Hotels
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<SignalHub>("/signal");
+                endpoints.MapHub<ReservationDataHub>("/reservationData");
             });
 
         }

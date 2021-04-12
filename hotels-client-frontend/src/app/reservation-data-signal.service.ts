@@ -10,7 +10,7 @@ import { ReservationCreatedData } from './reservation-created-data';
 @Injectable({
   providedIn: 'root'
 })
-export class SignalRService {
+export class ReservationDataSignalService {
 
   private hubConnection!: signalR.HubConnection;
   private _dataObservable = new BehaviorSubject(new ReservationCreatedData());
@@ -25,7 +25,7 @@ export class SignalRService {
 
   public startConnection(): void {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:44336/signal')
+      .withUrl('https://localhost:44336/reservationData')
       .build();
     
       this.hubConnection
@@ -37,7 +37,6 @@ export class SignalRService {
   public addTransferCreatedReservationDataListener(): void {
     this.hubConnection.on('transferCreatedReservationData', (data) => {
       this.setValue(data);
-      console.log(data);
     });
   }
   
