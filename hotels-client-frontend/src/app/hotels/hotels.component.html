@@ -52,27 +52,27 @@
             <button [disabled]="!checkParams()" (click)="filterHotels()">Find!</button>
             <br>
             <br>
-			<button (click)="clearFilter()">Clear</button>
-		</div>
-		<br>
-		<div *ngIf="hotels.length === 0">
-			<h2>No hotels found!</h2>
-		</div>
-	</div>	  
-	<div class="items-list">
-		<div class="item-container" *ngFor="let hotel of hotels, let i = index">
-			<div class='item' (click)="openDetailed(hotel.id)">
-				<div class="blur" [ngStyle]="{'background-image':'url(' + hotel.image + ')'}"></div>
-				<div class="header" >
-					<h1>{{hotel.name}}</h1>
-					<h2>{{hotel.country}}, {{hotel.city}}</h2>	
-				</div>	
-				<div class="blur"></div>
-				<div class="detail">
-					<p>Has {{hotel.roomCount}} free rooms</p>
-				</div>	
-			</div>
+            <button (click)="clearFilter()">Clear</button>
+        </div>
+        <br>
+        <div *ngIf="hotels.length === 0">
+            <h2>No hotels found!</h2>
+        </div>
+    </div>	  
+    <div class="items-list">
+        <div class="item-container" *ngFor="let hotel of hotels, let i = index">
+            <div class='item' (click)="openDetailed(hotel.id)">
+                <div class="blur" [ngStyle]="{'background-image':'url(' + hotel.image + ')'}"></div>
+                <div class="header" >
+                    <h1>{{hotel.name}}</h1>
+                    <h2>{{hotel.country}}, {{hotel.city}}</h2>	
+                </div>	
+                <div class="blur"></div>
+                <div class="detail">
+                    <p>Has {{hotel.roomCount}} free rooms</p>
+                </div>	
+            </div>
             <p *ngIf=reserved[i]>Someone just reserved room here!</p>
-		</div>		
-	</div>
+        </div>		
+    </div>
 </div>
