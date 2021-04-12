@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 
 using Hotels.Authentication;
 using Hotels.ImageProcessing;
+using Hotels.HubConfig;
 
 namespace Hotels
 {
@@ -35,7 +36,6 @@ namespace Hotels
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<HotelsDBContext>(opt => opt.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
-            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotels", Version = "v1" });
@@ -62,11 +62,15 @@ namespace Hotels
             {
                 c.AddPolicy("AllowCorsForAngular",
                     options => options
-                        .AllowAnyOrigin()
+                        .WithOrigins(Configuration.GetSection("AppSettings:AllowedOrigins").Value)
                         .AllowAnyMethod()
                         .AllowAnyHeader()
+                        .AllowCredentials()
                 );
             });
+
+            services.AddSignalR();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,7 +93,9 @@ namespace Hotels
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ReservationDataHub>("/reservationData");
             });
+
         }
     }
 }

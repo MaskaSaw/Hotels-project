@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Hotels.Extensions;
 using Hotels.DTOs;
+using Microsoft.AspNetCore.SignalR;
+using Hotels.HubConfig;
 
 namespace Hotels.Controllers
 {
@@ -18,11 +20,13 @@ namespace Hotels.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly HotelsDBContext _context;
+        private IHubContext<ReservationDataHub> _hub;
         private readonly int _itemsCount = 100;
 
-        public ReservationsController(HotelsDBContext context)
+        public ReservationsController(HotelsDBContext context, IHubContext<ReservationDataHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         // GET: api/Reservations
@@ -138,7 +142,17 @@ namespace Hotels.Controllers
 
                 var createdReservation = await _context.Reservations
                     .Include(createdReservation => createdReservation.ReservationServices)
+                    .Include(createdReservation => createdReservation.Room)
+                    .Include(createdReservation => createdReservation.Room.Hotel)
+                    .Include(createdReservation => createdReservation.User)
                     .FirstOrDefaultAsync(createdReservation => reservation.Id == createdReservation.Id);
+
+                await _hub.Clients.All.SendAsync("transferCreatedReservationData",
+                    new ReservationCreatedSignalDTO
+                    {
+                        HotelId = createdReservation.Room.HotelId
+                    }
+                );
 
                 return CreatedAtAction("GetReservation",
                     new { id = reservation.Id },

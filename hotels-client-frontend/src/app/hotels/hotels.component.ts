@@ -8,7 +8,9 @@ import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs/operato
 
 import { Hotel } from '../hotel';
 import { Params } from '../params';
+import { ReservationCreatedData } from '../reservation-created-data';
 import { SearchResult } from '../searchParams';
+import { ReservationDataSignalService } from '../reservation-data-signal.service';
 import { HotelsService } from './hotels.service';
 
 @Component({
@@ -22,6 +24,7 @@ export class HotelsComponent implements OnInit {
   searchCtrl = new FormControl();
   filteredSearch:  Observable<SearchResult[]>;
   hotels: Hotel[] = [];
+  reserved: boolean[] = [];
   params: Params = new Params;
   startMinDate = new Date();
   endMinDate = new Date();
@@ -32,6 +35,7 @@ export class HotelsComponent implements OnInit {
 
   constructor(
     private hotelsService: HotelsService,
+    private reservationDataSignalService: ReservationDataSignalService,
     private router: Router,
   ) { 
     this.filteredSearch = this.searchCtrl.valueChanges
@@ -48,6 +52,11 @@ export class HotelsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.reservationDataSignalService.startConnection();
+    this.reservationDataSignalService.addTransferCreatedReservationDataListener();
+    this.reservationDataSignalService.getValue().subscribe( value => {
+      this.pointHotel(value.hotelId);
+    })
     this.getHotels();
     this.params = new Params;
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
@@ -56,7 +65,12 @@ export class HotelsComponent implements OnInit {
 
   getHotels(): void {
     this.hotelsService.getHotels()
-      .subscribe(hotels =>  this.hotels = hotels);
+      .subscribe(hotels => {
+        this.hotels = hotels;
+        for (let i; i = 0; i < hotels.length) {
+          this.reserved.push(false);
+        }
+      });
   }
 
   getSearchData(event?: any): void {
@@ -97,8 +111,14 @@ export class HotelsComponent implements OnInit {
 
   filterHotels(): void {
     this.chooseSearchParams();
+    this.reserved = [];
     this.hotelsService.getHotels(this.params)
-      .subscribe( hotels => this.hotels = hotels);
+      .subscribe( hotels => { 
+        this.hotels = hotels;
+        for (let i; i = 0; i < hotels.length) {
+          this.reserved.push(false);
+        }
+      });
   }
 
   chooseSearchParams(): void {
@@ -135,6 +155,16 @@ export class HotelsComponent implements OnInit {
 
   onSelect(item: SearchResult): void {
     this.searchItem = item;
+  }
+
+  pointHotel(id: number): void {
+    const index = this.hotels.findIndex(hotel => hotel.id === id);
+    if (index !== -1) {
+      this.reserved[index] = true;
+      setTimeout(() => {
+        this.reserved[index] = false;
+      }, 3000);
+    }
   }
 
 }
