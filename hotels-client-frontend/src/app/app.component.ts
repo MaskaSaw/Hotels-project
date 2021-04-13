@@ -19,6 +19,14 @@ export class AppComponent {
     this.userLoggedIn = this.authService.userLoggedIn;
   }
 
+  public get isHotels(): boolean {
+    if (this.router.url === '/hotels') {
+      return true;
+    }
+
+    return false;
+  }
+
   logout(): void {
     this.authService.logout();
     this.userLoggedIn = false;

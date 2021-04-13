@@ -36,12 +36,12 @@ header {
         margin-top: 10px;
         margin-bottom: 10px;
 
-        .hotels-button {
+        .hotels-buttons {
             margin:0 auto;
             text-align: center;
 
-            button {
-                border: 1px solid @customDarkBlue;
+            .hotels-button {
+                border: 2px solid @customDarkBlue;
                 transition: 0.3s;
                 min-width: 100px;
                 min-height: 30px;
@@ -50,10 +50,16 @@ header {
                     border-color: white;
                 }
             }
+
+            .hotels-button-active {
+                color: white;
+                border-color: white;
+                background-color: @customDarkBlue;
+                min-width: 100px;
+                min-height: 30px;
+            }
         }
-
     }
-
 }
 
 body {

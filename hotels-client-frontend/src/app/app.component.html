@@ -4,8 +4,8 @@
         <h1 class="ending">Booking.com</h1>    
     </div>
     <div class="header-links">
-        <div class="hotels-button">
-            <button (click)="openHotels()">Hotels</button>
+        <div class="hotels-buttons">
+            <button [ngClass]= "{ 'hotels-button': !isHotels, 'hotels-button-active': isHotels}" (click)="openHotels()">Hotels</button>
             <button *ngIf="!authService.userLoggedIn" (click)="openAuth()" >Sign in</button>
         </div>
         <div class="dropdown" *ngIf="authService.userLoggedIn">
