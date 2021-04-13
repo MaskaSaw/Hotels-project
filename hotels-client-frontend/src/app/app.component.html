@@ -5,11 +5,11 @@
     </div>
     <div class="header-links">
         <div class="hotels-buttons">
-            <button [ngClass]= "{ 'hotels-button': !isHotels, 'hotels-button-active': isHotels}" (click)="openHotels()">Hotels</button>
-            <button *ngIf="!authService.userLoggedIn" (click)="openAuth()" >Sign in</button>
+            <button [ngClass]="{ 'hotels-button': !isHotels, 'hotels-button-active': isHotels}" (click)="openHotels()">Hotels</button>
+            <button *ngIf="!authService.userLoggedIn" [ngClass]="{ 'hotels-button': !isAuth, 'hotels-button-active': isAuth}" (click)="openAuth()" >Sign in</button>
         </div>
         <div class="dropdown" *ngIf="authService.userLoggedIn">
-            <button class="dropbtn" (click)="toggleMenu()">{{authService.getName}}</button>
+            <button [ngClass]="{ 'dropbtn': !isReservations, 'dropbtn-active': isReservations}" (click)="toggleMenu()">{{authService.getName}}</button>
             <div class="dropdown-content" *ngIf="toggle">
                 <p (click)="openReservations()">Show reservations</p>
                 <p (click)="logout()">Logout</p>

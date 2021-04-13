@@ -7,7 +7,6 @@
     text-align: center;
 
     .dropbtn {
-        color: @customBlue;
         background-color: white;
         color: @customDarkBlue;
         min-width: 100px;
@@ -21,6 +20,16 @@
             background-color: @customDarkBlue;
             color: white;
         }
+    }
+
+    .dropbtn-active {
+        color: white;
+        background-color: @customDarkBlue;
+        min-width: 100px;
+        min-height: 30px;
+        font-size: 1.2em;
+        border: 2px solid white;
+        transition: 0.3s;
     }
 
     .dropdown-content {

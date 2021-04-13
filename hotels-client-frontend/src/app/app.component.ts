@@ -27,7 +27,24 @@ export class AppComponent {
     return false;
   }
 
+  public get isReservations(): boolean {
+    if (this.router.url === '/user/reservations') {
+      return true;
+    }
+
+    return false;
+  }
+
+  public get isAuth(): boolean {
+    if (this.router.url === '/authentication') {
+      return true;
+    }
+
+    return false;
+  }
+
   logout(): void {
+    this.toggleMenu();
     this.authService.logout();
     this.userLoggedIn = false;
   }
