@@ -9,11 +9,13 @@ header {
     font-family: Helvetica,Arial,sans-serif;
     
     .header-text {
-        padding: 30px 100px;
+        margin-top: 30px;
+        display: block;
+        text-align: center;
 
-        h2 {
-            display: inline-block;
-            margin: 0;
+        h1 {
+            display: block;
+            margin: 0 auto;
             text-shadow: 1px 1px black;
         }
     
@@ -27,68 +29,28 @@ header {
             display: inline;
         }
 
-        a {
-            float: right;
-            text-decoration: none;
-            font-size: 15pt;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-
-            &:hover{
-                color: yellow;
-            }
-        }
-
-    } 
-
-    nav {
-        overflow: hidden;
-
-        ul.menu {
-            margin: 0 0 2px 0;
-            padding: 0 100px;
+    }
     
-            li {
-                display: inline-block;
-                font-weight: bold;
-                font-size: 15pt;
-                border-radius: 3px;
-                cursor: pointer;
-                height: 26px;
-    
-                a {
-                    padding: 0px 10px;
-                    background: @customDarkBlue;
-                    text-decoration: none;
-                    color: white;
-                    border-radius: 3px;
-                    height: 26px;
+    .header-links {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 10px;
 
-                    &:hover {
-                        color: @customDarkBlue;
-                        background: white;
-                    }
-                }
+        .hotels-button {
+            margin:0 auto;
+            text-align: center;
 
-                p {
-                    margin: 0;
-                    padding: 0 10px;
-                    text-decoration: none;
-                }
-                
+            button {
+                border: 1px solid #0071c2;
+
                 &:hover {
-                    color: @customDarkBlue;
-                    background: white;
-
-                    a {   
-                        color: @customDarkBlue;
-                        background: white;
-                    }
+                    border: none;
                 }
             }
         }
-    }   
+
+    }
+
 }
 
 body {
@@ -126,9 +88,8 @@ button {
     border: 2px solid @customDarkBlue;
     color: @customDarkBlue;
     border-radius: 5px;
-    height: 26px;
     font-weight: bold;
-    font-size: 17px;
+    font-size: 16px;
     cursor: pointer;
 
     &:hover {

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from './authentication/auth.service';
 
 @Component({
@@ -8,10 +9,12 @@ import { AuthService } from './authentication/auth.service';
 })
 export class AppComponent {
   title = 'hotels-client-frontend';
+  toggle: boolean = false;
   userLoggedIn: boolean = false;
 
   constructor(
-    public authService: AuthService
+    public authService: AuthService,
+    private router: Router
   ) {
     this.userLoggedIn = this.authService.userLoggedIn;
   }
@@ -19,5 +22,23 @@ export class AppComponent {
   logout(): void {
     this.authService.logout();
     this.userLoggedIn = false;
+  }
+
+  toggleMenu(): void {
+    this.toggle = !this.toggle;
+  }
+
+  openHotels(): void {
+    this.router.navigate([`/hotels`]);
+  }
+
+  openAuth(): void {
+    this.toggleMenu();
+    this.router.navigate([`/authentication`]);
+  }
+
+  openReservations(): void {
+    this.toggleMenu();
+    this.router.navigate([`user/reservations`]);
   }
 }

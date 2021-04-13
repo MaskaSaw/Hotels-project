@@ -1,15 +1,20 @@
 <header>
     <div class="header-text">
-        <h2 class="beginning">Ne</h2>
-        <h2 class="ending">Booking.com</h2>
-        <a routerLink="user/reservations" *ngIf="authService.userLoggedIn">{{authService.getName}}</a>
+        <h1 class="beginning">Ne</h1>
+        <h1 class="ending">Booking.com</h1>    
     </div>
-    <nav>
-        <ul class="menu">
-            <li style="float: left;" ><a routerLink="hotels" >Hotels</a></li>
-            <li style="float: right;" ><a routerLink="authentication" *ngIf="!authService.userLoggedIn" >Sign in</a></li>
-            <li style="float: right;" (click)="logout()" *ngIf="authService.userLoggedIn" ><p>Logout</p></li>
-        </ul>
-    </nav> 
+    <div class="header-links">
+        <div class="hotels-button">
+            <button (click)="openHotels()">Hotels</button>
+            <button *ngIf="!authService.userLoggedIn" (click)="openAuth()" >Sign in</button>
+        </div>
+        <div class="dropdown" *ngIf="authService.userLoggedIn">
+            <button class="dropbtn" (click)="toggleMenu()">{{authService.getName}}</button>
+            <div class="dropdown-content" *ngIf="toggle">
+                <p (click)="openReservations()">Show reservations</p>
+                <p (click)="logout()">Logout</p>
+            </div>
+        </div>    
+    </div> 
 </header>
 <router-outlet></router-outlet>
