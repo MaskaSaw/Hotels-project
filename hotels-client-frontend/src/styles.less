@@ -151,33 +151,42 @@ ul {
 
     table {
         text-align: center;
-        padding: 10px;
-        width: 80%;
+        padding: 5px;
+        width: 100%;
         border: 2px solid @customDarkBlue;
-        margin-left: 10%;
-        border-radius: 5px;
+        margin: 0 auto;
+        border-radius: 10px;
+        font-size: 0.6em;
 
-        tbody {
-            margin-top: 20px;
-        }
-        
-        td {
-            border-bottom: 1px solid @customDarkBlue;
-        }
-        
-        ul {
-            padding-left: 0;
-            
-            li {
+        thead {
+            border: 2px solid @customDarkBlue;
+
+            th {
                 padding-bottom: 5px;
+                border-bottom: 1px solid @customDarkBlue;
             }
         }
 
-        button {
-            font-size: 15px;
-        }
-    }
+        tbody {
+            margin-top: 20px;
 
+            td {
+                border-bottom: 1px solid @customDarkBlue;
+
+                ul {
+                    padding-left: 0;
+                    
+                    li {
+                        padding-bottom: 5px;
+                    }
+                }
+        
+                button {
+                    font-size: 1em;
+                }
+            }
+        }       
+    }
 }
 
 input.form-control {
@@ -260,15 +269,46 @@ input.form-control {
     }
 }
 
+@media screen and (min-width: 500px) {
+
+    .user-reservations-container {
+        table {
+            font-size: 0.8em;
+        }
+    }
+}
+
 @media screen and (min-width: 600px) {
     .items-list .item-container {
         width: 48%;
+    }
+
+    .user-reservations-container {
+        table {
+            font-size: 0.9em;
+        }
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .user-reservations-container {
+        table {
+            width: 80%;
+            font-size: 1em;
+        }
     }
 }
 
 @media screen and (min-width: 1200px) {
     .items-list .item-container {
         width: 23%;
+    }
+
+    .user-reservations-container {
+        table {
+            width: 60%;
+            font-size: 1.1em;
+        }
     }
 }
 

@@ -16,7 +16,7 @@
         <br>
     </div>
     <h2 *ngIf="checkReservations()"> No bookings were found!</h2>
-    <table *ngIf="!checkReservations()" class="table table-striped" cellspacing="0">
+    <table class="reservations-table" *ngIf="!checkReservations()" class="table table-striped" cellspacing="0">
         <thead>
             <tr>
                 <th>Hotel</th>
@@ -29,8 +29,6 @@
                 <th>Change arrival time</th>
             </tr>
         </thead>
-        <br>
-        <br>
         <tbody>
             <tr *ngFor="let reservation of reservations">
                 <td>{{reservation.hotelName}}</td>
@@ -45,7 +43,7 @@
                     </ul>
                 </td>
                 <td>
-                    <button *ngIf="!checkDates(reservation.startDate)" (click)="openEdit(reservation)">Change arrival time</button>
+                    <button *ngIf="!checkDates(reservation.startDate)" (click)="openEdit(reservation)">Change time</button>
                     <p *ngIf="checkDates(reservation.startDate)">Booking has already ended</p>
                 </td>
             </tr>

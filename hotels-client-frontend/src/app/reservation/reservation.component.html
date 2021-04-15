@@ -1,18 +1,32 @@
 <div class="reservation-container">
-	<h1>Your reservation:</h1>
-	<p>Reservation start date: {{reservation.startDate | date}}</p>
-	<p>Reservation end date: {{reservation.endDate | date}}</p>
-	<p>Arrival time: {{reservation.arrivalTime}}</p>
-	<p>Departure time: {{reservation.departureTime}}</p>
-	<h3>Additional services:</h3>
-	<ul *ngFor="let service of reservation.reservationServices">
-		<li>
-			<label>{{service.name}} : {{service.cost}}$</label>
-		</li>
-	</ul>
-	<h2>Summary: {{getSummary()}}$</h2>
-	<button (click)="addReservation()">Confirm reservation</button>
-	<br>
-	<br>
-	<button (click)="goBack()">Cancel</button>
+    <h1>Your reservation details:</h1>
+    <table class="details-table">
+        <tr>
+            <td>Reservation start date: </td>
+            <td class="info">{{reservation.startDate | date}}</td>
+        </tr>
+        <tr>
+            <td>Reservation end date: </td>
+            <td class="info">{{reservation.endDate | date}}</td>
+        </tr>
+        <tr>
+            <td>Arrival time: </td>
+            <td class="info">{{reservation.arrivalTime}}</td>
+        </tr>
+        <tr>
+            <td>Departure time: </td>
+            <td class="info">{{reservation.departureTime}}</td>
+        </tr>
+    </table>
+    <h1>Additional services:</h1>
+    <ul class="service-table">
+        <li *ngFor="let service of reservation.reservationServices">
+            <label>{{service.name}} : {{service.cost}}$</label>
+        </li>
+    </ul>
+    <h2>Summary: {{getSummary()}}$</h2>
+    <button (click)="addReservation()">Confirm reservation</button>
+    <br>
+    <br>
+    <button (click)="goBack()">Cancel</button>
 </div>
