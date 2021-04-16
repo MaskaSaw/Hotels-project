@@ -137,6 +137,7 @@ export class ReservationsComponent implements OnInit {
     else {
       this.reservation.roomId = this.rooms.find(room => room.roomNumber === this.roomNumber)!.id
     }
+    this.reservation.cost = this.computeCost;
     this.reservationsService.addReservation(this.reservation)
       .subscribe(reservation => {
         if (reservation !== undefined) {

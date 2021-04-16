@@ -1,3 +1,7 @@
+<ng-template #userTemplate let-model="item">
+    <h5>{{model.name}} {{model.surname}}, Login: {{model.login}}</h5>
+</ng-template>
+
 <div class="add-form" *ngIf="editFormOn">
     <ul>
         <li>
@@ -7,6 +11,7 @@
             <label>User: </label>
             <input type="text" placeholder="User name" [typeahead]="users" [typeaheadScrollable]="true"
             typeaheadOptionField="login"
+            [typeaheadItemTemplate]="userTemplate"
             [typeaheadOptionsInScrollableView]="10"
             (input)="getUsersData($event)"
             [(ngModel)]="userName">
