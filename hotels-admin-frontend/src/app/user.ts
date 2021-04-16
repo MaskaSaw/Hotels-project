@@ -5,6 +5,7 @@ export class User {
     login: string;
     name: string;
     surname: string;
+    fullName: string;
     password: string;
     role: string;
     reservations: Reservation[];
@@ -14,6 +15,7 @@ export class User {
         this.login = '';
         this.name = '';
         this.surname = '';
+        this.fullName = '';
         this.password = '';
         this.role = 'User';
         this.reservations = [];

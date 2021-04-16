@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subject, Subscription } from 'rxjs';
 
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
+
 import { ReservationsService } from './reservations.service';
 import { Reservation } from '../reservation';
 import { AuthGuard } from '../auth.guard';
@@ -205,11 +207,8 @@ export class ReservationsComponent implements OnInit {
       this.userSearchTermChanged.pipe(debounceTime(500), distinctUntilChanged())
         .subscribe(() => {
           this.usersService.getUserNames(this.userName)
-            .subscribe(users => {
-              users.forEach(user => user = user as User);
-              this.users = users;
-            } );
-        })
+            .subscribe(users => this.users = users)
+          })
     }
     this.userSearchTermChanged.next(event) 
   }
@@ -256,6 +255,10 @@ export class ReservationsComponent implements OnInit {
         })
     }
     this.roomSearchTermChanged.next(event) 
+  }
+
+  onSelect(event: TypeaheadMatch): void {
+    this.userName = event.item.login;
   }
 
   parseDate(event: any): Date | null{

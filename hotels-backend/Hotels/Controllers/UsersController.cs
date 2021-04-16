@@ -48,6 +48,7 @@ namespace Hotels.Controllers
                     Login = user.Login,
                     Name = user.Name,
                     Surname = user.Surname,
+                    FullName = $"{user.Name} {user.Surname}",
                     Password = string.Empty,
                     Role = user.Role
                 })
@@ -75,14 +76,14 @@ namespace Hotels.Controllers
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsersByName([FromQuery]string namePart)
         {
             return await _context.Users
-                .Where(user => user.Name.Contains(namePart) || user.Surname.Contains(namePart)
-                    || user.Login.Contains(namePart))
+                .Where(user => (user.Name + " " + user.Surname).Contains(namePart) || user.Login.Contains(namePart))
                 .Select(user => new UserDTO
                 {
                     Id = user.Id,
                     Login = user.Login,
                     Name = user.Name,
                     Surname = user.Surname,
+                    FullName = $"{user.Name} {user.Surname}",
                     Password = string.Empty,
                     Role = user.Role
                 })

@@ -49,6 +49,7 @@ namespace Hotels.Controllers
                 Login = createdUser.Login,
                 Name = createdUser.Name,
                 Surname = createdUser.Surname,
+                FullName = $"{createdUser.Name} {createdUser.Surname}",
                 Password = userForRegister.Password,
                 Role = createdUser.Role
             };
