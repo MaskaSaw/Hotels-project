@@ -16,6 +16,8 @@ import { UsersService } from '../users/users.service';
 import { User } from '../user';
 import { HotelsService } from '../hotels/hotels.service';
 import { RoomSearch } from '../room-search';
+import { Room } from '../room';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-reservations',
@@ -38,6 +40,7 @@ export class ReservationsComponent implements OnInit {
   userName: string = '';
   hotels: string[] = [];
   hotelName: string = '';
+  roomCost: number = 0;
   rooms: RoomSearch[] = [];
   roomNumber: string = '';
   userSearchTermChanged: Subject<string> = new Subject<string>();
@@ -115,6 +118,8 @@ export class ReservationsComponent implements OnInit {
       this.routePart = 'room';
       this.roomsService.getServices(this.id)
         .subscribe(services => this.services = services);
+      this.roomsService.getRoomCost(this.reservation.roomId)
+        .subscribe(roomCost => this.roomCost = roomCost);
     }
     else if (this.isUser()) {
       this.routePart = 'user';
@@ -199,7 +204,10 @@ export class ReservationsComponent implements OnInit {
       this.userSearchTermChanged.pipe(debounceTime(500), distinctUntilChanged())
         .subscribe(() => {
           this.usersService.getUserNames(this.userName)
-            .subscribe(users => this.users = users);
+            .subscribe(users => {
+              users.forEach(user => user = user as User);
+              this.users = users;
+            } );
         })
     }
     this.userSearchTermChanged.next(event) 
@@ -222,9 +230,10 @@ export class ReservationsComponent implements OnInit {
         .subscribe(() => {
           this.roomsService.getRoomNumbers(this.roomNumber, this.hotelName)
             .subscribe(rooms => this.rooms = rooms);
-          const roomId = this.rooms.find(room => room.roomNumber === this.roomNumber)
-          if (roomId) {
-            this.roomsService.getServices(roomId!.id)
+          const room = this.rooms.find(room => room.roomNumber === this.roomNumber)
+          if (room) {
+            this.reservation.roomId = room!.id;
+            this.roomsService.getServices(room!.id)
               .subscribe(services => {
                 this.services = services;
                 for (let i = 0; i < this.services.length; i++) {
@@ -237,18 +246,43 @@ export class ReservationsComponent implements OnInit {
                 }
               }
             );
+            this.roomsService.getRoomCost(room!.id)
+              .subscribe(roomCost => this.roomCost = roomCost);
+          }
+          else {
+            this.reservation.roomId = 0;
           }
         })
     }
     this.roomSearchTermChanged.next(event) 
   }
 
-  parseDate(dateString: string): Date | null{
-    if (dateString) {
-      return new Date(dateString);
+  parseDate(event: any): Date | null{
+    if (event.target.value) {
+      return new Date(event.target.value);
     }
     
     return null;
+  }
+
+  public get computeCost(): number {
+    if (this.reservation.roomId !== 0) {
+      let summary = this.roomCost * this.getDatesDiff();
+      this.includeServices();
+      for (let i = 0; i < this.reservation.reservationServices.length; i++) {
+        summary += this.reservation.reservationServices[i].cost; 
+      }
+
+      return summary;
+    }
+    
+    return 0;
+  }
+
+  getDatesDiff(): number {
+    const a = moment(this.reservation.endDate).startOf('day');
+    const b = moment(this.reservation.startDate).startOf('day');
+    return a.diff(b, 'days');
   }
 
   isRoom(): boolean {

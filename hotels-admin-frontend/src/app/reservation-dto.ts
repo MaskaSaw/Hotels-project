@@ -10,6 +10,7 @@ export class ReservationDTO {
   departureTime: string;
   country: string;
   city: string;
+  cost: number;
   hotelName: string;
   roomNumber: string;
   userName: string;
@@ -26,6 +27,7 @@ export class ReservationDTO {
       this.departureTime = '00:00';
       this.country = '';
       this.city = '';
+      this.cost = 0;
       this.hotelName = '';
       this.roomNumber = '';
       this.userName = '';

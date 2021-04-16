@@ -47,6 +47,8 @@ namespace Hotels.Models
 
                 entity.Property(e => e.StartDate).HasColumnType("date");
 
+                entity.Property(e => e.Cost).HasPrecision(6, 2);
+
                 entity.HasOne<Room>(r => r.Room)
                     .WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.RoomId);
@@ -74,7 +76,7 @@ namespace Hotels.Models
             {
                 entity.Property(e => e.RoomNumber).HasMaxLength(20);
 
-                entity.Property(e => e.Cost).HasPrecision(9,2);
+                entity.Property(e => e.Cost).HasPrecision(6, 2);
 
                 entity.Property(e => e.Image)
                     .HasMaxLength(100)
@@ -92,7 +94,7 @@ namespace Hotels.Models
             {
                 entity.Property(e => e.Name).HasMaxLength(20);
 
-                entity.Property(e => e.Cost).HasPrecision(9, 2);
+                entity.Property(e => e.Cost).HasPrecision(6, 2);
 
                 entity.HasOne<Hotel>()
                    .WithMany(p => p.Services)
@@ -104,7 +106,7 @@ namespace Hotels.Models
             {
                 entity.Property(e => e.Name).HasMaxLength(20);
 
-                entity.Property(e => e.Cost).HasPrecision(9, 2);
+                entity.Property(e => e.Cost).HasPrecision(6, 2);
 
                 entity.HasOne<Reservation>()
                    .WithMany(p => p.ReservationServices)

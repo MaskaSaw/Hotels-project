@@ -8,6 +8,7 @@ export class Reservation {
     endDate: Date | null;
     arrivalTime: string;
     departureTime: string;
+    cost: number;
     reservationServices: ReservationService[];
 
     constructor() {
@@ -18,6 +19,7 @@ export class Reservation {
         this.endDate = new Date();
         this.arrivalTime = '00:00';
         this.departureTime = '00:00';
+        this.cost = 0;
         this.reservationServices = [];
     }
 }

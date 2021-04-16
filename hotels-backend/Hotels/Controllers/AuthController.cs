@@ -90,7 +90,7 @@ namespace Hotels.Controllers
                     }
                 ),
 
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddDays(5),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha512Signature

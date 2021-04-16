@@ -26,6 +26,8 @@ namespace Hotels.DTOs
         public string RoomNumber { get; set; }
         public string UserName { get; set; }
 
+        public decimal Cost { get; set; }
+
         public int RoomId { get; set; }
 
         public int UserId { get; set; }

@@ -166,6 +166,7 @@ namespace Hotels.Controllers
                         DepartureTime = reservation.DepartureTime,
                         StartDate = reservation.StartDate,
                         EndDate = reservation.EndDate,
+                        Cost = reservation.Cost,
                         ReservationServices = reservation.ReservationServices,
                         RoomNumber = reservation.Room.RoomNumber,
                         HotelName = reservation.Room.Hotel.Name,

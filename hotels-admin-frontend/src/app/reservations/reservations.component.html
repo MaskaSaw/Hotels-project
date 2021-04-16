@@ -6,7 +6,7 @@
         <li *ngIf="this.isRoom()">
             <label>User: </label>
             <input type="text" placeholder="User name" [typeahead]="users" [typeaheadScrollable]="true"
-            typeaheadOptionField="name"
+            typeaheadOptionField="login"
             [typeaheadOptionsInScrollableView]="10"
             (input)="getUsersData($event)"
             [(ngModel)]="userName">
@@ -31,7 +31,7 @@
             <input type="date" 
                 name="startDate" 
                 [ngModel]="reservation.startDate | date:'yyyy-MM-dd'" 
-                (ngModelChange)="reservation.startDate = parseDate($event.target.value)" 
+                (change)="reservation.startDate = parseDate($event)" 
                 #startDate="ngModel" 
                 dateValidator 
                 [secondDate]="reservation.endDate" 
@@ -46,7 +46,7 @@
             <input type="date" 
                 name="endDate" 
                 [ngModel]="reservation.endDate | date:'yyyy-MM-dd'" 
-                (ngModelChange)="reservation.endDate = parseDate($event.target.value)" 
+                (change)="reservation.endDate = parseDate($event)" 
                 #endDate="ngModel" 
                 dateValidator 
                 [secondDate]="reservation.startDate" 
@@ -68,9 +68,12 @@
         <li>
             <ul *ngFor="let service of services, let i = index">
                 <li>
-                    <label>{{service.name}} : </label><input type="checkbox" [(ngModel)]="includedServices[i]">
+                    <label>{{service.name}} : {{service.cost}}</label><input type="checkbox" [(ngModel)]="includedServices[i]">
                 </li>
             </ul>
+        </li>
+        <li>
+            <label>Reservation cost: {{computeCost}}</label>
         </li>  
         <li *ngIf="!edit">
             <button [disabled]="startDate.invalid || endDate.invalid" 
@@ -113,6 +116,7 @@
                 <th>Arrival time</th>
                 <th>Departure time</th>
                 <th>Services</th>
+                <th>Cost</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -133,6 +137,7 @@
                         </li>
                     </ul>
                 </td>
+                <td>{{reservation.cost}}</td>
                 <td><button class="open-button" (click)="editMode(reservation.id)">Edit</button></td>
                 <td><button class="del-button" (click)="deleteReservation(reservation.id)">Delete</button></td>
             </tr>

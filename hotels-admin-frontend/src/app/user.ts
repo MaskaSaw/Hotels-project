@@ -9,6 +9,10 @@ export class User {
     role: string;
     reservations: Reservation[];
 
+    public get SearchData(): string {
+        return `${this.name} ${this.surname}: ${this.login}`;
+    }
+
     constructor() {
         this.id = 0;
         this.login = '';

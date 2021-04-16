@@ -45,6 +45,15 @@ export class RoomsService {
     );
   }
 
+  getRoomCost(id: number): Observable<number> {
+    const url = `${this.roomsUrl}/${id}/cost`;
+    return this.http.get<number>(url)
+      .pipe(
+        catchError(this.handleError<number>('getRoomCost')
+      )
+    );
+  }
+
   getServices(id: number) {
     const url = `${this.roomsUrl}/${id}/services`;
     return this.http.get<Service[]>(url)

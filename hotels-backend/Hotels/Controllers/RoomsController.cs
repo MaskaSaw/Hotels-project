@@ -89,6 +89,7 @@ namespace Hotels.Controllers
                             DepartureTime = reservation.DepartureTime,
                             StartDate = reservation.StartDate,
                             EndDate = reservation.EndDate,
+                            Cost = reservation.Cost,
                             ReservationServices = reservation.ReservationServices,
                             RoomNumber = reservation.Room.RoomNumber,
                             HotelName = reservation.Room.Hotel.Name,
@@ -123,6 +124,19 @@ namespace Hotels.Controllers
                     }
                 )
                 .ToListAsync();
+        }
+
+        [HttpGet("{id}/Cost")]
+        public async Task<ActionResult<decimal>> GetRoomCost(int id)
+        {
+            var room = await _context.Rooms.FindAsync(id);
+
+            if (room == null)
+            {
+                return NotFound();
+            }
+
+            return room.Cost;
         }
 
         // PUT: api/Rooms/5

@@ -75,7 +75,8 @@ namespace Hotels.Controllers
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsersByName([FromQuery]string namePart)
         {
             return await _context.Users
-                .Where(user => user.Login.Contains(namePart))
+                .Where(user => user.Name.Contains(namePart) || user.Surname.Contains(namePart)
+                    || user.Login.Contains(namePart))
                 .Select(user => new UserDTO
                 {
                     Id = user.Id,
@@ -127,6 +128,7 @@ namespace Hotels.Controllers
                             DepartureTime = reservation.DepartureTime,
                             StartDate = reservation.StartDate,
                             EndDate = reservation.EndDate,
+                            Cost = reservation.Cost,
                             ReservationServices = reservation.ReservationServices,
                             RoomNumber = reservation.Room.RoomNumber,
                             HotelName = reservation.Room.Hotel.Name,
@@ -167,6 +169,7 @@ namespace Hotels.Controllers
                         DepartureTime = reservation.DepartureTime,
                         StartDate = reservation.StartDate,
                         EndDate = reservation.EndDate,
+                        Cost = reservation.Cost,
                         ReservationServices = reservation.ReservationServices,
                         RoomNumber = reservation.Room.RoomNumber,
                         HotelName = reservation.Room.Hotel.Name,

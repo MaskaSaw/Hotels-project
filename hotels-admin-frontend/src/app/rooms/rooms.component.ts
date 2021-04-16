@@ -60,6 +60,7 @@ export class RoomsComponent implements OnInit {
               if (room !== undefined) {
                 this.rooms.push(room);
               }
+              this.closeEditForm();
               this.room = new Room();
               this.room.hotelId = this.id;
               this.imageUploader.nativeElement.value = null;
@@ -74,6 +75,7 @@ export class RoomsComponent implements OnInit {
           if (room !== undefined) {
             this.rooms.push(room);
           }
+          this.closeEditForm();
           this.room = new Room();
           this.room.hotelId = this.id;
           this.imageUploader.nativeElement.value = null;
