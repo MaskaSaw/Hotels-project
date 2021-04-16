@@ -62,9 +62,15 @@ example-form {
   width: 100%;
 }
 
-.example-full-width {
-  width: 15%;
-  margin: 0 10px 0 10px;
+.datepicker-form-control {
+  display: block !important;
+  width: 40%;
+  margin: 0 auto;
+}
+
+.input-form-control {
+  width: 40%;
+  margin: 0 auto;
 }
 
 .example-option-img {
@@ -75,4 +81,39 @@ example-form {
 [dir='rtl'] .example-option-img {
   margin-right: 0;
   margin-left: 8px;
+}
+
+@media screen and (min-width: 800px) {
+
+  .datepicker-form-control {
+    display: inline-block !important;
+    width: 25%;
+    margin: 0 10px 0 10px;
+  }
+
+  .input-form-control {
+    width: 30%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+
+  .datepicker-form-control {
+    width: 20%;
+  }
+
+  .input-form-control {
+    width: 20%;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+
+  .datepicker-form-control {
+    width: 15%;
+  }
+
+  .input-form-control {
+    width: 15%;
+  }
 }

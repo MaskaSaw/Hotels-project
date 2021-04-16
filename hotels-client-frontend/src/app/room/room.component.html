@@ -1,29 +1,29 @@
 <div class="room-container">
     <h1>Room number {{room.roomNumber}}</h1>
-    <img [src]="room.image" height="300px">
+    <img class="room-image" [src]="room.image">
     <div>
         <p>Type: {{room.roomType}}</p>
         <p>Vacant beds: {{room.vacantBeds}}</p>
         <p>Cost: {{room.cost}}$ per day</p>
     </div>
-    <button (click)="goBack()"> <-- Back to hotel</button>
-    <button (click)="initReservation()">Make reservation</button>
+    <button class="room-button" (click)="goBack()"> <-- Back to hotel</button>
+    <button class="room-button" (click)="initReservation()">Make reservation</button>
     <div *ngIf="reserving" class="reservation-form">
-    <ul>
+    <ul class="reservation-details">
         <li>
             <h2>Please, select your reservation parameters:</h2>
         </li>
         <li>
-            <label>Arrival time:</label>
-            <input type="time" [(ngModel)]="reservation.arrivalTime"/>
+            <label>Arrival time: </label>
+            <input type="time" class="time-input" [(ngModel)]="reservation.arrivalTime"/>
         </li>
         <li>
-            <label>Departure time:</label>
-            <input type="time" [(ngModel)]="reservation.departureTime"/>
+            <label>Departure time: </label>
+            <input type="time" class="time-input" [(ngModel)]="reservation.departureTime"/>
         </li>
         <li>
             <h2>Want to order additional services?</h2>
-            <ul *ngFor="let service of services, let i = index">
+            <ul class="service-details" *ngFor="let service of services, let i = index">
                 <li>
                     <label>{{service.name}} : {{service.cost}}$</label><input type="checkbox" [(ngModel)]="includedServices[i]">
                 </li>

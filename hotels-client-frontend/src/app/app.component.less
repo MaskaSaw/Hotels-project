@@ -1,0 +1,62 @@
+@customBlue:  #0071c2;
+@customDarkBlue: #003580;
+
+.dropdown {
+    margin-top: 5px;
+    display: block;
+    text-align: center;
+
+    .dropbtn {
+        background-color: white;
+        color: @customDarkBlue;
+        min-width: 100px;
+        min-height: 30px;
+        font-size: 1.2em;
+        border: 2px solid @customDarkBlue;
+        transition: 0.3s;
+
+        &:hover {
+            border-color: white;
+            background-color: @customDarkBlue;
+            color: white;
+        }
+    }
+
+    .dropbtn-active {
+        color: white;
+        background-color: @customDarkBlue;
+        min-width: 100px;
+        min-height: 30px;
+        font-size: 1.2em;
+        border: 2px solid white;
+        transition: 0.3s;
+    }
+
+    .dropdown-content {
+        display: inline;
+        position: absolute;
+        background-color: white;
+        border-radius: 5px;
+        border: 1px solid @customDarkBlue;
+        min-width: 150px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 100;
+
+        p {
+            color: @customDarkBlue;
+            padding: 12px 16px;
+            margin: 5px 0;
+            border-radius: 5px;           
+            text-decoration: none;
+            display: block;
+            border: 1px solid white;
+
+            &:hover {
+                background-color: rgb(238, 237, 237);
+                border-color: @customDarkBlue;
+                cursor: pointer;
+            }
+        }
+    }
+}
+  

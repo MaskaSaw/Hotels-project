@@ -4,13 +4,13 @@
 	<div class="hotels-input">		
 		<div>
             <form class="example-form">
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="datepicker-form-control" appearance="fill">
                     <mat-label>Choose start date</mat-label>
                     <input matInput [min]="startMinDate" [matDatepicker]="firstpicker" [(ngModel)]="params.checkIn" name="first">
                     <mat-datepicker-toggle matSuffix [for]="firstpicker"></mat-datepicker-toggle>
                     <mat-datepicker #firstpicker></mat-datepicker>
                 </mat-form-field>
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="datepicker-form-control" appearance="fill">
                     <mat-label>Choose end date</mat-label>
                     <input matInput [min]="endMinDate" [matDatepicker]="secondpicker" [(ngModel)]="params.checkOut" name="second">
                     <mat-datepicker-toggle matSuffix [for]="secondpicker"></mat-datepicker-toggle>
@@ -19,7 +19,7 @@
                 <br>
                 <br>
                 <h3>Select your destination point: </h3>   
-                <mat-form-field class="example-full-width">
+                <mat-form-field class="input-form-control">
                     <mat-label>Where are you going?</mat-label>
                     <input matInput
                         aria-label="SearchResult"
@@ -40,7 +40,7 @@
             </form>
             <br>
             <h3>Expected number of residents: </h3> 
-            <mat-form-field class="example-full-width">
+            <mat-form-field class="input-form-control">
                 <mat-label>Number of residents</mat-label>
                 <input matInput type="text" [(ngModel)]="params.numberOfResidents">
                 <button mat-button *ngIf="params.numberOfResidents" matSuffix mat-icon-button aria-label="Clear" (click)="params.numberOfResidents=''">

@@ -1,24 +1,24 @@
 <div class="hotel-detailed-container">
 	<h1>{{hotel.name}}</h1>
-<img [src]="hotel.image" height="300px">
-<p>{{hotel.country}}, {{hotel.city}}</p>
-<p>{{hotel.address}}</p>
-<h2>Rooms</h2>
-<div class="items-list">
-	<div class="item-container" *ngFor="let room of rooms">
-		<div class='item' (click)="openDetailed(room.id)">
-			<div class="blur" [ngStyle]="{'background-image':'url(' + room.image + ')'}"></div>
-			<div class="header" >
-				<h1>{{room.roomNumber}}</h1>	
-			</div>	
-			<div class="blur"></div>
-			<div class="detail">
-				<p>Room №: {{room.roomNumber}}</p>
-				<p>{{room.roomType}}</p>
-			</div>	
-		</div>
-	</div>		
-</div>
-<br>
-<button (click)="goBack()"> <-- Back to all hotels</button>
+	<img class="hotel-image" [src]="hotel.image">
+	<p>{{hotel.country}}, {{hotel.city}}</p>
+	<p>{{hotel.address}}</p>
+	<h2>Rooms</h2>
+	<div class="items-list">
+		<div class="item-container" *ngFor="let room of rooms">
+			<div class='item' (click)="openDetailed(room.id)">
+				<div class="blur" [ngStyle]="{'background-image':'url(' + room.image + ')'}"></div>
+				<div class="header" >
+					<h1>{{room.roomNumber}}</h1>	
+				</div>	
+				<div class="blur"></div>
+				<div class="detail">
+					<p>Room №: {{room.roomNumber}}</p>
+					<p>{{room.roomType}}</p>
+				</div>	
+			</div>
+		</div>		
+	</div>
+	<br>
+	<button (click)="goBack()"> <-- Back to all hotels</button>
 </div>
