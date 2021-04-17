@@ -229,29 +229,33 @@ export class ReservationsComponent implements OnInit {
       this.roomSearchTermChanged.pipe(debounceTime(500), distinctUntilChanged())
         .subscribe(() => {
           this.roomsService.getRoomNumbers(this.roomNumber, this.hotelName)
-            .subscribe(rooms => this.rooms = rooms);
-          const room = this.rooms.find(room => room.roomNumber === this.roomNumber)
-          if (room) {
-            this.reservation.roomId = room!.id;
-            this.roomsService.getServices(room!.id)
-              .subscribe(services => {
-                this.services = services;
-                for (let i = 0; i < this.services.length; i++) {
-                  if (this.reservation.reservationServices.find(service => service.name == this.services[i].name)) {
-                    this.includedServices.push(true);
+            .subscribe(rooms => {
+              this.rooms = rooms;
+              const room = this.rooms.find(room => room.roomNumber === this.roomNumber)
+              if (room) {
+                this.reservation.roomId = room!.id;
+                this.roomsService.getServices(room!.id)
+                  .subscribe(services => {
+                    this.services = services;
+                    for (let i = 0; i < this.services.length; i++) {
+                      if (this.reservation.reservationServices.find(service => service.name == this.services[i].name)) {
+                        this.includedServices.push(true);
+                      }
+                      else {
+                        this.includedServices.push(false);
+                      }
+                    }
                   }
-                  else {
-                    this.includedServices.push(false);
-                  }
-                }
+                );
+                this.roomsService.getRoomCost(room!.id)
+                  .subscribe(roomCost => this.roomCost = roomCost);
               }
-            );
-            this.roomsService.getRoomCost(room!.id)
-              .subscribe(roomCost => this.roomCost = roomCost);
-          }
-          else {
-            this.reservation.roomId = 0;
-          }
+              else {
+                this.reservation.roomId = 0;
+                this.services = [];
+                this.includedServices = [];
+              }
+            }); 
         })
     }
     this.roomSearchTermChanged.next(event) 

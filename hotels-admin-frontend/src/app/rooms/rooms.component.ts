@@ -109,14 +109,16 @@ export class RoomsComponent implements OnInit {
         .subscribe(imageUrl => {
           this.room.image = imageUrl;
           this.roomsService.updateRoom(this.room)
-            .subscribe();      
+            .subscribe(); 
+          this.cancelEdit();     
         }
       ); 
     }
-    this.roomsService.updateRoom(this.room)
-      .subscribe(); 
-
-    this.cancelEdit();
+    else {
+      this.roomsService.updateRoom(this.room)
+        .subscribe(); 
+      this.cancelEdit();
+    }
   }
 
   deleteRoom(roomId: number): void {

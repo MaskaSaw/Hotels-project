@@ -49,7 +49,7 @@ export class UsersComponent implements OnInit {
         }
       });
 
-    this.user = new User();
+    this.closeEditForm();
   }
 
   openEditForm(): void {
