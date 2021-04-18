@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using Hotels.Authentication;
 using Hotels.ImageProcessing;
 using Hotels.HubConfig;
+using Hotels.HostedServices;
 
 namespace Hotels
 {
@@ -40,6 +41,9 @@ namespace Hotels
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotels", Version = "v1" });
             });
+
+            services.AddHostedService<ConsumeScopedRoomBlockService>();
+            services.AddScoped<IScopedProcessingService, ScopedRoomBlockClearService>();
             services.AddScoped<AuthService>();
             services.AddSingleton<ImageService>();
 
