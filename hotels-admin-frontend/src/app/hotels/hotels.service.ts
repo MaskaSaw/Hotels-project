@@ -43,6 +43,7 @@ export class HotelsService {
       params = {
         page: '1',
         itemsPerPage: this.itemsPerPage.toString(),
+        hotelName: inputParams.name,
         city: inputParams.city,
         country: inputParams.country,
       }
