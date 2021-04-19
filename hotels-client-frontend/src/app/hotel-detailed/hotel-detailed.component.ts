@@ -29,8 +29,17 @@ export class HotelDetailedComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.saveParams();
     this.getHotel();
     this.getRooms();
+  }
+
+  saveParams(): void {
+    const checkIn = this.route.snapshot.queryParamMap.get('checkIn');
+    const checkOut = this.route.snapshot.queryParamMap.get('checkOut');
+    if ( checkIn && checkOut) {
+      this.hotelsService.saveDates(new Date(checkIn), new Date(checkOut));
+    }
   }
 
   getHotel(): void {

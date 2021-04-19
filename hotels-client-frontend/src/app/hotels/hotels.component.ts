@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
 
 import { Observable, Subject } from 'rxjs';
@@ -22,6 +22,7 @@ import { HotelsService } from './hotels.service';
 export class HotelsComponent implements OnInit {
 
   searchCtrl = new FormControl();
+  withQueryParams: boolean = false;
   filteredSearch:  Observable<SearchResult[]>;
   hotels: Hotel[] = [];
   reserved: boolean[] = [];
@@ -37,6 +38,7 @@ export class HotelsComponent implements OnInit {
     private hotelsService: HotelsService,
     private reservationDataSignalService: ReservationDataSignalService,
     private router: Router,
+    private route: ActivatedRoute,
   ) { 
     this.filteredSearch = this.searchCtrl.valueChanges
       .pipe(
@@ -57,10 +59,51 @@ export class HotelsComponent implements OnInit {
     this.reservationDataSignalService.getValue().subscribe( value => {
       this.pointHotel(value.hotelId);
     })
-    this.getHotels();
-    this.params = new Params;
+    this.getSearchParams();
+    if (this.withQueryParams) {
+      this.filterHotels();
+    }
+    else {
+      this.getHotels();
+      this.params = new Params;
+    } 
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.params.checkOut = this.endMinDate;
+  }
+
+  getSearchParams(): void {
+    if (this.route.snapshot.queryParamMap.get('hotelName')) {
+      this.params.hotelName = this.route.snapshot.queryParamMap.get('hotelName')!;
+      this.searchString = this.route.snapshot.queryParamMap.get('hotelName')!;
+      this.withQueryParams = true;
+    }
+
+    if (this.route.snapshot.queryParamMap.get('country')) {
+      this.params.country = this.route.snapshot.queryParamMap.get('country')!
+      this.withQueryParams = true;
+    }
+
+    if (this.route.snapshot.queryParamMap.get('city')) {
+      this.params.city = this.route.snapshot.queryParamMap.get('city')!
+      this.withQueryParams = true;
+    }
+
+    if (this.route.snapshot.queryParamMap.get('checkIn')) {
+      this.params.checkIn = new Date(this.route.snapshot.queryParamMap.get('checkIn')!)
+      this.withQueryParams = true;
+    }
+
+    if (this.route.snapshot.queryParamMap.get('checkOut')) {
+      this.params.checkOut = new Date(this.route.snapshot.queryParamMap.get('checkOut')!)
+      this.withQueryParams = true;
+    }
+
+    if (this.route.snapshot.queryParamMap.get('numberOfResidents')) {
+      this.params.numberOfResidents = this.route.snapshot.queryParamMap.get('numberOfResidents')!
+      this.withQueryParams = true;
+    }
+
+    this.params.globalSearch = false;
   }
 
   getHotels(): void {
@@ -86,6 +129,7 @@ export class HotelsComponent implements OnInit {
   }
 
   clearFilter(): void {
+    this.router.navigate(['.']);
     this.params = new Params();
     this.searchItem = new SearchResult;
     this.searchString = '';
@@ -94,7 +138,7 @@ export class HotelsComponent implements OnInit {
 
   openDetailed(hotelId: number): void {
     this.hotelsService.saveDates(this.params.checkIn, this.params.checkOut);
-    this.router.navigate([`/detailed/hotel/${hotelId}`]);
+    this.router.navigate([`/detailed/hotel/${hotelId}`], { relativeTo: this.route, queryParams: {checkIn: this.params.checkIn, checkOut: this.params.checkOut}});
   }
 
   checkParams(): boolean {
@@ -109,8 +153,13 @@ export class HotelsComponent implements OnInit {
     return true;
   }
 
-  filterHotels(): void {
+  findHotels(): void {
     this.chooseSearchParams();
+    this.router.navigate(['.'], {relativeTo: this.route, queryParams: this.params});
+    this.filterHotels();
+  }
+
+  filterHotels(): void {
     this.reserved = [];
     this.hotelsService.getHotels(this.params)
       .subscribe( hotels => { 
